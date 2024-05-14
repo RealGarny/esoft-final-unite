@@ -2,10 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #343331;
+  --secondary: #2D2C2A;
+  --additional: #262523;
+  --background: #31302E;
+  --accent: #FB6400;
+  --text: #fff;
+}
+
 body,#root {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   min-width: 320px;
   min-height: 100vh;
   background-color: rgb(111, 111, 214);
