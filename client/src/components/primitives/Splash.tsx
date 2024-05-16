@@ -1,10 +1,11 @@
 import { ChildrenProp } from "../../interfaces"
 import routes from "../../routes/routes";
-import CrossIcon from "../icons/CrossIcon";
-import SearchIcon from "../icons/SearchIcon";
+import Flexbox from "../Flexbox";
 import Button from "./Button";
+import Card from "./Card";
 
-const Splash:React.FC<ChildrenProp> = (props) => {
+const Splash:React.FC<ChildrenProp> = () => {
+
     return(
         <div className="bg-secondary">
             <div className="mt-[-64px] relative h-[600px] z-10 w-full uppercase overflow-hidden">
@@ -21,10 +22,22 @@ const Splash:React.FC<ChildrenProp> = (props) => {
                 <div className="absolute size-full bg-black bg-opacity-20"></div>
                 <div className="bottom-0 left-0 bg-gradient-to-t from-secondary to-transparent absolute w-full h-[200px]"/>
             </div>
-            <div className="mt-10 px-4 flex justify-between items-center">
-                <p className="font-bold uppercase text-white text-2xl">Communities</p>
-                <Button href={routes.communities} className="font-bold opacity-75" variant="text">View All</Button>
-            </div>
+            <Flexbox className="mt-10 flex-col">
+                <Flexbox className="justify-between items-center px-2">
+                    <p className="font-bold uppercase text-white text-2xl">Communities</p>
+                    <Button href={routes.communities} className="font-bold opacity-75" variant="text">View All</Button>
+                </Flexbox>
+                <Flexbox className="pl-2">
+                    <Card className=" bg-primary min-w-64 min-h-52">
+                        <div className="relative h-44 w-full">
+                            <div className="absolute top-0 left-0">
+                                <img src="https://media.cdn.community.lambdageneration.com/backgrounds/1694882926930B4CsCjBrB2CfBUXB.png?size=search"></img>
+                            </div>
+                        </div>
+                        <div className="bottom-0 left-0 bg-gradient-to-t from-secondary to-transparent absolute w-full h-[200px]"></div>
+                    </Card>
+                </Flexbox>
+            </Flexbox>
         </div>
     )
 }

@@ -1,50 +1,61 @@
 import { Link } from "react-router-dom";
-import { ButtonProps as Bprops } from "../../interfaces";
+import { ButtonHTMLAttributes } from "react";
+import { cva, VariantProps } from "class-variance-authority";
+import cn from "../../util/cn";
 
-interface ButtonProps extends Bprops {
-    primary?:string,
-    secondary?:string,
-    rounded?:string,
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof ButtonVariants> {
     href?:string
     hover?: string,
-    border?: string,
-    variant?: "text" | "contained" | "outlined",
-    disabled?: never,
     startIcon?: React.ReactNode,
     endIcon?: React.ReactNode,
 }
 
-const Button:React.FC<ButtonProps> = (props) => {
+const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, children, href, className, ...args}) => {
 
-    /*
-    let primary:string = props.primary && typeof props.primary === "string" ? props.primary : "white";
-    let secondary:string = props.secondary && typeof props.secondary === "string" ? props.secondary : "accent";
-    let rounded:string = `rounded-${props.rounded && typeof props.rounded === "string" ? props.rounded : "full"}`;
-    */
-    let variant:string = "bg-white text-accent hover:bg-accent-light";
+    let variantStyle:string = "bg-white text-accent hover:bg-accent-light";
 
-    if(props.variant && typeof props.variant === "string") {
-        switch(props.variant) {
+    if(variant && typeof variant === "string") {
+        switch(variant) {
             case "text":
-                variant = "text-text hover:bg-text hover:bg-opacity-15"
+                variantStyle = ""
                 break;
             case "contained":
-                variant = "bg-white text-accent hover:bg-accent-light"
+                variantStyle = ""
                 break;
             case "outlined":
-                variant = "border border-accent border-opacity-30 hover:bg-accent hover:bg-opacity-10 text-accent hover:border-opacity-60"
+                variantStyle = ""
                 break;
         }
     }
 
     return(
-        <button className={`relative rounded-full transition-all flex gap-2 justify-center bg-satu px-4 py-2 align-middle items-center ${variant} ${props.className}`} onClick={props.onClick}>
-            {props.href && typeof props.href === "string" && <Link to={props.href} className="absolute top-0 left-0 size-full"></Link>}
-            {props.startIcon}
-            {props.children}
-            {props.endIcon}
+        <button {...args} className={cn(ButtonVariants({variant, padding, className}))}>
+            {href && typeof href === "string" && <Link to={href} className="absolute top-0 left-0 size-full"></Link>}
+            {startIcon}
+            {children}
+            {endIcon}
         </button>
     )
 }
+
+    const ButtonVariants = cva("relative transition-all rounded-full flex gap-2 justify-center align-middle items-center", {
+        variants: {
+            variant: {
+                text: "text-text hover:bg-text hover:bg-opacity-15",
+                contained: "bg-white text-accent hover:bg-accent-light",
+                outlined: "border border-accent border-opacity-30 hover:bg-accent hover:bg-opacity-10 text-accent hover:border-opacity-60"
+            },
+            padding: {
+                none: "",
+                sm: "px-2 py-1",
+                md: "px-4 py-2",
+                lg: "px-8 py-4"
+            },
+        },
+        defaultVariants: {
+            variant: "contained",
+            padding: "md"
+        }
+    })
 
 export default Button;
