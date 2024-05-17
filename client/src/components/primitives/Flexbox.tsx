@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge"
-import { ContainerProps } from "../interfaces"
+import { ContainerProps } from "../../interfaces"
 
 const Flexbox:React.FC<ContainerProps> = (props) => {
     

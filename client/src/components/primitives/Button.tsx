@@ -12,22 +12,6 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantPr
 
 const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, children, href, className, ...args}) => {
 
-    let variantStyle:string = "bg-white text-accent hover:bg-accent-light";
-
-    if(variant && typeof variant === "string") {
-        switch(variant) {
-            case "text":
-                variantStyle = ""
-                break;
-            case "contained":
-                variantStyle = ""
-                break;
-            case "outlined":
-                variantStyle = ""
-                break;
-        }
-    }
-
     return(
         <button {...args} className={cn(ButtonVariants({variant, padding, className}))}>
             {href && typeof href === "string" && <Link to={href} className="absolute top-0 left-0 size-full"></Link>}
@@ -38,7 +22,7 @@ const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, chi
     )
 }
 
-    const ButtonVariants = cva("relative transition-all rounded-full flex gap-2 justify-center align-middle items-center", {
+    const ButtonVariants = cva("relative text-nowrap transition-all rounded-full flex gap-2 justify-center align-middle items-center", {
         variants: {
             variant: {
                 text: "text-text hover:bg-text hover:bg-opacity-15",

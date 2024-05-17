@@ -1,11 +1,14 @@
 import { twMerge } from "tailwind-merge";
 import { ContainerProps } from "../../interfaces";
-import Flexbox from "../Flexbox"
+import Flexbox from "./Flexbox"
 
 const Card:React.FC<ContainerProps> = ({children, className}) => {
 
+    //requested props:
+    //rounded, border, 
+
     return(
-        <Flexbox className={twMerge("rounded-xl bg-secondary px-4 py-2 overflow-hidden", className)}>
+        <Flexbox className={twMerge("rounded-xl bg-secondary overflow-hidden", className)}>
             {children}
         </Flexbox>
     )
