@@ -10,10 +10,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantPr
     endIcon?: React.ReactNode,
 }
 
-const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, children, href, className, ...args}) => {
+const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, children, href, rounded, className, ...args}) => {
 
     return(
-        <button {...args} className={cn(ButtonVariants({variant, padding, className}))}>
+        <button {...args} className={cn(ButtonVariants({variant, padding, rounded, className}))}>
             {href && typeof href === "string" && <Link to={href} className="absolute top-0 left-0 size-full"></Link>}
             {startIcon}
             {children}
@@ -35,10 +35,18 @@ const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, chi
                 md: "px-4 py-2",
                 lg: "px-8 py-4"
             },
+            rounded: {
+                sm: "rounded",
+                md: "rounded-xl",
+                lg: "rounded-2xl",
+                xl: "rounded-3xl",
+                full: "rounded-full"
+            }
         },
         defaultVariants: {
             variant: "contained",
-            padding: "md"
+            padding: "md",
+            rounded: "full"
         }
     })
 
