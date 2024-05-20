@@ -13,7 +13,7 @@ const Splash:React.FC<ChildrenProp> = () => {
                 className="mt-[-64px] h-[600px] uppercase"
             >
                     <video
-                        className="min-h-full min-w-full absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+                        className="min-h-full min-w-full absolute-centered"
                         poster="https://static.cdn.lambdageneration.com/video/LG_VideoBanner_v4_frame.jpg"
                         playsInline={false}
                         autoPlay={true}

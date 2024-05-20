@@ -1,7 +1,11 @@
+import Post from "../Post/Post";
+import PostHeader from "../Post/PostHeader";
 
 const Feed = () => {
     return(
-        <div>Feed</div>
+        <Post
+            PostHeader={<PostHeader/>}
+        />
     )
 }
 
