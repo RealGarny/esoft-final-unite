@@ -5,7 +5,7 @@ import FadeContainer from "./FadeContainer";
 const Splash:React.FC<ChildrenProp> = () => {
 
     return(
-        <div className="bg-secondary">
+        <div className="bg-secondary pb-3">
             <FadeContainer 
                 blackOverlay
                 fadeColor="from-secondary"

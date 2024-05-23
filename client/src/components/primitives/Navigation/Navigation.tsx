@@ -7,7 +7,7 @@ interface NavigationProps {
 
 const Navigation:React.FC<NavigationProps> = ({sort, categories}) => {
     return(
-        <Flexbox padding="none" className="w-40">
+        <Flexbox className="w-40">
             {sort}
             {categories}
         </Flexbox>

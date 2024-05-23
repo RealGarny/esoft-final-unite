@@ -6,7 +6,7 @@ import FeedSort from "../Navigation/FeedSort"
 
 const FeedSection = () => {
     return(
-        <Flexbox className="gap-6 justify-center h-[1200px]">
+        <Flexbox padding="md" className="gap-6 justify-center">
             <Navigation
                 sort={<FeedSort/>}
             />

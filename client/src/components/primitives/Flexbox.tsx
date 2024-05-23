@@ -23,7 +23,7 @@ const FlexboxVariants = cva("flex gap-2", {
         },
     },
     defaultVariants: {
-        padding: "md"
+        padding: "none"
     }
 })
 
