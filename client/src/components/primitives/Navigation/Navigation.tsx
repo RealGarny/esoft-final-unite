@@ -7,7 +7,7 @@ interface NavigationProps {
 
 const Navigation:React.FC<NavigationProps> = ({sort, categories}) => {
     return(
-        <Flexbox className="w-40">
+        <Flexbox className="sticky top-20 w-40 hidden sm:block size-fit">
             {sort}
             {categories}
         </Flexbox>

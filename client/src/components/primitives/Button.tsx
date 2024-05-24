@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
 import { ButtonHTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import cn from "../../util/cn";
+import Hyperlink from "./Hyperlink";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof ButtonVariants> {
     href?:string
@@ -14,7 +14,7 @@ const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, chi
 
     return(
         <button {...args} className={cn(ButtonVariants({variant, padding, rounded, className}))}>
-            {href && typeof href === "string" && <Link to={href} className="absolute top-0 left-0 size-full"></Link>}
+            {href && typeof href === "string" && <Hyperlink to={href} className="absolute top-0 left-0 size-full"></Hyperlink>}
             {startIcon}
             {children}
             {endIcon}
@@ -36,7 +36,7 @@ const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, chi
                 lg: "px-8 py-4"
             },
             rounded: {
-                sm: "rounded",
+                sm: "rounded-lg",
                 md: "rounded-xl",
                 lg: "rounded-2xl",
                 xl: "rounded-3xl",

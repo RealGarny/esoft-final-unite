@@ -3,7 +3,7 @@ import Flexbox, { FlexboxProps } from "./Flexbox"
 import { cva, VariantProps } from "class-variance-authority";
 import cn from "../../util/cn";
 
-interface CardProps extends ContainerProps, VariantProps<typeof CardVariants> {
+export interface CardProps extends ContainerProps, VariantProps<typeof CardVariants> {
     bg?:string,
     padding?: FlexboxProps["padding"]
 }
@@ -17,10 +17,11 @@ const Card:React.FC<CardProps> = ({children, className, bg, rounded, padding}) =
     )
 }
 
-const CardVariants = cva("overflow-hidden bg-primary items-center", {
+const CardVariants = cva("bg-primary", {
     variants: {
         rounded: {
-            sm: "rounded",
+            xs: "rounded-md",
+            sm: "rounded-lg",
             md: "rounded-xl",
             lg: "rounded-2xl",
             xl: "rounded-3xl",

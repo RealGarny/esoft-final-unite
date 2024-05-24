@@ -1,4 +1,3 @@
-import { twMerge } from "tailwind-merge"
 import { ContainerProps } from "../../interfaces"
 import { cva, VariantProps } from "class-variance-authority"
 

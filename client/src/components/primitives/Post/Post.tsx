@@ -10,8 +10,7 @@ export interface PostProps {
 const Post:React.FC<PostProps> = ({PostHeader, PostContent, PostActions, children}) => {
     return(
         <Card
-            className="border-2 border-primary bg-secondary shadow-md"
-            padding="sm"
+            className="border-2 border-primary bg-secondary shadow-md flex-col w-full px-4 py-4"
         >
             {PostHeader}
             {PostContent}

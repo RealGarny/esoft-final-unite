@@ -1,7 +1,7 @@
 
 const CommunityInfo = () => {
     return(
-        <p>Community Info</p>
+        <p className="hidden lg:block">Community Info</p>
     )
 }
 
