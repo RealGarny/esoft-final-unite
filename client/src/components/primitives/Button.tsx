@@ -3,14 +3,24 @@ import { cva, VariantProps } from "class-variance-authority";
 import cn from "../../util/cn";
 import Hyperlink from "./Hyperlink";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof ButtonVariants> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof ButtonVariants> {
     href?:string
     hover?: string,
     startIcon?: React.ReactNode,
-    endIcon?: React.ReactNode,
+    endIcon?: React.ReactNode
 }
 
-const Button:React.FC<ButtonProps> = ({variant, padding, startIcon, endIcon, children, href, rounded, className, ...args}) => {
+const Button:React.FC<ButtonProps> = ({
+    variant,
+    padding,
+    startIcon,
+    endIcon,
+    children,
+    href,
+    rounded,
+    className,
+    ...args
+}) => {
 
     return(
         <button {...args} className={cn(ButtonVariants({variant, padding, rounded, className}))}>

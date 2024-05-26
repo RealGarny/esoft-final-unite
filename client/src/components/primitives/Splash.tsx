@@ -5,10 +5,10 @@ import FadeContainer from "./FadeContainer";
 const Splash:React.FC<ChildrenProp> = () => {
 
     return(
-        <div className="bg-secondary pb-3">
+        <div className="bg-background pb-3">
             <FadeContainer 
                 blackOverlay
-                fadeColor="from-secondary"
+                fadeColor="from-background"
                 fadeSize="h-[300px]"
                 className="mt-[-64px] h-[600px] uppercase"
             >

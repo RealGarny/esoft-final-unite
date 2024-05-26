@@ -9,11 +9,13 @@ const Feed = () => {
         <Flexbox className="flex-col">
             <Post
                 PostHeader={<PostHeader
-                    //authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
+                    authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
                     authorName="Garny"
+                    authorId="RealGarny"
                     date="2h"
                     communityLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/16989520711478_DwC_CtCqDfcBMC.png?size=small"
                     communityName="Source"
+                    communityId="TheSource"
                     communityLink="http://localhost:5173/communities/source"
                     communityCategoryName="Main"
                     communitySublink="http://localhost:5173/communities/source/main"
@@ -25,13 +27,15 @@ const Feed = () => {
                 />}
                 PostActions={<PostActions/>}
             />
-                <Post
+            <Post
                 PostHeader={<PostHeader
-                    //authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
+                    authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
                     authorName="Garny"
+                    authorId="RealGarny"
                     date="2h"
                     communityLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/16989520711478_DwC_CtCqDfcBMC.png?size=small"
                     communityName="Source"
+                    communityId="TheSource"
                     communityLink="http://localhost:5173/communities/source"
                     communityCategoryName="Main"
                     communitySublink="http://localhost:5173/communities/source/main"
@@ -43,13 +47,15 @@ const Feed = () => {
                 />}
                 PostActions={<PostActions/>}
             />
-                <Post
+            <Post
                 PostHeader={<PostHeader
-                    //authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
+                    authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
                     authorName="Garny"
+                    authorId="RealGarny"
                     date="2h"
                     communityLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/16989520711478_DwC_CtCqDfcBMC.png?size=small"
                     communityName="Source"
+                    communityId="TheSource"
                     communityLink="http://localhost:5173/communities/source"
                     communityCategoryName="Main"
                     communitySublink="http://localhost:5173/communities/source/main"
@@ -61,31 +67,15 @@ const Feed = () => {
                 />}
                 PostActions={<PostActions/>}
             />
-                <Post
+            <Post
                 PostHeader={<PostHeader
-                    //authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
+                    authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
                     authorName="Garny"
+                    authorId="RealGarny"
                     date="2h"
                     communityLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/16989520711478_DwC_CtCqDfcBMC.png?size=small"
                     communityName="Source"
-                    communityLink="http://localhost:5173/communities/source"
-                    communityCategoryName="Main"
-                    communitySublink="http://localhost:5173/communities/source/main"
-                />}
-                PostContent={<PostContent
-                    text="Nuclear Fusion
-                    Circa 202X. On-going timeline during White forest rocket launch
-                    (Im back yay)"
-                />}
-                PostActions={<PostActions/>}
-            />
-                <Post
-                PostHeader={<PostHeader
-                    //authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
-                    authorName="Garny"
-                    date="2h"
-                    communityLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/16989520711478_DwC_CtCqDfcBMC.png?size=small"
-                    communityName="Source"
+                    communityId="TheSource"
                     communityLink="http://localhost:5173/communities/source"
                     communityCategoryName="Main"
                     communitySublink="http://localhost:5173/communities/source/main"

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Searchbar from "./Searchbar";
 import unite_logo from "/unite_logo.svg" 
 import Button from "./Button";
+import routes from "../../routes/routes";
 
 const Header:React.FC = () => {
 
@@ -23,8 +24,8 @@ const Header:React.FC = () => {
             </div>
             <Searchbar/>
             <div className="flex gap-2 items-center">
-                <Button variant="text" className="uppercase font-bold opacity-75 text-sm">sign in</Button>
-                <Button className="uppercase font-bold text-sm">sign up</Button>
+                <Button variant="text" href={routes.signIn()} className="uppercase font-bold opacity-75 text-sm">sign in</Button>
+                <Button href={routes.signUp()} className="uppercase font-bold text-sm">sign up</Button>
             </div>
         </div>
     )
