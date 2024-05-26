@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .absolute-centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .opacity-75 {
+    opacity: 75%;
+  }
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body,#root {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #2D2C2A;
+  color: white;
+}
+
+input {
+  all: unset;
+}
