@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "-r dotenv/config & tsc --watch",
+    "pm2": "pm2 start ./dist/index.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.12",
+    "typescript": "^5.4.5",
+    "dotenv": "^16.4.5"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pm2": "^5.4.0"
+  }
+}
