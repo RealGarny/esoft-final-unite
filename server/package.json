@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "-r dotenv/config & tsc --watch",
+    "dev": "nodemon src/index.ts",
     "pm2": "pm2 start ./dist/index.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,6 +18,8 @@
     "@types/node": "^20.12.12",
     "@types/swagger-ui-express": "^4.1.6",
     "dotenv": "^16.4.5",
+    "nodemon": "^3.1.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {

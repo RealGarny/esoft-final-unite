@@ -18,6 +18,33 @@ class UsersService {
         return(this._usersData.getUsers())
     }
 
+    public getUser(userLogin:string, params:object) {
+        if(!userLogin || !params) {
+            return;
+        }
+
+        const userParamsKeys = Object.keys(params);
+
+        if(userParamsKeys.length < 1) {
+            return this._usersData.getUser(userLogin);
+        }
+
+        const availibleParams = this._usersData.getPublicFields();
+
+        let finalParams = [];
+
+        let query = "SELECT"
+        for(let key in params) {
+            if(availibleParams.includes(key)) {
+                finalParams.push(key);
+            }
+        }
+
+        query += " " + finalParams.join(", ") + " FROM users"
+        console.log(query);
+        //return this._usersData.customQuery(query);
+    }
+
     public async createUser(user:usersData) {
 
         if(
