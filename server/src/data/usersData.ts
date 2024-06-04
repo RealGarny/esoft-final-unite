@@ -2,8 +2,13 @@ const data:number[] = []
 
 
 class usersData {
-    public getUsers() {
-        return(data);
+    public createUser() {
+        return({
+            login: "RealGarny", //unique
+            username: "Garny", //string (4-20)
+            userLogoUrl: "http://unitecdn.com/logos/RealGarny",
+
+        });
     }
 }
 

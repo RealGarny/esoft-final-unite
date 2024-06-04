@@ -6,8 +6,8 @@ class UsersService {
         this._usersData = usersData;
     }
 
-    public getUsers() {
-        return(this._usersData.getUsers())
+    public createUser() {
+        return(this._usersData.createUser())
     }
 }
 

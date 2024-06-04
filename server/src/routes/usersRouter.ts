@@ -3,7 +3,7 @@ import { Router } from "express"
 const usersRouter = (routerClass:any, usersController:any) => {
     const router:Router = routerClass();
 
-    router.get("/", usersController.getUsers)
+    router.post("/", usersController.createUser)
 
     return router;
 }

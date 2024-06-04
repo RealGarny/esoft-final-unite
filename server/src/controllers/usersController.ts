@@ -10,8 +10,8 @@ class UsersController {
         this._usersService = usersService;
     }
 
-    public getUsers = (req:usersRequest, res:usersResponse) => {
-        const users = this._usersService.getUsers();
+    public createUser = (req:usersRequest, res:usersResponse) => {
+        const users = this._usersService.createUser();
         if(users) {
             res.json(users);
         } else {
