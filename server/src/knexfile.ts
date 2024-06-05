@@ -1,18 +1,16 @@
-import dotenv = require('dotenv');
 import type { Knex } from "knex";
-dotenv.config();
 
 // Update with your config settings.
 
 const config: { [key: string]: Knex.Config } = {
   development: {
-    client: "pg",
+    client: process.env.DB_CLIENT,
     connection: {
-      host: "localhost",
-      port: 5432,
-      database: "Unite",
-      user: "postgres",
-      password: '3mbP0YRc^90GY&V7#Hz1!t5'
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT!),
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD
     },
     pool: {
       min: 2,

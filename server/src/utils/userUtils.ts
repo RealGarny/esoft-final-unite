@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv = require('dotenv');
 dotenv.config();
+import SnowflakeId from "./generateSnowflake";
 
 const emailRegex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 const passSaltRounds = 6;
@@ -11,7 +12,7 @@ class userUtils {
 
     private static _userConfig = {
         nameMinLen: 4,
-        nameMaxLen: 15,
+        nameMaxLen: 25,
         emailRegex,
         emailMaxLen: 254,
         passwordMinLen: 8,
@@ -50,6 +51,10 @@ class userUtils {
 
     public static async hashPassword(password:string) {
         return bcrypt.hash(password, passSaltRounds);
+    }
+
+    public static generateUid() {
+        return SnowflakeId().generate();
     }
 }
 

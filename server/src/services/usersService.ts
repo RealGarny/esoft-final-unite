@@ -1,4 +1,5 @@
 type usersData = {
+    uid: string,
     login: string,
     displayedName: string,
     email: string,
@@ -53,19 +54,19 @@ class UsersService {
             !this._userUtils.checkEmail(user.email) || 
             !this._userUtils.checkPassword(user.password)
         ) return false;
-
+        console.log(this._userUtils.generateUid())
         const userSchema:usersData = {
+            uid: this._userUtils.generateUid(),
             login: user.login,
             displayedName: user.displayedName,
             email: user.email,
             password: await this._userUtils.hashPassword(user.password)
         }
 
-        console.log(userSchema);
-
-        const createdUser = await this._usersData.createUser();
-
-        if(!createdUser) {
+        try{
+            const createdUser = await this._usersData.createUser(userSchema);
+        }catch(e) {
+            console.log(e)
             return false;
         }
 
