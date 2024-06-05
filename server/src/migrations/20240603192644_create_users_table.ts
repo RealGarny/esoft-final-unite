@@ -2,8 +2,9 @@ import type { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
+    console.log(knex.fn.uuid)
     return knex.schema.createTable("users", (table) => {
-        table.uuid("uid").defaultTo(knex.fn.uuid())
+        table.uuid("uid")
             .unique()
             .primary()
         table.string("login")

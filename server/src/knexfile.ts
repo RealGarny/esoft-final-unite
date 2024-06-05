@@ -12,7 +12,7 @@ const config: { [key: string]: Knex.Config } = {
       port: 5432,
       database: "Unite",
       user: "postgres",
-      password: '3mbP0YRc^90GY&V7#Hz1!t5'
+      password: 'admin'
     },
     pool: {
       min: 2,
