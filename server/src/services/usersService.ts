@@ -66,7 +66,6 @@ class UsersService {
         try{
             const createdUser = await this._usersData.createUser(userSchema);
         }catch(e) {
-            console.log(e)
             return false;
         }
 

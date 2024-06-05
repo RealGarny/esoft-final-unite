@@ -17,9 +17,9 @@ class UsersController {
         this._usersService = usersService;
     }
 
+
     public getUsers = async (req:usersRequest, res:usersResponse) => {
         const users = await this._usersService.getUsers();
-
         if(users) {
             res.status(statusCode.ok).json(users);
         } else {
