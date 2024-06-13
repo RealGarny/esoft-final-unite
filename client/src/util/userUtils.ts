@@ -1,10 +1,6 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv = require('dotenv');
-dotenv.config();
-import SnowflakeId from "./generateSnowflake";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
-type tokenPayload = string | jwt.JwtPayload;
+type tokenPayload = string | JwtPayload;
 type usersData = {
     login: string,
     displayedName: string,
@@ -13,8 +9,6 @@ type usersData = {
 }
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const passSaltRounds = 6;
-const secret = process.env.TOKEN_SECRETKEY || "PEROALIS";
 
 class userUtils {
 
@@ -63,31 +57,15 @@ class userUtils {
         return this._userConfig;
     }
 
-    public static generateToken(params:object) {
-        return jwt.sign(params, secret, { expiresIn:"48h" });
-    }
-
-    public static verifyToken(token:string, secret:string): tokenPayload | undefined {
+    public static decodeToken(token:string): tokenPayload | undefined {
 
         let decoded;
         try {
-            decoded = jwt.verify(token, secret)
+            decoded = jwtDecode(token)
         } catch(e) {
             decoded = undefined;
         }
         return decoded;
-    }
-
-    public static async hashPassword(password:string) {
-        return bcrypt.hash(password, passSaltRounds);
-    }
-
-    public static comparePassword(password:string, hash:string) {
-        return bcrypt.compareSync(password, hash)
-    }
-
-    public static generateId() {
-        return SnowflakeId().generate();
     }
 }
 

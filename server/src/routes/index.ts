@@ -6,14 +6,25 @@ import docsRouter from "./docsRouter";
 import docs from "../docs/docs";
 import userUtils from "../utils/userUtils";
 import UsersData from "../data/usersData";
-import knexModel from "../models/knexModel";
+import KnexModel from "../models/knexModel";
+import CommunitiesData from "../data/communitiesData";
+import CommunitiesService from "../services/communitiesService";
+import CommunitiesController from "../controllers/communitiesController";
+import communitiesRouter from "./communitiesRouter";
 
 const router = Router();
-const usersData = new UsersData(new knexModel().getConHandler())
+const knexModel = new KnexModel();
+
+const usersData = new UsersData(knexModel.getConHandler())
 const usersService = new UsersService(usersData, userUtils);
 const usersController = new UsersController(usersService);
 
-router.use("/users", usersRouter(Router, usersController))
+const communitiesData = new CommunitiesData(knexModel.getConHandler());
+const communitiesService = new CommunitiesService(communitiesData);
+const communitiesController = new CommunitiesController(communitiesService);
+
+router.use("/users", usersRouter(Router(), usersController))
+router.use("/communities", communitiesRouter(Router(), communitiesController))
 router.use("/docs", docsRouter(router, docs))
 
 export default router;

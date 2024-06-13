@@ -1,8 +1,11 @@
-import { Router } from "express";
+import checkUserToken from "../middlewares/checkUserToken";
 
-const communitiesRouter = (router:Router, communitiesController:any) => {
+const communitiesRouter = (router:any, communitiesController:any) => {
     
-    router.get("", communitiesController)
+    router.get("", communitiesController.getCommunities)
+    router.post("", checkUserToken, communitiesController.createCommunity)
 
     return router;
 }
+
+export default communitiesRouter;

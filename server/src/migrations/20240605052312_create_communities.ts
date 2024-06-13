@@ -14,10 +14,7 @@ import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable("communities", (table) => {
-        table.bigInteger("uid")
-            .unsigned()
-            .notNullable()
-            .unique()
+        table.increments("id")
             .primary()
         table.string("name")
             .unique()
@@ -36,6 +33,6 @@ export async function up(knex: Knex): Promise<void> {
 
 
 export async function down(knex: Knex): Promise<void> {
-    knex.schema.dropTableIfExists("communities");
+    return knex.schema.dropTableIfExists("communities");
 }
 

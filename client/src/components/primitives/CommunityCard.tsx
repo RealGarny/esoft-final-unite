@@ -1,7 +1,6 @@
 import Card from "./Card"
 import FadeContainer from "./FadeContainer"
 import Flexbox from "./Flexbox"
-import Button from "./Button"
 import routes from "../../routes/routes"
 import Hyperlink from "./Hyperlink"
 import Logo from "./Logo"
@@ -10,7 +9,6 @@ import AuthReqButton from "./AuthReqButton"
 const requiredProps = {
     bgURL: "https://media.cdn.community.lambdageneration.com/backgrounds/1694882926930B4CsCjBrB2CfBUXB.png?size=search",
     iconURL: "https://media.cdn.community.lambdageneration.com/avatars/1694882926817D8CbBPDqgtBDB7CC.png?size=mega",
-    bgColor: "#202020",
     primaryColor: "#",
     CID: "source",
     CName: "Source",

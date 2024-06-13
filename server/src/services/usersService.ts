@@ -1,9 +1,15 @@
+import UsersData from "../data/usersData";
+
 type usersData = {
-    uid: string,
     login: string,
     displayedName: string,
     email: string,
     password: string
+}
+
+type userAuth = {
+    login: usersData['login'],
+    password: usersData['password']
 }
 
 class UsersService {
@@ -19,14 +25,12 @@ class UsersService {
         return(this._usersData.getUsers())
     }
 
-    public getUser(userLogin:string, params:object) {
-        if(!userLogin || !params) {
-            return;
+    public getUser(userLogin:string, params:object|undefined = undefined) {
+        if(!userLogin) {
+            return false;
         }
 
-        const userParamsKeys = Object.keys(params);
-
-        if(userParamsKeys.length < 1) {
+        if(!params || typeof params !== "object" || Object.keys(params).length < 1) {
             return this._usersData.getUser(userLogin);
         }
 
@@ -42,21 +46,30 @@ class UsersService {
         }
 
         query += " " + finalParams.join(", ") + " FROM users"
-        console.log(query);
+
         //return this._usersData.customQuery(query);
+    }
+
+    public async authUser(user:userAuth) {
+        if(
+            !this._userUtils.checkName(user.login) ||
+            !this._userUtils.checkPassword(user.password)
+        ) return false;
+
+        const fetchedUser:usersData = await this.getUser(user.login);
+
+        if(!fetchedUser || !this._userUtils.comparePassword(user.password, fetchedUser.password)) {
+            return false;
+        }
+
+        return this._userUtils.generateToken(fetchedUser);
     }
 
     public async createUser(user:usersData) {
 
-        if(
-            !this._userUtils.checkName(user.displayedName) ||
-            !this._userUtils.checkName(user.login) ||
-            !this._userUtils.checkEmail(user.email) || 
-            !this._userUtils.checkPassword(user.password)
-        ) return false;
-        console.log(this._userUtils.generateUid())
+        if(!this._userUtils.checkUser(user)) return false;
+
         const userSchema:usersData = {
-            uid: this._userUtils.generateUid(),
             login: user.login,
             displayedName: user.displayedName,
             email: user.email,
@@ -64,7 +77,7 @@ class UsersService {
         }
 
         try{
-            const createdUser = await this._usersData.createUser(userSchema);
+            await this._usersData.createUser(userSchema);
         }catch(e) {
             return false;
         }

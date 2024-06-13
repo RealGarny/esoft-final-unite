@@ -40,7 +40,10 @@ class UsersData {
 
     //get user by his login
     public async getUser(userLogin:string):Promise<usersData[]> {
-        return this._db.from<usersData>('users').select().where('login', userLogin);
+
+        return this._db.from<usersData>('users')
+            .where('login', userLogin)
+            .first();
     }
 
     public async createUser(userData:usersData) {

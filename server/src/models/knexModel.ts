@@ -1,7 +1,7 @@
 import knex from "knex";
 import defaultKnexConfig from "../knexfile";
 
-class knexModel {
+class KnexModel {
     private _dbHandle:knex.Knex;
     public constructor(config:any = undefined) {
         this._dbHandle = knex(config ? config : defaultKnexConfig)
@@ -11,4 +11,4 @@ class knexModel {
     }
 }
 
-export default knexModel;
+export default KnexModel;

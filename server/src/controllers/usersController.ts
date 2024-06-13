@@ -1,14 +1,8 @@
 import { Request, Response } from "express";
+import {statusCode} from "../utils/httpStatusCodes";
 
 type usersRequest = Request;
 type usersResponse = Response;
-
-enum statusCode {
-    created = 201,
-    ok = 200,
-    badRequest = 400,
-    notFound = 404,
-}
 
 class UsersController {
     private _usersService:any;
@@ -24,6 +18,16 @@ class UsersController {
             res.status(statusCode.ok).json(users);
         } else {
             res.status(statusCode.notFound).json({message:"users not found"})
+        }
+    }
+
+    public authUser = async (req:usersRequest, res:usersResponse) => {
+        const token = await this._usersService.authUser(req.body);
+
+        if(token) {
+            res.status(200).json({token})
+        }  else {
+            res.status(statusCode.badRequest).json({message: "BAD_USER"})
         }
     }
 

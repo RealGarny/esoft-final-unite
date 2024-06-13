@@ -4,12 +4,14 @@ import { ChangeEvent, FormEvent, InputHTMLAttributes, useState } from "react";
 import routes from "../../routes/routes";
 import Hyperlink from "../primitives/Hyperlink";
 import Input from "../primitives/Input";
+import userAPI from "../../http/userAPI";
+import userUtils from "../../util/userUtils";
 
 interface FormInputs extends InputHTMLAttributes<HTMLInputElement> {
     key:number,
     label:string,
     errorMessage?:string,
-    isError?: boolean,
+    isError: boolean,
 }
 
 const SignUpPage = () => {
@@ -18,9 +20,15 @@ const SignUpPage = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        username: '',
+        login: '',
         displayName: ''
     });
+
+    const userConfig = userUtils.getUserReqs();
+
+    const stringLenError = (minLen:number, maxLen:number) => {
+        return(`Should be at least ${minLen}-${maxLen} characters long`)
+    }
 
     const inputs:FormInputs[] = [
         {
@@ -30,8 +38,7 @@ const SignUpPage = () => {
             label: "Email",
             value: values.email,
             errorMessage: "Email is incorrect!",
-            pattern:"test",
-            isError: !/^\S+@\S+\.\S+$/.test(values.email)
+            isError: !userUtils.checkEmail(values.email)
         },
         {
             key: 1,
@@ -39,8 +46,8 @@ const SignUpPage = () => {
             type:"password",
             label: "Password",
             value: values.password,
-            errorMessage: "Should be at least 8-15 characters long",
-            isError: values.password.length < 8 || values.password.length > 15
+            errorMessage: stringLenError(userConfig.passwordMinLen, userConfig.passwordMaxLen),
+            isError: !userUtils.checkPassword(values.password)
         },
         {
             key: 2,
@@ -53,20 +60,20 @@ const SignUpPage = () => {
         },
         {
             key: 3,
-            name: "username",
+            name: "login",
             type: "string",
-            value: values.username,
+            value: values.login,
             label: "Username",
-            isError: values.username.length > 15 || values.username.length < 4,
-            errorMessage: "Should be at least 4-15 characters long",
+            isError: !userUtils.checkName(values.login),
+            errorMessage: stringLenError(userConfig.nameMinLen, userConfig.nameMaxLen),
         },
         {
             key: 4,
             name: "displayName",
             label: "Display name",
             value: values.displayName,
-            isError: values.displayName.length > 15 || values.displayName.length < 4,
-            errorMessage: "Should be at least 4-15 characters long"
+            isError: !userUtils.checkName(values.displayName),
+            errorMessage: stringLenError(userConfig.nameMinLen, userConfig.nameMaxLen)
         },
     ]
 
@@ -74,15 +81,28 @@ const SignUpPage = () => {
         setValues((prevState) => ({...prevState, [e.target.name]: e.target.value}))
     }
 
-    const handleSubmit = (e:FormEvent<HTMLButtonElement>) => {
+    const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        let formErrors = false;
+        console.log("hello")
+        
+        for(let key in inputs) {
+            if(inputs[key].isError) {
+                formErrors = true;
+                break;
+            }
+        }
+
+        if(!formErrors) {
+            userAPI.registration(values.email, values.displayName, values.login, values.password)
+        }
     }
 
     return(
         <div className="sm:items-center box-border flex justify-center min-h-screen p-0 sm:p-16">
             <Card padding="lg" bg="bg-primary" className="flex-col justify-center sm:justify-normal items-center w-full sm:w-96 sm:min-h-full">
                 <p className="font-bold text-2xl pb-4">Create an account</p>
-                <form className="flex flex-col w-full gap-4">
+                <form className="flex flex-col w-full gap-4" onSubmit={handleSubmit}>
                     {inputs.map((input)=> (
                         <Input
                             {...input}
@@ -92,7 +112,7 @@ const SignUpPage = () => {
                             onChange={handleChange}
                         />
                     ))}
-                    <Button onSubmit={handleSubmit} rounded="sm" className="w-full font-bold bg-accent text-white hover:bg-orange-600">Sign Up</Button>
+                    <Button rounded="sm" className="w-full font-bold bg-accent text-white hover:bg-orange-600">Sign Up</Button>
                 </form>
                 <p className="font-bold">Already have an account? <Hyperlink to={routes.signIn()} className="text-accent hover:underline">Sign In</Hyperlink></p>
             </Card>
