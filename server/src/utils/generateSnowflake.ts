@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config();
 
 const waitUntilNextTimestamp = (currentTimestamp: number) => {
     let nextTimestamp = Date.now();
@@ -8,6 +6,7 @@ const waitUntilNextTimestamp = (currentTimestamp: number) => {
     }
     return nextTimestamp;
   };
+
 
   const DEFAULTS = {
     WORKER_ID: process.env.WORKER_ID || 12,
@@ -46,7 +45,7 @@ const SnowflakeId = ({ workerId = DEFAULTS.WORKER_ID, epoch = DEFAULTS.EPOCH } =
       } else {
         sequence = 0;
       }
-
+      
       lastTimestamp = timestamp;
 
       const timestampOffset = timestamp - epoch;

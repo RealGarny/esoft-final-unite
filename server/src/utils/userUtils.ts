@@ -1,7 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv = require('dotenv');
-dotenv.config();
 import SnowflakeId from "./generateSnowflake";
 
 type tokenPayload = string | jwt.JwtPayload;
@@ -63,8 +61,12 @@ class userUtils {
         return this._userConfig;
     }
 
-    public static generateToken(params:object) {
-        return jwt.sign(params, secret, { expiresIn:"48h" });
+    public static generateAccessToken(params:object) {
+        return jwt.sign(params, secret, { expiresIn:"5m" });
+    }
+
+    public static generateRefreshToken(params:object) {
+        return jwt.sign(params, secret, { expiresIn:"72h" });
     }
 
     public static verifyToken(token:string, secret:string): tokenPayload | undefined {

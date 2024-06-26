@@ -76,13 +76,16 @@ class UsersService {
             password: await this._userUtils.hashPassword(user.password)
         }
 
+        const accessToken =  this._userUtils.generateAccessToken(userSchema);
+        const refreshToken = this._userUtils.generateRefreshToken({ login: userSchema.login });
+
         try{
             await this._usersData.createUser(userSchema);
         }catch(e) {
             return false;
         }
 
-        return {token: this._userUtils.generateToken(userSchema)}
+        return {accessToken, refreshToken}
     }
 }
 

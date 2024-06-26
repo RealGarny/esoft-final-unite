@@ -16,6 +16,8 @@ export async function up(knex: Knex): Promise<void> {
             .notNullable()
         table.string("password")
             .notNullable()
+        table.string("refreshToken", 1000)
+            
     })
 }
 
