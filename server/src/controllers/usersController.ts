@@ -33,9 +33,13 @@ class UsersController {
 
     public createUser = async (req:usersRequest, res:usersResponse) => {
         const token = await this._usersService.createUser(req.body);
+        const cookieConfig = { maxAge: 72 * 60 * 60 * 1000, httpOnly: true };
 
         if(token) {
-            res.status(statusCode.created).json(token);
+            res
+            .status(statusCode.created)
+            .cookie("refreshToken", token.accessToken, cookieConfig)
+            .json({accessToken: token.accessToken});
         } else {
             res.status(statusCode.badRequest).json({message: "user was not created."})
         }

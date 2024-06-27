@@ -17,7 +17,6 @@ export async function up(knex: Knex): Promise<void> {
         table.integer("globalRole")
             .references('id')
             .inTable('roles')
-            .defaultTo(0)
         table.timestamps(true, true, true)
         table.timestamp('lastSeen')
             .defaultTo(knex.fn.now())

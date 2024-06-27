@@ -13,6 +13,7 @@ type usersData = {
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passSaltRounds = 6;
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRETKEY;
+console.log(accessTokenSecret)
 const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRETKEY;
 
 class userUtils {
@@ -67,7 +68,7 @@ class userUtils {
     }
 
     public static generateRefreshToken(params:object) {
-        return jwt.sign(params, refreshTokenSecret!, { expiresIn:"72h" });
+        return jwt.sign(params, refreshTokenSecret!);
     }
 
     public static verifyToken(token:string, secret:string): tokenPayload | undefined {

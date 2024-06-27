@@ -1,9 +1,8 @@
-import checkUserToken from "../middlewares/checkAccessToken";
 
 const communitiesRouter = (router:any, communitiesController:any) => {
     
     router.get("", communitiesController.getCommunities)
-    router.post("", checkUserToken, communitiesController.createCommunity)
+    router.post("", communitiesController.createCommunity)
 
     return router;
 }

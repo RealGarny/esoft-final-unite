@@ -3,13 +3,15 @@ import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('permissions', (table) => {
-        table.enu('permission', ['banUser', 'createPost', 'teapot'], {
-            enumName: 'ePermissons',
-            useNative: true,
-        })
-            .unique()
+        table.increments('id')
+        table.string('title', 100)
+        table.string('route')
             .notNullable()
-        })
+        table.enu('method', ['GET', 'POST', 'PATCH', 'DELETE'])
+            .notNullable()
+        table.boolean('active')
+            .defaultTo(true)
+    })
 }
 
 

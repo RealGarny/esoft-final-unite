@@ -76,12 +76,13 @@ class UsersService {
         }
 
         const accessToken =  this._userUtils.generateAccessToken(userSchema);
-        const refreshToken = this._userUtils.generateRefreshToken({ login: userSchema.login });
+        const refreshToken = this._userUtils.generateRefreshToken(userSchema);
 
         try{
             await this._usersData.createUser({
                 ...userSchema,
                 password: await this._userUtils.hashPassword(user.password),
+                globalRole: 1, //supposed to be user
                 refreshToken
             });
         }catch(e) {

@@ -3,16 +3,17 @@ import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('roles_permissions', (table) => {
-        table.specificType('permissionId', 'ePermissions')
+        table.increments('id')
+        table.integer('permissionId')
             .primary()
             .notNullable()
-            .references('permission')
+            .references('id')
             .inTable('permissions')
             .onDelete('CASCADE')
-        table.specificType('roleId', 'eRoles')
+        table.integer('roleId',)
             .primary()
             .notNullable()
-            .references('role')
+            .references('id')
             .inTable('roles')
             .onDelete('CASCADE')
     })
