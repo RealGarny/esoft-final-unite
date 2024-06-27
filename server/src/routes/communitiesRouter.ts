@@ -1,4 +1,4 @@
-import checkUserToken from "../middlewares/checkUserToken";
+import checkUserToken from "../middlewares/checkAccessToken";
 
 const communitiesRouter = (router:any, communitiesController:any) => {
     

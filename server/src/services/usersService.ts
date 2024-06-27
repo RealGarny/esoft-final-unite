@@ -4,7 +4,7 @@ type usersData = {
     login: string,
     displayedName: string,
     email: string,
-    password: string
+    password?: string
 }
 
 type userAuth = {
@@ -62,7 +62,7 @@ class UsersService {
             return false;
         }
 
-        return this._userUtils.generateToken(fetchedUser);
+        return this._userUtils.generateAccessToken(fetchedUser);
     }
 
     public async createUser(user:usersData) {
@@ -72,15 +72,18 @@ class UsersService {
         const userSchema:usersData = {
             login: user.login,
             displayedName: user.displayedName,
-            email: user.email,
-            password: await this._userUtils.hashPassword(user.password)
+            email: user.email
         }
 
         const accessToken =  this._userUtils.generateAccessToken(userSchema);
         const refreshToken = this._userUtils.generateRefreshToken({ login: userSchema.login });
 
         try{
-            await this._usersData.createUser(userSchema);
+            await this._usersData.createUser({
+                ...userSchema,
+                password: await this._userUtils.hashPassword(user.password),
+                refreshToken
+            });
         }catch(e) {
             return false;
         }

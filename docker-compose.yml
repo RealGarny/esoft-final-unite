@@ -46,9 +46,8 @@ services:
         && npx knex migrate:latest --knexfile ./src/knexfile.ts
         && npm run start:dev"
     container_name: unite-backend
-    restart: unless-stopped
     volumes:
-      - ./server/src:/opt/node/src
+      - ./server:/opt/node
 
 networks:
   unite:

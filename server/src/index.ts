@@ -11,5 +11,4 @@ app.use("/api", router)
 
 app.listen(PORT, () => {
     console.log(`server is listenning on port ${PORT}`)
-    console.log("test4")
 })

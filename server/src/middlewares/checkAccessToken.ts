@@ -11,7 +11,7 @@ declare global {
     }
 }
 
-const checkUserToken = (req:Request, res:Response, next:NextFunction) => {
+export const checkAccessToken = (req:Request, res:Response, next:NextFunction) => {
     
     if(req.method === "OPTIONS") {
         next()
@@ -22,7 +22,7 @@ const checkUserToken = (req:Request, res:Response, next:NextFunction) => {
         if(!token) {
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
-        const decoded = userUtils.verifyToken(token, process.env.TOKEN_SECRETKEY!);
+        const decoded = userUtils.verifyToken(token, process.env.ACCESS_TOKEN_SECRETKEY!);
         
         if(decoded){
             req.user = decoded;
@@ -33,4 +33,4 @@ const checkUserToken = (req:Request, res:Response, next:NextFunction) => {
     }
 }
 
-export default checkUserToken;
+export default checkAccessToken;
