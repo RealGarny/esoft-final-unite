@@ -1,27 +1,32 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import SnowflakeId from "./generateSnowflake";
 
-type tokenPayload = string | jwt.JwtPayload;
-type usersData = {
+export type usersData = {
     login: string,
     displayedName: string,
     email: string,
     password: string
 }
 
-const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const passSaltRounds = 6;
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRETKEY;
-console.log(accessTokenSecret)
-const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRETKEY;
+export type fullUsersData = usersData & {
+    id: number,
+    globalRole: number,
+    createdAt: Date,
+    updatedAT: Date,
+    lastSeen: Date,
+    refreshToken: null | string
+}
 
+export type tokenPayload = Omit<fullUsersData, "password" | "refresh">
 class userUtils {
+
+    private static emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    private static passSaltRounds = 6;
 
     private static _userConfig = {
         nameMinLen: 4,
         nameMaxLen: 25,
-        emailRegex,
+        emailRegex: this.emailRegex,
         emailMaxLen: 254,
         passwordMinLen: 8,
         passwordMaxLen: 25
@@ -46,7 +51,7 @@ class userUtils {
     public static checkEmail(email:string):boolean {
         return this._checkString(email) &&
             email.length < this._userConfig.emailMaxLen &&
-            emailRegex.test(email);
+            this.emailRegex.test(email);
     }
 
     public static checkUser(user:usersData):boolean {
@@ -63,27 +68,8 @@ class userUtils {
         return this._userConfig;
     }
 
-    public static generateAccessToken(params:object) {
-        return jwt.sign(params, accessTokenSecret!, { expiresIn:"5m" });
-    }
-
-    public static generateRefreshToken(params:object) {
-        return jwt.sign(params, refreshTokenSecret!);
-    }
-
-    public static verifyToken(token:string, secret:string): tokenPayload | undefined {
-
-        let decoded;
-        try {
-            decoded = jwt.verify(token, secret)
-        } catch(e) {
-            decoded = undefined;
-        }
-        return decoded;
-    }
-
     public static async hashPassword(password:string) {
-        return bcrypt.hash(password, passSaltRounds);
+        return bcrypt.hash(password, this.passSaltRounds);
     }
 
     public static comparePassword(password:string, hash:string) {

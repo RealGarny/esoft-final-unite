@@ -1,15 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import userUtils from "../utils/userUtils";
 import { statusCode } from "../utils/httpStatusCodes";
-import { JwtPayload } from "jsonwebtoken";
+import TokenService from "../services/tokenService";
+import { UserPayload } from "jsonwebtoken";
+import { tokenUniteData } from "../routes";
 
 declare global {
     namespace Express {
         interface Request {
-        user: string | JwtPayload;
+        user: UserPayload;
         }
     }
 }
+
+const tokenService = TokenService(tokenUniteData);
 
 export const checkAccessToken = (req:Request, res:Response, next:NextFunction) => {
     
@@ -22,10 +25,10 @@ export const checkAccessToken = (req:Request, res:Response, next:NextFunction) =
         if(!token) {
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
-        const decoded = userUtils.verifyToken(token, process.env.ACCESS_TOKEN_SECRETKEY!);
-        
-        if(decoded){
-            req.user = decoded;
+        const decoded = tokenService.verifyAccessToken(token, process.env.ACCESS_TOKEN_SECRETKEY!);
+        if(!decoded){
+            console.log("expired access")
+            return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
         next();
     } catch(e) {
@@ -44,10 +47,11 @@ export const checkRefreshToken = (req:Request, res:Response, next:NextFunction) 
         if(!token) {
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
-        const decoded = userUtils.verifyToken(token, process.env.REFRESH_TOKEN_SECRETKEY!);
         
-        if(decoded){
-            req.user = decoded;
+        if(!tokenService.verifyRefreshToken(token)){
+            console.log("expired refresh")
+            res.status(statusCode.unauthorized)
+                .json({message: "user is not authorized"})
         }
         next();
     } catch(e) {
@@ -55,4 +59,4 @@ export const checkRefreshToken = (req:Request, res:Response, next:NextFunction) 
     }
 }
 
-export const checkAccessAndRefresh = [checkAccessToken, checkRefreshToken];
+export const checkAccessAndRefresh = [checkAccessToken, checkRefreshToken]

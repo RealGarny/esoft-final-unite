@@ -6,20 +6,22 @@ import docsRouter from "./docsRouter";
 import docs from "../docs/docs";
 import userUtils from "../utils/userUtils";
 import UsersData from "../data/usersData";
-import KnexModel from "../models/knexModel";
+import uniteModel from "../models/uniteModel";
 import CommunitiesData from "../data/communitiesData";
 import CommunitiesService from "../services/communitiesService";
 import CommunitiesController from "../controllers/communitiesController";
 import communitiesRouter from "./communitiesRouter";
+import tokenService from "../services/tokenService";
+import TokenData from "../data/tokenData";
 
 const router = Router();
-const knexModel = new KnexModel();
+export const tokenUniteData = new TokenData(uniteModel);
 
-const usersData = new UsersData(knexModel.getConHandler())
-const usersService = new UsersService(usersData, userUtils);
+const usersData = new UsersData(uniteModel)
+const usersService = new UsersService(usersData, userUtils, tokenService(tokenUniteData));
 const usersController = new UsersController(usersService);
 
-const communitiesData = new CommunitiesData(knexModel.getConHandler());
+const communitiesData = new CommunitiesData(uniteModel);
 const communitiesService = new CommunitiesService(communitiesData);
 const communitiesController = new CommunitiesController(communitiesService);
 

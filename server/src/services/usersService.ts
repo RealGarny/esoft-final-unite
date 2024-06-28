@@ -15,10 +15,12 @@ type userAuth = {
 class UsersService {
     private _usersData;
     private _userUtils;
+    private _tokenService;
 
-    public constructor(usersData:any, userUtils:any) {
+    public constructor(usersData:any, userUtils:any, tokenService:any) {
         this._usersData = usersData;
         this._userUtils = userUtils;
+        this._tokenService = tokenService;
     }
 
     public getUsers() {
@@ -62,7 +64,7 @@ class UsersService {
             return false;
         }
 
-        return this._userUtils.generateAccessToken(fetchedUser);
+        return this._tokenService.generateAccessToken(fetchedUser);
     }
 
     public async createUser(user:usersData) {
@@ -75,8 +77,8 @@ class UsersService {
             email: user.email
         }
 
-        const accessToken =  this._userUtils.generateAccessToken(userSchema);
-        const refreshToken = this._userUtils.generateRefreshToken(userSchema);
+        const accessToken =  this._tokenService.generateAccessToken(userSchema);
+        const refreshToken = this._tokenService.generateRefreshToken(userSchema);
 
         try{
             await this._usersData.createUser({
