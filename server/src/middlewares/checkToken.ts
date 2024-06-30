@@ -52,7 +52,7 @@ export const checkRefreshToken = (req:Request, res:Response, next:NextFunction) 
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
         
-        if(!tokenService.verifyRefreshToken(refreshToken, process.env.REFRESH_TOKEN_SECRETKEY!)){
+        if(!tokenService.verifyRefreshToken(refreshToken, process.env.REFRESH_TOKEN_SECRETKEY!)) {
             console.log("expired refresh")
             return res.status(statusCode.unauthorized)
                     .json({message: "user is not authorized"})

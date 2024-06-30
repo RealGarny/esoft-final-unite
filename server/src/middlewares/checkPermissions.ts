@@ -1,9 +1,14 @@
 import { Request, Response, NextFunction } from "express"
 import { statusCode } from "../utils/httpStatusCodes"
+import uniteModel from "../models/uniteModel";
+import UsersService from "../services/usersService";
+import UsersData from "../data/usersData";
 
 interface Options {
     trimUrl: boolean;
 }
+
+const usersData = new UsersData(uniteModel);
 
 const checkPermissions = (options:Options = {trimUrl: false}) => {
     return (req:Request, res:Response, next:NextFunction) => {
@@ -14,7 +19,7 @@ const checkPermissions = (options:Options = {trimUrl: false}) => {
                 url = trimmed.join("/")
             }
         }
-        
+
         if(!req.user.globalRole) {
             res.status(statusCode.unauthorized)
                 .json({message: "user is not authorized"})

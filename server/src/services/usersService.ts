@@ -22,12 +22,17 @@ class UsersService {
         return(this._usersData.getUsers())
     }
 
-    public getUser(params:object) {
-        if(!params || typeof params !== "object" || Object.keys(params).length < 1) {
+    public async getUser(login:string) {
+        if(!login || typeof login !== "string" || login.length < 1) {
             return false;
         }
 
-         return this._usersData.getUser(params);
+        const fetchedUser = await this._usersData.getUser({login});
+        if(!fetchedUser) {
+            return false;
+        } else {
+            return fetchedUser;
+        }
     }
 
     public async authUser(user:userAuth) {
@@ -36,7 +41,7 @@ class UsersService {
             !this._userUtils.checkPassword(user.password)
         ) return false;
 
-        let fetchedUser:fullUsersData = await this.getUser({login: user.login});
+        let fetchedUser:fullUsersData = await this.getUser(user.login);
 
         if(!fetchedUser || !this._userUtils.comparePassword(user.password, fetchedUser.password)) {
             return false;

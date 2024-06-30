@@ -49,9 +49,9 @@ class UsersController {
     }
 
     public getUser = async(req: usersRequest, res: usersResponse) => {
-        const user = await this._usersService.getUser({login: req.params.userLogin})
+        const user = await this._usersService.getUser(req.params.userLogin)
 
-        if(!user) {
+        if(user) {
             res.status(statusCode.ok).json(user);
         } else {
             res.status(statusCode.notFound).json({message: "user was not found."})

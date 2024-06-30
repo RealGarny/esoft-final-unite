@@ -15,25 +15,28 @@ class UsersData {
     }
 
     //get user by his login
-    public async getUser(param:object):Promise<usersData[]> {
+    public getUser(param:object):Promise<usersData[]> {
 
         return this._db.from<usersData>('users')
             .where(param)
             .first();
     }
 
-    public async createUser(userData:usersData) {
+    public createUser(userData:usersData) {
         return this._db('users').insert(userData);
     }
 
-    public async updateUser(userId:number, data:object) {
+    public updateUser(userId:number, data:object):Promise<any[]> {
         return this._db('users')
         .where('id', userId)
         .update(data)
     }
 
-    public customQuery(query:string) {
-        return {query};
+    public getRolePermissions(userRole:number|number[]) {
+        if(typeof userRole !== "number" || !Array.isArray(userRole)) {
+            throw new Error("userRole is not of type numer or array")
+        }
+
     }
 }
 
