@@ -5,12 +5,23 @@ class TokenData {
         this._db = model;
     };
     
-    public getRefreshToken = (token:any) => {
-        return this._db("users")
-            .get("*")
-            .where("refreshToken", "=", token)
+    public getRefreshToken = async(token:any) => {
+        const user = await this._db("users")
+        .select("refreshToken")
+        .whereLike("refreshToken", token)
+        .first()
+
+        return user.refreshToken
     }
 
+    public RevokeRefreshToken = async(token:any) => {
+        const user = await this._db("users")
+        .select("refreshToken")
+        .whereLike("refreshToken", token)
+        .first()
+
+        return user.refreshToken
+    }
 }
 
 export default TokenData;

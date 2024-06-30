@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { statusCode } from "../utils/httpStatusCodes";
 import TokenService from "../services/tokenService";
 import { UserPayload } from "jsonwebtoken";
-import { tokenUniteData } from "../routes";
+import TokenData from "../data/tokenData";
+import uniteModel from "../models/uniteModel";
 
 declare global {
     namespace Express {
@@ -12,7 +13,8 @@ declare global {
     }
 }
 
-const tokenService = TokenService(tokenUniteData);
+export const tokenUniteData = new TokenData(uniteModel);
+const tokenService = new TokenService(tokenUniteData);
 
 export const checkAccessToken = (req:Request, res:Response, next:NextFunction) => {
     
@@ -29,8 +31,10 @@ export const checkAccessToken = (req:Request, res:Response, next:NextFunction) =
         if(!decoded){
             console.log("expired access")
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+        } else {
+            req.user = decoded;
+            next();
         }
-        next();
     } catch(e) {
         res.status(statusCode.unauthorized).json({message: "user is not authorized"})
     }
@@ -42,19 +46,20 @@ export const checkRefreshToken = (req:Request, res:Response, next:NextFunction) 
         next()
     }
     try {
-        const token = req.cookies("refreshToken");
+        const { refreshToken } = req.cookies;
 
-        if(!token) {
+        if(!refreshToken) {
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
         
-        if(!tokenService.verifyRefreshToken(token)){
+        if(!tokenService.verifyRefreshToken(refreshToken, process.env.REFRESH_TOKEN_SECRETKEY!)){
             console.log("expired refresh")
-            res.status(statusCode.unauthorized)
-                .json({message: "user is not authorized"})
+            return res.status(statusCode.unauthorized)
+                    .json({message: "user is not authorized"})
         }
         next();
     } catch(e) {
+        console.log(e)
         res.status(statusCode.unauthorized).json({message: "user is not authorized"})
     }
 }

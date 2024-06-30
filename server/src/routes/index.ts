@@ -12,13 +12,11 @@ import CommunitiesService from "../services/communitiesService";
 import CommunitiesController from "../controllers/communitiesController";
 import communitiesRouter from "./communitiesRouter";
 import tokenService from "../services/tokenService";
-import TokenData from "../data/tokenData";
 
 const router = Router();
-export const tokenUniteData = new TokenData(uniteModel);
 
 const usersData = new UsersData(uniteModel)
-const usersService = new UsersService(usersData, userUtils, tokenService(tokenUniteData));
+const usersService = new UsersService(usersData, userUtils, tokenService);
 const usersController = new UsersController(usersService);
 
 const communitiesData = new CommunitiesData(uniteModel);

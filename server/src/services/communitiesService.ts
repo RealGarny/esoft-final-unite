@@ -6,7 +6,8 @@ class CommunitiesService {
         this._communitiesData = communitiesData;
     }
 
-    public createCommunity(header:any, community:any) {
+    public createCommunity(community:any) {
+        
         return true
     }
 }

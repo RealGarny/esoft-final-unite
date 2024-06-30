@@ -1,16 +1,11 @@
-import UsersData from "../data/usersData";
-
-type usersData = {
-    login: string,
-    displayedName: string,
-    email: string,
-    password?: string
-}
+import { fullUsersData, usersData } from "../utils/userUtils";
 
 type userAuth = {
     login: usersData['login'],
     password: usersData['password']
 }
+
+type registerUser = Omit<usersData, "password">
 
 class UsersService {
     private _usersData;
@@ -27,29 +22,12 @@ class UsersService {
         return(this._usersData.getUsers())
     }
 
-    public getUser(userLogin:string, params:object|undefined = undefined) {
-        if(!userLogin) {
+    public getUser(params:object) {
+        if(!params || typeof params !== "object" || Object.keys(params).length < 1) {
             return false;
         }
 
-        if(!params || typeof params !== "object" || Object.keys(params).length < 1) {
-            return this._usersData.getUser(userLogin);
-        }
-
-        const availibleParams = this._usersData.getPublicFields();
-
-        let finalParams = [];
-
-        let query = "SELECT"
-        for(let key in params) {
-            if(availibleParams.includes(key)) {
-                finalParams.push(key);
-            }
-        }
-
-        query += " " + finalParams.join(", ") + " FROM users"
-
-        //return this._usersData.customQuery(query);
+         return this._usersData.getUser(params);
     }
 
     public async authUser(user:userAuth) {
@@ -58,40 +36,62 @@ class UsersService {
             !this._userUtils.checkPassword(user.password)
         ) return false;
 
-        const fetchedUser:usersData = await this.getUser(user.login);
+        let fetchedUser:fullUsersData = await this.getUser({login: user.login});
 
         if(!fetchedUser || !this._userUtils.comparePassword(user.password, fetchedUser.password)) {
             return false;
         }
 
-        return this._tokenService.generateAccessToken(fetchedUser);
+        try {
+            fetchedUser = this._userUtils.getUserTokenSchema(fetchedUser);
+
+            const accessToken =  this._tokenService.generateAccessToken(fetchedUser);
+            const refreshToken = this._tokenService.generateRefreshToken({login: fetchedUser.login});
+
+            try{
+            this._usersData.updateUser(fetchedUser.id, {refreshToken})
+            } catch(e) {
+                console.log(`unable to update users refresh token. user id:${fetchedUser.id}`)
+            }
+
+
+            return {accessToken, refreshToken}
+        } catch(e) {
+            return false;
+        }
     }
 
     public async createUser(user:usersData) {
 
-        if(!this._userUtils.checkUser(user)) return false;
+        if(!this._userUtils.checkUser(user)) return {error: "USER_INVALID"};
 
-        const userSchema:usersData = {
+        const userSchema = {
             login: user.login,
             displayedName: user.displayedName,
             email: user.email
         }
-
-        const accessToken =  this._tokenService.generateAccessToken(userSchema);
-        const refreshToken = this._tokenService.generateRefreshToken(userSchema);
 
         try{
             await this._usersData.createUser({
                 ...userSchema,
                 password: await this._userUtils.hashPassword(user.password),
                 globalRole: 1, //supposed to be user
-                refreshToken
             });
         }catch(e) {
-            return false;
+            return {error: "USER_EXISTS"};
         }
 
-        return {accessToken, refreshToken}
+        try{
+            const createdUser = await this._usersData.getUser({login: userSchema.login});
+            const tokenParams = this._userUtils.getUserTokenSchema(createdUser)
+
+            const refreshToken = this._tokenService.generateRefreshToken({login: tokenParams.login})
+            const accessToken =  this._tokenService.generateAccessToken(tokenParams);
+
+            return {accessToken, refreshToken}
+        } catch(e) {
+            return {error: "USER_NOT_CREATED"}
+        }
     }
 }
 

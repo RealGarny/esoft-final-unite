@@ -12,12 +12,13 @@ export type fullUsersData = usersData & {
     id: number,
     globalRole: number,
     createdAt: Date,
-    updatedAT: Date,
+    updatedAt: Date,
     lastSeen: Date,
     refreshToken: null | string
 }
 
-export type tokenPayload = Omit<fullUsersData, "password" | "refresh">
+export type tokenPayload = Omit<fullUsersData, "password" | "refreshToken" | "lastSeen">
+
 class userUtils {
 
     private static emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -62,6 +63,18 @@ class userUtils {
             !this.checkPassword(user.password)
         ) return false;
         else return true;
+    }
+
+    public static getUserTokenSchema(user:fullUsersData):tokenPayload {
+        return {
+            id: user.id,
+            login: user.login,
+            displayedName: user.displayedName,
+            email: user.email,
+            globalRole: user.globalRole,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
+        }
     }
 
     public static getUserReqs() {

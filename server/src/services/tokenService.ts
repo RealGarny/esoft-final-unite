@@ -7,20 +7,34 @@ declare module 'jsonwebtoken' {
     }
 }
 
-const tokenService = (tokenData:any = undefined) => {
-
-    const _accessTokenSecret = process.env.ACCESS_TOKEN_SECRETKEY;
-    const _refreshTokenSecret = process.env.REFRESH_TOKEN_SECRETKEY;
-
-    const generateAccessToken = (params:object) => {
-        return jwt.sign(params, _accessTokenSecret!, { expiresIn:"5m" });
+const _accessTokenSecret = process.env.ACCESS_TOKEN_SECRETKEY;
+const _refreshTokenSecret = process.env.REFRESH_TOKEN_SECRETKEY;
+const _accessExpiration = "50m";
+const _refreshExpiration = "72h";
+class TokenService {
+    private _tokenData;
+    
+    public constructor(tokenData:any) {
+        this._tokenData = tokenData
     }
 
-    const generateRefreshToken = (params:object) => {
-        return jwt.sign(params, _refreshTokenSecret!);
+    public generateAccessToken = (params:object) => {
+        return jwt.sign(params, _accessTokenSecret!, { expiresIn:_accessExpiration });
     }
 
-    const verifyAccessToken = (token:string, secret:string): UserPayload | undefined => {
+    static generateAccessToken = (params:object) => {
+        return jwt.sign(params, _accessTokenSecret!, { expiresIn:_accessExpiration });
+    }
+
+    public generateRefreshToken = (params:object) => {
+        return jwt.sign(params, _refreshTokenSecret!, { expiresIn:_refreshExpiration });
+    }
+
+    static generateRefreshToken = (params:object) => {
+        return jwt.sign(params, _refreshTokenSecret!, { expiresIn:_refreshExpiration });
+    }
+
+    public verifyAccessToken = (token:string, secret:string): UserPayload | undefined => {
 
         let decoded;
         try {
@@ -31,25 +45,20 @@ const tokenService = (tokenData:any = undefined) => {
         return decoded;
     }
 
-    const verifyRefreshToken = (token:string): true | false => {
-
-        let result;
+    public verifyRefreshToken = async(token:string, secret:string): Promise<true | false> => {
         try {
-            result = tokenData.getRefreshToken(token)
-
-            result = result.length > 0;
+            <UserPayload>jwt.verify(token, secret)
+            let result = await this._tokenData.getRefreshToken(token)
+            
+            if(result) {
+                return true;
+            }
         } catch(e) {
-            result = false;
+            console.log(e)
+            return false;
         }
-        return result;
-    }
-
-    return {
-        generateAccessToken,
-        generateRefreshToken,
-        verifyAccessToken,
-        verifyRefreshToken
+        return false;
     }
 }
 
-export default tokenService;
+export default TokenService;
