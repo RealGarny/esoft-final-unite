@@ -1,6 +1,6 @@
 import { ContainerProps } from "../../interfaces";
 import { VariantProps, cva } from "class-variance-authority";
-import cn from "../../util/cn";
+import cn from "../../utils/cn";
 import { twMerge } from "tailwind-merge";
 
 interface FadeContainerProps extends ContainerProps, VariantProps<typeof fadeVariants>{

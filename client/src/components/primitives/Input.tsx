@@ -1,6 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { InputHTMLAttributes, useState } from "react";
-import cn from "../../util/cn";
+import cn from "../../utils/cn";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof InputVariants> { 
     label?:string,

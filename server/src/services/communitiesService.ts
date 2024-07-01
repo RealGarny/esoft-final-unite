@@ -11,7 +11,7 @@ class communitiesUtils {
     private static _urlRegex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/
     private static _communityConfig = {
         nameMinLen: 3,
-        nameMaxLen: 14,
+        nameMaxLen: 21,
         descriptionMaxLen: 300,
         nicknameMaxLen: 25
     }
@@ -80,7 +80,7 @@ class CommunitiesService {
         }
 
         const communitySchema:CreateCommunity = {
-            name: community.name,
+            name: community.name.replace(/\s+/g, "-"),
             description: community.description,
             creator: user.id,
             followerNickname: community.followerNickname,
@@ -89,9 +89,13 @@ class CommunitiesService {
         }
         try{
             await this._communitiesData.createCommunity(communitySchema)
-        } catch(e) {
-            console.log(e)
-            return {error: "INTERNAL_ERROR"}
+            return true;
+        } catch(e:any) {
+            if(e.detail) {
+                return {error: "COMMUNITY_EXIST"}
+            } else {
+                return {error: "INTERNAL_ERROR"}
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ export type usersData = {
     login: string,
     displayedName: string,
     email: string,
-    password: string
+    password?: string
 }
 
 export type fullUsersData = usersData & {
@@ -60,7 +60,7 @@ class userUtils {
             !this.checkName(user.displayedName) ||
             !this.checkName(user.login) ||
             !this.checkEmail(user.email) || 
-            !this.checkPassword(user.password)
+            !this.checkPassword(user.password!)
         ) return false;
         else return true;
     }

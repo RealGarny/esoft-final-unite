@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
-import cn from "../../util/cn";
+import cn from "../../utils/cn";
 import Hyperlink from "./Hyperlink";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof ButtonVariants> {

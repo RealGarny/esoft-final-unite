@@ -48,13 +48,10 @@ class UsersService {
         }
 
         try {
-            fetchedUser = this._userUtils.getUserTokenSchema(fetchedUser);
-
-            const accessToken =  this._tokenService.generateAccessToken(fetchedUser);
-            const refreshToken = this._tokenService.generateRefreshToken({login: fetchedUser.login});
+            const { accessToken, refreshToken } = this._createUserTokens(fetchedUser);
 
             try{
-            this._usersData.updateUser(fetchedUser.id, {refreshToken})
+                await this._usersData.updateUser(fetchedUser.id, {refreshToken})
             } catch(e) {
                 console.log(`unable to update users refresh token. user id:${fetchedUser.id}`)
             }
@@ -76,11 +73,14 @@ class UsersService {
             email: user.email
         }
 
+        const refreshToken = this._createUserRefresh(userSchema)
+
         try{
             await this._usersData.createUser({
                 ...userSchema,
                 password: await this._userUtils.hashPassword(user.password),
                 globalRole: 1, //supposed to be user
+                refreshToken 
             });
         }catch(e) {
             return {error: "USER_EXISTS"};
@@ -88,15 +88,27 @@ class UsersService {
 
         try{
             const createdUser = await this._usersData.getUser({login: userSchema.login});
-            const tokenParams = this._userUtils.getUserTokenSchema(createdUser)
-
-            const refreshToken = this._tokenService.generateRefreshToken({login: tokenParams.login})
-            const accessToken =  this._tokenService.generateAccessToken(tokenParams);
-
+            const accessToken = this._createUserAccess(createdUser);
             return {accessToken, refreshToken}
         } catch(e) {
             return {error: "USER_NOT_CREATED"}
         }
+    }
+
+    private _createUserRefresh(user:usersData) {
+        return this._tokenService.generateRefreshToken({login: user.login});
+    }
+
+    private _createUserAccess(user:usersData) {
+        const tokenParams = this._userUtils.getUserTokenSchema(user)
+        return this._tokenService.generateAccessToken(tokenParams);
+    }
+
+    private _createUserTokens(user:usersData) {
+        const refreshToken = this._createUserRefresh(user);
+        const accessToken =  this._createUserAccess(user);
+
+        return { accessToken, refreshToken }
     }
 }
 
