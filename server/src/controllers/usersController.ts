@@ -36,7 +36,6 @@ class UsersController {
 
     public createUser = async (req:usersRequest, res:usersResponse) => {
         const result = await this._usersService.createUser(req.body);
-        console.log(result)
 
         if(!result.error) {
             res

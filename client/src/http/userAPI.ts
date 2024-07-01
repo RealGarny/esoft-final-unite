@@ -5,12 +5,12 @@ type UserAuthorization = (login:string, password:number) => void;
 class userAPI {
 
     public static registration:UserRegistration = async (email, displayedName, login, password) => {
-        const {data} = await $host.post('api/users', {email, displayedName, login, password}, {withCredentials:true});
+        const {data} = await $host.post('api/users', {email, displayedName, login, password});
         console.log(data);
     }
 
     public static authorization:UserAuthorization = async (login, password) => {
-        const {data} = await $host.post('api/users', {login, password}, {withCredentials:true});
+        const {data} = await $host.post('api/users/auth', {login, password});
         console.log(data);
     }
 }
