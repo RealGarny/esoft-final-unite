@@ -69,7 +69,7 @@ const Feed = () => {
             />
             <Post
                 PostHeader={<PostHeader
-                    authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1691202325152qyDABLBtDPBmCHsn.png?size=large"
+                    authorLogoUrl="https://media.cdn.community.lambdageneration.com/avatars/1719916026765CACxB6CkCTBtDpDz.jpg?size=large"
                     authorName="Garny"
                     authorId="RealGarny"
                     date="2h"

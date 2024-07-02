@@ -4,6 +4,7 @@ import MainPage from "../components/pages/MainPage";
 import MainLayout from "../components/layouts/MainLayout";
 import SignInPage from "../components/pages/SignInPage";
 import SignUpPage from "../components/pages/SignUpPage";
+import Community from "../components/pages/Community";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
             },
             {
               path: routes.rawCommunity(),
-              element: <h1>specific community</h1>
+              element: <Community/>
             }
           ]
     },

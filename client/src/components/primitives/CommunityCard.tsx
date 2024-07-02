@@ -4,7 +4,8 @@ import Flexbox from "./Flexbox"
 import routes from "../../routes/routes"
 import Hyperlink from "./Hyperlink"
 import Logo from "./Logo"
-import AuthReqButton from "./AuthReqButton"
+import WithAuthReq from "./withAuthReq"
+import Button from "./Button"
 
 const requiredProps = {
     bgURL: "https://media.cdn.community.lambdageneration.com/backgrounds/1694882926930B4CsCjBrB2CfBUXB.png?size=search",
@@ -29,7 +30,9 @@ const CommunityCard = () => {
             </FadeContainer>
             <Flexbox className="flex-col relative px-5 py-5 gap-4 justify-between">
                 <Logo size="lg" alt="communityLogo" rounded="xl" src={requiredProps.iconURL} className="border-black border-4 border-opacity-10 mt-[-70px]"/>
-                <AuthReqButton className="absolute top-2 right-5 z-30 m-auto text-sm bg-accent hover:bg-accent-light text-white font-bold">Join</AuthReqButton>
+                <WithAuthReq render={(path) => (
+                    <Button href={path} className="absolute top-2 right-5 z-30 m-auto text-sm bg-accent hover:bg-accent-light text-white font-bold">Join</Button>
+                )}/>
                 <div className="font-bold text-3xl">{requiredProps.CName}</div>
                 <Flexbox padding="none" className="flex-col font-bold w-full text-sm h-36 overflow-hidden">
                     <Card padding="none" rounded="sm" className="px-1 items-center uppercase bg-accent text-sm font-bold min-h-6 w-fit ">New!</Card>

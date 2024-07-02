@@ -4,7 +4,7 @@ interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
 
 }
 
-const Text:React.FC<TextProps> = ({children, className, ...args}) => {
+const Text:React.FC<TextProps> = ({children, ...args}) => {
     return(
         <p {...args}>
             {children}
