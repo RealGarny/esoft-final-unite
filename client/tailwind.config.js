@@ -14,6 +14,9 @@ export default {
         "accent": "#FB6400",
         "accent-light": "#ffefd3",
         "text": "#fff"
+      },
+      maxWidth: {
+        "container": "1212px",
       }
     },
   },

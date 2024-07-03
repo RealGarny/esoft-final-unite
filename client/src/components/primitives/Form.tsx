@@ -1,4 +1,4 @@
-import { useState, cloneElement, ReactElement } from "react"
+import { useState, cloneElement, ReactElement, useEffect } from "react"
 import Input from "./Input"
 import { ChangeEvent } from "react"
 import { InputHTMLAttributes } from "react"
@@ -26,8 +26,12 @@ export interface FormProps {
 }
 
 const Form = ({formAction, config}:FormProps) => {
+    if(!config || !config.inputs) {
+        return(<div>config was not provided</div>)
+    }
+
     const initialFormState = config.inputs.reduce((acc:Partial<InputItem>, obj) => {
-        acc[obj.name as keyof InputItem] = '';
+        acc[obj.name as keyof InputItem] = obj.value ? obj.value : '';
         return acc;
     }, {});
     
@@ -39,7 +43,6 @@ const Form = ({formAction, config}:FormProps) => {
     }
 
     const handleError = (index:number) => {
-        console.log(index)
         const result = config.inputs[index].isError(formState);
         formErrrors[index] = result;
 
@@ -48,17 +51,20 @@ const Form = ({formAction, config}:FormProps) => {
 
     return(
         <form className="flex flex-col w-full gap-4">
-            {config.inputs.map((input, index)=> (
+            {config.inputs.map((input, index)=> {
+                if(!input.name || typeof input.name !== "string") {return <div>provided input name is icorrect. input id:{index}</div>}
+                return(
                 <Input
                     {...input}
                     key={`${index}`+input.name}
-                    value={formState.value}
+                    //@ts-ignore
+                    value={formState[input.name]}
                     isError={handleError(index)}
                     errorMessage={input.errorMessage}
                     className={`bg-additional ${input.className ? input.className : ""}`}
                     onChange={handleChange}
                 />
-            ))}
+            )})}
            { cloneElement(formAction, {onClick: (e:MouseEvent) => {config.onSubmit(e, {values: formState, errors: formErrrors})}}) }
         </form>
     )

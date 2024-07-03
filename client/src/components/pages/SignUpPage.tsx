@@ -17,7 +17,6 @@ const SignUpPage = () => {
     const config:FormConfig = {
         onSubmit: (e, {values, errors}) => {
             e.preventDefault()
-            console.log(values)
             
             let formErrors = false;
             for(let key in errors) {
@@ -28,7 +27,8 @@ const SignUpPage = () => {
             }
             console.log(formErrors)
             if(!formErrors) {
-                userAPI.registration(values.email, values.displayName, values.login, values.password)
+                const user = userAPI.registration(values.email, values.displayName, values.login, values.password);
+                console.log(user);
             }
         },
         inputs: [
