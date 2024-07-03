@@ -1,25 +1,21 @@
-interface routes {
-    main: string,
-    user: string,
-    communities: string,
-    community: string,
-    signIn: string,
-    signUp: string
-}
 
 const checkString = (string:string) => {
     return !string || typeof string !== "string" || string.length < 1;
 }
 class Routes {
 
-    private _routes:routes = {
+    private _routes = {
         main: "/",
         user: "/user/:userId",
         communities: "/communities",
-        community: "/communities/:communityId",
+        
         signUp: "/sign-up",
-        signIn: "/sign-in"
-    }    
+        signIn: "/sign-in",
+        settings: "/settings"
+    }
+    private _rawRoutes = {
+        community: "/communities/:communityId",
+    }
 
     public main() {
         return this._routes.main;
@@ -42,23 +38,26 @@ class Routes {
     }
 
     public rawCommunity() {
-        return this._routes.community;
+        return this._rawRoutes.community;
     }
 
-    public community(communityTag:string) {
-        if(checkString(communityTag)) {
-            throw Error("communityTag is invalid.")
+    public community(communityName:string) {
+        if(checkString(communityName)) {
+            throw Error("community name is invalid.")
         }
 
-        return this._routes.community.replace(":communityId", communityTag)
+        return this._rawRoutes.community.replace(":communityId", communityName)
     }
 
     public signIn() {
-        return this._routes.signIn
+        return this._routes.signIn;
     }
 
     public signUp() {
-        return this._routes.signUp
+        return this._routes.signUp;
+    }
+    public settings() {
+        return this._routes.settings;
     }
 }
 

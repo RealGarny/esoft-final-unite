@@ -1,11 +1,13 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "../utils/globalStorage"
 
-export interface StyleColors {
-    primary:string,
-    secondary:string,
-    background:string,
-    accent:string,
-    text:string
+export interface UserState {
+    id: number,
+    login: string,
+    displayedName: string,
+    email: string,
+    globalRole: number,
+    createdAt: string,
+    updatedAt: string
 }
 
 export const GetCommunityColors = createAsyncThunk(
@@ -19,36 +21,47 @@ export const GetCommunityColors = createAsyncThunk(
     }
 )
 
-const initialState:StyleColors = {
-    primary: "",
-    secondary: "",
-    background: "",
-    accent: "",
-    text: ""
+const initialState:UserState = {
+    id: 0,
+    login: '',
+    displayedName: '',
+    email: '',
+    globalRole: 0,
+    createdAt: '',
+    updatedAt: '',
 }
 
-export const styleSlice = createSlice({
-    name: 'style',
+const userSlice = createSlice({
+    name: "user",
     initialState,
-    extraReducers: (builder) => {
-        builder.addCase(fetchFilms.pending, (state) => {
-            state.loading = true;
-            state.error = false;
-        })
-        builder.addCase(fetchFilms.fulfilled, (state, action) => {
-            state.loading = false;
-            state.error = false;
-            state._initialFilms = action.payload;
-            state.films = state._initialFilms;
-        })
-        builder.addCase(fetchFilms.rejected, (state) => {
-            state.loading = false;
-            state.error = true;
-        })
+    reducers: {
+        assignUser(state, action:PayloadAction<UserState>) {
+            if(
+                !action.payload.id ||
+                !action.payload.login ||
+                !action.payload.displayedName ||
+                !action.payload.email ||
+                !action.payload.globalRole ||
+                !action.payload.createdAt ||
+                !action.payload.updatedAt
+            ) return
+            
+            state.id = action.payload.id;
+            state.login = action.payload.login;
+            state.displayedName = action.payload.displayedName;
+            state.email = action.payload.email;
+            state.globalRole = action.payload.globalRole;
+            state.createdAt = action.payload.createdAt;
+            state.updatedAt = action.payload.updatedAt;
+        },
+        removeUser(state) {
+            state = initialState;
+        }
     }
 })
 
 export const {
-    clearFilms
-} = filmsSlice.actions;
-export default filmsSlice.reducer;
+    assignUser,
+    removeUser
+} = userSlice.actions;
+export default userSlice.reducer;

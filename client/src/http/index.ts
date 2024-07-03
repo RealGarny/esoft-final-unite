@@ -3,7 +3,7 @@ import axios, {AxiosRequestConfig} from "axios";
 const $host = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 })
-export const $tokenHost = await $host;
+export const $tokenHost = $host;
 
 const authInterceptor = (config: AxiosRequestConfig) => {
     if(!config.headers){
