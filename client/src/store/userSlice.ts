@@ -55,7 +55,13 @@ const userSlice = createSlice({
             state.updatedAt = action.payload.updatedAt;
         },
         removeUser(state) {
-            state = initialState;
+            state.id = 0;
+            state.login = '';
+            state.displayedName = '';
+            state.email = '';
+            state.globalRole = 0;
+            state.createdAt = '';
+            state.updatedAt = '';
         }
     }
 })

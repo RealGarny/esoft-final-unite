@@ -45,13 +45,13 @@ class TokenService {
         return decoded;
     }
 
-    public verifyRefreshToken = async(token:string, secret:string): Promise<true | false> => {
+    public verifyRefreshToken = async(token:string, secret:string): Promise<UserPayload | false> => {
         try {
             <UserPayload>jwt.verify(token, secret)
             let result = await this._tokenData.getRefreshToken(token)
             
             if(result) {
-                return true;
+                return result;
             }
         } catch(e) {
             console.log(e)

@@ -48,18 +48,20 @@ class UsersService {
         }
 
         try {
-            const { accessToken, refreshToken } = this._createUserTokens(fetchedUser);
-
-            try{
-                await this._usersData.updateUser(fetchedUser.id, {refreshToken})
-            } catch(e) {
-                console.log(`unable to update users refresh token. user id:${fetchedUser.id}`)
-            }
-
-
-            return {accessToken, refreshToken}
+        const {refreshToken, accessToken} = await this._handleUserTokens(fetchedUser)
+        return {refreshToken, accessToken};
         } catch(e) {
+            console.log(e);
             return false;
+        }
+    }
+
+    public async checkAuth(refreshPayload:fullUsersData) {
+        try {
+            console.log(refreshPayload)
+            return this._handleUserTokens(refreshPayload);
+        } catch(e) {
+            return {error: "TOKENGEN_FAILURE"}
         }
     }
 
@@ -109,6 +111,18 @@ class UsersService {
         const accessToken =  this._createUserAccess(user);
 
         return { accessToken, refreshToken }
+    }
+
+    //generates both access and refresh tokens and updates refresh token in the database
+    private async _handleUserTokens(user:fullUsersData) {
+        try {
+            const { accessToken, refreshToken } = this._createUserTokens(user);
+            await this._usersData.updateUser(user.id, {refreshToken})
+
+            return {accessToken, refreshToken}
+        } catch(e) {
+            throw e;
+        }
     }
 }
 

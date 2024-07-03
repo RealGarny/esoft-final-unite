@@ -26,11 +26,23 @@ class UsersController {
 
         if(token) {
             res
-            .status(200)
+            .status(statusCode.ok)
             .cookie("refreshToken", token.refreshToken, { httpOnly: true })
             .json({accessToken: token.accessToken})
         }  else {
             res.status(statusCode.badRequest).json({message: "BAD_USER"})
+        }
+    }
+
+    public checkAuth = async(req:usersRequest, res:usersResponse) => {
+        const result = await this._usersService.checkAuth(req.refreshPayload);
+        if(!result.error) {
+            res.status(statusCode.ok)
+            .status(statusCode.ok)
+            .cookie("refreshToken", result.refreshToken, { httpOnly: true })
+            .json({accessToken: result.accessToken});
+        } else {
+            res.status(statusCode.badRequest).json(result)
         }
     }
 

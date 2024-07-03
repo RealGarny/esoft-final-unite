@@ -1,4 +1,6 @@
 import routes from "../../routes/routes";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { removeUser } from "../../store/userSlice";
 
 const isUserLogged = () => {
     return false;
@@ -9,7 +11,14 @@ type props = {
 }
 
 const WithAuthReq = (props:props) => {
-    const path = isUserLogged() ? "" : routes.signIn();
+    const userLogin = useAppSelector(state => state.user.login);
+    const dispatch = useAppDispatch();
+    let path = "";
+    if(!userLogin) {
+        //@ts-ignore
+        dispatch(removeUser())
+    }
+    
 
     return (
         <>

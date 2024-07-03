@@ -4,4 +4,5 @@ export enum statusCode {
     badRequest = 400,
     unauthorized = 401,
     notFound = 404,
+    internal = 500
 }

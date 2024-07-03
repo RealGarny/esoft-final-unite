@@ -1,7 +1,8 @@
+import { JwtPayload } from "jwt-decode";
 import $host from ".";
 import jwtDecode from "../utils/jwtDecode";
 type UserRegistration = (email:string, displayedName: string, login: string, password:string) => void;
-type UserAuthorization = (login:string, password:number) => void;
+type UserAuthorization = (login:string, password:number) => {error:string} | any;
 
 class userAPI {
 

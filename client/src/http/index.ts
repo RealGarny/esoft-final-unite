@@ -1,11 +1,11 @@
-import axios, {AxiosRequestConfig} from "axios";
+import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios";
 
 const $host = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 })
 export const $tokenHost = $host;
 
-const authInterceptor = (config: AxiosRequestConfig) => {
+const authReqInterceptor = (config:AxiosRequestConfig) => {
     if(!config.headers){
         return undefined
     } else {
@@ -14,6 +14,16 @@ const authInterceptor = (config: AxiosRequestConfig) => {
     };
 }
 
-$tokenHost.interceptors.request.use(authInterceptor)
+const authResInterceptor = (response:AxiosResponse) => {
+
+    return response;
+};
+const authResInterceptorError = (error:AxiosError) => {
+
+    return Promise.reject(error)
+}
+
+$tokenHost.interceptors.request.use(authReqInterceptor)
+$tokenHost.interceptors.response.use(authResInterceptor, authResInterceptorError)
 
 export default $host

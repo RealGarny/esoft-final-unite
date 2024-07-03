@@ -9,6 +9,7 @@ declare global {
     namespace Express {
         interface Request {
         user: UserPayload;
+        refreshPayload: UserPayload
         }
     }
 }
@@ -40,7 +41,7 @@ export const checkAccessToken = (req:Request, res:Response, next:NextFunction) =
     }
 }
 
-export const checkRefreshToken = (req:Request, res:Response, next:NextFunction) => {
+export const checkRefreshToken = async(req:Request, res:Response, next:NextFunction) => {
     
     if(req.method === "OPTIONS") {
         next()
@@ -51,12 +52,15 @@ export const checkRefreshToken = (req:Request, res:Response, next:NextFunction) 
         if(!refreshToken) {
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
+
+        const refreshPayload = await tokenService.verifyRefreshToken(refreshToken, process.env.REFRESH_TOKEN_SECRETKEY!)
         
-        if(!tokenService.verifyRefreshToken(refreshToken, process.env.REFRESH_TOKEN_SECRETKEY!)) {
+        if(!refreshPayload) {
             console.log("expired refresh")
             return res.status(statusCode.unauthorized)
                     .json({message: "user is not authorized"})
         }
+        req.refreshPayload = refreshPayload;
         next();
     } catch(e) {
         console.log(e)
