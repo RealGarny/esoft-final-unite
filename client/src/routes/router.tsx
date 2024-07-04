@@ -6,6 +6,7 @@ import SignInPage from "../components/pages/SignInPage";
 import SignUpPage from "../components/pages/SignUpPage";
 import Community from "../components/pages/Community";
 import Settings from "../components/pages/Settings";
+import Communities from "../components/pages/Communities";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
         },
         {
             path: routes.communities(),
-            element: <h1>communities</h1>
+            element: <Communities/>
         },
         {
           path: routes.rawCommunity(),

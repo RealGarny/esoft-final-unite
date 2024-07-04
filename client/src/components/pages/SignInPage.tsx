@@ -7,20 +7,24 @@ import userAPI from "../../http/userAPI";
 import userUtils from "../../utils/userUtils";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { assignUser } from "../../store/userSlice";
 import { useNavigate } from "../../utils/router";
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 
 const SignInPage = () => {
 
     const userConfig = userUtils.getUserReqs();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {loginUser} = useContext(AuthContext);
+    console.log(loginUser)
 
     const stringLenError = (minLen:number, maxLen:number) => {
         return(`Should be at least ${minLen}-${maxLen} characters long`)
     }
 
     const [isError, setIsError] = useState(false);
+
 
     const config:FormConfig = {
         onSubmit: (e, {values, errors}) => {
@@ -35,11 +39,11 @@ const SignInPage = () => {
             }
 
             const getUser = async() => {
-                const user = await userAPI.authorization(values.login, values.password);
+                const token = await userAPI.authorization(values.login, values.password);
 
-                if(!user.error) {
+                if(!token.error) {
                     setIsError(false);
-                    dispatch(assignUser(user));
+                    loginUser(token);
                     navigate(routes.main());
                 } else {
                     setIsError(true);

@@ -19,7 +19,9 @@ const authResInterceptor = (response:AxiosResponse) => {
     return response;
 };
 const authResInterceptorError = (error:AxiosError) => {
-
+    if(error.code === '401') {
+        console.log('worked')
+    }
     return Promise.reject(error)
 }
 
