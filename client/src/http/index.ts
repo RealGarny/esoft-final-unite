@@ -1,31 +1,43 @@
 import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 const $host = axios.create({
-    baseURL: import.meta.env.VITE_API_URL
+    baseURL: import.meta.env.VITE_API_URL,
 })
 export const $tokenHost = $host;
+export default $host
 
-const authReqInterceptor = (config:AxiosRequestConfig) => {
+//request interceptor
+$tokenHost.interceptors.request.use((config:any) => {
     if(!config.headers){
         return undefined
     } else {
-        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+        config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
         return config
     };
-}
+})
 
-const authResInterceptor = (response:AxiosResponse) => {
-
+//response interceptors
+const tokenResponseInterceptor = (response:AxiosResponse) => {
+    console.log("response")
     return response;
 };
-const authResInterceptorError = (error:AxiosError) => {
-    if(error.code === '401') {
-        console.log('worked')
+const tokenResponseInterceptorError = async(error:AxiosError) => {
+    console.log(error)
+    if(error.response?.status !== 401) { return Promise.reject(error) }
+    console.log("also here")
+    try {
+        const res = await $host.get("/users/checkAuth", {withCredentials: true})
+        console.log(res)
+    } catch(e) {
+        if(e instanceof AxiosError) {
+            "error"
+            if(e.response?.status === 401) {
+                "unauhtorized"
+            }
+        }
     }
-    return Promise.reject(error)
 }
 
-$tokenHost.interceptors.request.use(authReqInterceptor)
-$tokenHost.interceptors.response.use(authResInterceptor, authResInterceptorError)
-
-export default $host
+$tokenHost.interceptors.response.use(tokenResponseInterceptor, tokenResponseInterceptorError)

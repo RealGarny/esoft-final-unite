@@ -18,7 +18,6 @@ export const tokenUniteData = new TokenData(uniteModel);
 const tokenService = new TokenService(tokenUniteData);
 
 export const checkAccessToken = (req:Request, res:Response, next:NextFunction) => {
-    
     if(req.method === "OPTIONS") {
         next()
     }

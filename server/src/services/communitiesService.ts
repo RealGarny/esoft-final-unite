@@ -17,7 +17,7 @@ class communitiesUtils {
     }
 
     private static _checkString(string:string) {
-        return !!string && typeof string === "string";
+        return (!!string || string === "") && typeof string === "string";
     }
 
     private static _checkNumber(number:number) {
@@ -35,6 +35,8 @@ class communitiesUtils {
     }
 
     static checkDescription(description:string) {
+        console.log(this._checkString(description)
+        && description.length <= this._communityConfig.descriptionMaxLen)
         return this._checkString(description)
         && description.length <= this._communityConfig.descriptionMaxLen
     }
@@ -44,8 +46,8 @@ class communitiesUtils {
     }
 
     static checkFollowerNickname(nickname:string) {
-        return this._checkString(nickname) 
-        && nickname.length <= this._communityConfig.nicknameMaxLen
+        return (this._checkString(nickname)
+        && nickname.length <= this._communityConfig.nicknameMaxLen) || nickname === ""
     }
 }
 

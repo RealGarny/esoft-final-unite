@@ -9,7 +9,7 @@ declare module 'jsonwebtoken' {
 
 const _accessTokenSecret = process.env.ACCESS_TOKEN_SECRETKEY;
 const _refreshTokenSecret = process.env.REFRESH_TOKEN_SECRETKEY;
-const _accessExpiration = "50m";
+const _accessExpiration = 3000000;
 const _refreshExpiration = "72h";
 class TokenService {
     private _tokenData;

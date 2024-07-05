@@ -17,7 +17,6 @@ const SignInPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {loginUser} = useContext(AuthContext);
-    console.log(loginUser)
 
     const stringLenError = (minLen:number, maxLen:number) => {
         return(`Should be at least ${minLen}-${maxLen} characters long`)

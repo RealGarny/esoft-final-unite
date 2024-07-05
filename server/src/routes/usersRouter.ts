@@ -5,7 +5,7 @@ const usersRouter = (router:any, usersController:any) => {
 
     router.post("/", usersController.createUser)
     router.post("/auth", usersController.authUser)
-    router.post("/checkAuth", checkRefreshToken, usersController.checkAuth)
+    router.get("/checkAuth", checkRefreshToken, usersController.checkAuth)
     router.get("/:userLogin", checkAccessAndRefresh, checkPermissions({trimUrl:true}), usersController.getUser)
 
     return router;
