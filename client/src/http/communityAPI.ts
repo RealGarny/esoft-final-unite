@@ -1,10 +1,23 @@
-import { $tokenHost } from ".";
+import $host,{ $tokenHost } from ".";
 import errorList from "../utils/errorList";
+import { AxiosError } from "axios";
+
+type GetCommunities = {
+    name?:string,
+
+}
 
 class communityAPI {
 
-    public static getCommunities = async() => {
-        //TODO: get logic
+    public static getCommunities = async(params:GetCommunities) => {
+        try {
+            const {data} = await $host.get('communities', {params})
+            return data;
+        } catch(e) {
+            if(e instanceof AxiosError) {
+                return null;
+            }
+        }
     }
 
     public static updateCommunity = async(communityId:number, updatedParams:object) => {
@@ -20,17 +33,15 @@ class communityAPI {
             return this._createError("BAD_COMMUNITY")
         }
         try{
-            await $tokenHost.post('communities', communityData, {withCredentials: true});
+            await $tokenHost.post('communities', communityData);
         } catch(e:any) {
-            if(e.response.data.message) {
-                return this._createError(e.response.data.message)
-            } else {
-                return this._createError("INTERNAL_ERROR")
+            if(e instanceof AxiosError && e.response?.data.error) {
+                return this._createError(e.response?.data.error);
             }
         }
     }
 
-    private static _createError(error:Parameters<typeof errorList>[0]) {
+    private static _createError = (error:Parameters<typeof errorList>[0]) => {
         return({error: errorList(error)})
     }
 }

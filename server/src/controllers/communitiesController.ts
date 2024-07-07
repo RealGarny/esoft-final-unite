@@ -8,8 +8,15 @@ class CommunitiesController {
         this._communitiesService = communitiesService;
     }
 
-    public getCommunities = (req:Request, res:Response) => {
-        this._communitiesService.getCommunities(req.query);
+    public getCommunities = async(req:Request, res:Response) => {
+
+        const result = await this._communitiesService.getCommunities(req.query);
+        if(!result.error) {
+            res.status(statusCode.created).json(result)  
+        } else {
+            res.status(statusCode.badRequest).json(result)
+        }
+        
     }
 
     public createCommunity = async(req:Request, res:Response) => {

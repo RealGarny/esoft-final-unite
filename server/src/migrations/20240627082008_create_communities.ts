@@ -14,6 +14,7 @@ export async function up(knex: Knex): Promise<void> {
             .inTable('users')
             .onDelete('SET NULL')
         table.integer('followCount')
+            .defaultTo(0)
         table.string('followerNickname')
         table.string('bgUrl')
         table.string('iconUrl')

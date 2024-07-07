@@ -27,7 +27,7 @@ export const checkAccessToken = (req:Request, res:Response, next:NextFunction) =
         if(!token) {
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
-        const decoded = tokenService.verifyAccessToken(token, process.env.ACCESS_TOKEN_SECRETKEY!);
+        const decoded = tokenService.verifyAccessToken(token);
         if(!decoded){
             console.log("expired access")
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
@@ -47,12 +47,12 @@ export const checkRefreshToken = async(req:Request, res:Response, next:NextFunct
     }
     try {
         const { refreshToken } = req.cookies;
-
+        console.log(refreshToken);
         if(!refreshToken) {
             return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
 
-        const refreshPayload = await tokenService.verifyRefreshToken(refreshToken, process.env.REFRESH_TOKEN_SECRETKEY!)
+        const refreshPayload = await tokenService.verifyRefreshToken(refreshToken)
         
         if(!refreshPayload) {
             console.log("expired refresh")

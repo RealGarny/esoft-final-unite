@@ -34,27 +34,26 @@ class TokenService {
         return jwt.sign(params, _refreshTokenSecret!, { expiresIn:_refreshExpiration });
     }
 
-    public verifyAccessToken = (token:string, secret:string): UserPayload | undefined => {
+    public verifyAccessToken = (token:string): UserPayload | undefined => {
 
         let decoded;
         try {
-            decoded = <UserPayload>jwt.verify(token, secret)
+            decoded = <UserPayload>jwt.verify(token, _accessTokenSecret!)
         } catch(e) {
             decoded = undefined;
         }
         return decoded;
     }
 
-    public verifyRefreshToken = async(token:string, secret:string): Promise<UserPayload | false> => {
+    public verifyRefreshToken = async(token:string): Promise<UserPayload | false> => {
         try {
-            <UserPayload>jwt.verify(token, secret)
+            <UserPayload>jwt.verify(token, _refreshTokenSecret!)
             let result = await this._tokenData.getRefreshToken(token)
             
             if(result) {
                 return result;
             }
         } catch(e) {
-            console.log(e)
             return false;
         }
         return false;

@@ -7,11 +7,15 @@ import SignUpPage from "../components/pages/SignUpPage";
 import Community from "../components/pages/Community";
 import Settings from "../components/pages/Settings";
 import Communities from "../components/pages/Communities";
+import { ScrollRestoration } from "../utils/router";
 
 const router = createBrowserRouter([
   {
     path:routes.main(),
-    element: <MainLayout/>,
+    element: <>
+    <MainLayout/>
+    <ScrollRestoration/>
+    </>,
     children: [
         {
           path: routes.main(),

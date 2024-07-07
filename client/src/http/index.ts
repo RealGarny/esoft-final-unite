@@ -1,12 +1,15 @@
-import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios";
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import axios, {AxiosError, AxiosResponse} from "axios";
+import { useNavigate } from "../utils/router";
+import userAPI from "./userAPI";
 
 const $host = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
 })
-export const $tokenHost = $host;
-export default $host
+export default $host;
+export const $tokenHost = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: true
+});
 
 //request interceptor
 $tokenHost.interceptors.request.use((config:any) => {
@@ -20,23 +23,14 @@ $tokenHost.interceptors.request.use((config:any) => {
 
 //response interceptors
 const tokenResponseInterceptor = (response:AxiosResponse) => {
-    console.log("response")
+    console.log("good response")
     return response;
 };
 const tokenResponseInterceptorError = async(error:AxiosError) => {
-    console.log(error)
-    if(error.response?.status !== 401) { return Promise.reject(error) }
-    console.log("also here")
-    try {
-        const res = await $host.get("/users/checkAuth", {withCredentials: true})
-        console.log(res)
-    } catch(e) {
-        if(e instanceof AxiosError) {
-            "error"
-            if(e.response?.status === 401) {
-                "unauhtorized"
-            }
-        }
+    switch(error.response?.status) {
+        case 401:   
+            const response = await userAPI.checkAuth();
+            localStorage.setItem('accessToken', response ? response : '') 
     }
 }
 

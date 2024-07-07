@@ -2,7 +2,7 @@ import Button from "../primitives/Button";
 import Card from "../primitives/Card";
 import Hyperlink from "../primitives/Hyperlink";
 import routes from "../../routes/routes";
-import Form, { FormConfig } from "../primitives/Form";
+import Form, { FormConfig } from "../primitives/Form/Form";
 import userAPI from "../../http/userAPI";
 import userUtils from "../../utils/userUtils";
 import { useState } from "react";
@@ -78,10 +78,10 @@ const SignInPage = () => {
                 {isError && <p>login or password is incorrect</p>}
                 <Form
                     config={config}
-                    formAction={<Button rounded="sm" className="w-full font-bold bg-accent text-white hover:bg-orange-600">Sign In</Button>}
+                    formAction={<Button rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign In</Button>}
                 />
                 <Button rounded="sm" variant="text" href={routes.main()} className="w-full font-bold">Back to Main</Button>
-                <p className="font-bold">don't have an account? <Hyperlink to={routes.signUp()} className="text-accent hover:underline">Sign Up!</Hyperlink></p>
+                <p className="font-bold">don't have an account? <Hyperlink to={routes.signUp()} className="text-accent-500 hover:underline">Sign Up!</Hyperlink></p>
             </Card>
         </div>
     )

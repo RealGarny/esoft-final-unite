@@ -4,18 +4,23 @@ import routes from "../../routes/routes";
 import Hyperlink from "../primitives/Hyperlink";
 import userAPI from "../../http/userAPI";
 import userUtils from "../../utils/userUtils";
-import Form, { FormConfig } from "../primitives/Form";
+import Form, { FormConfig } from "../primitives/Form/Form";
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "../../utils/router";
 
 const SignUpPage = () => {
 
     const userConfig = userUtils.getUserReqs();
+    const {loginUser} = useContext(AuthContext);
+    const navigate = useNavigate()
 
     const stringLenError = (minLen:number, maxLen:number) => {
         return(`Should be at least ${minLen}-${maxLen} characters long`)
     }
 
     const config:FormConfig = {
-        onSubmit: (e, {values, errors}) => {
+        onSubmit: async(e, {values, errors}) => {
             e.preventDefault()
             
             let formErrors = false;
@@ -25,15 +30,19 @@ const SignUpPage = () => {
                     break;
                 }
             }
-            console.log(formErrors)
+
             if(!formErrors) {
-                const user = userAPI.registration(values.email, values.displayName, values.login, values.password);
-                console.log(user);
+                const user = await userAPI.registration(values.email, values.displayName, values.login, values.password);
+                if(!user.error) {
+                    loginUser(user);
+                    navigate(routes.main())
+                }
             }
         },
         inputs: [
             {
                 name: "email",
+                className: "bg-secondary",
                 type:"email",
                 label: "Email",
                 errorMessage: "Email is incorrect!",
@@ -75,9 +84,9 @@ const SignUpPage = () => {
                 <p className="font-bold text-2xl pb-4">Create an account</p>
                 <Form
                     config = {config}
-                    formAction = {<Button rounded="sm" className="w-full font-bold bg-accent text-white hover:bg-orange-600">Sign Up</Button>}
+                    formAction = {<Button rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign Up</Button>}
                 />
-                <p className="font-bold">Already have an account? <Hyperlink to={routes.signIn()} className="text-accent hover:underline">Sign In</Hyperlink></p>
+                <p className="font-bold">Already have an account? <Hyperlink to={routes.signIn()} className="text-accent-500 hover:underline">Sign In</Hyperlink></p>
             </Card>
             <Button variant="text" href={routes.main()} className="font-bold absolute top-4 left-4 bg-black bg-opacity-30 text-sm">To Main</Button>
         </div>

@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { assignUser, removeUser } from "../store/userSlice";
 import jwtDecode from "../utils/jwtDecode";
+import userAPI from "../http/userAPI";
 
 type ContextData = {
     user:any,
@@ -21,20 +22,27 @@ type AuthProviderProps = {
 export const AuthProvider = ({children}:AuthProviderProps) => {
     const [accessToken, setAccessToken] = useState<string|null>(()=>localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : '')
     const user = useAppSelector(state => state.user)
-    const [loading, isLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const dispatch = useAppDispatch();
+    const locStorageName = "accessToken"
 
     const loginUser = async(token:string) => {
-        localStorage.setItem("accessToken", token)
+        localStorage.setItem(locStorageName, token)
         const tokenData = jwtDecode(token)
-        console.log(tokenData)
         dispatch(assignUser(tokenData))
+    }
+
+    const checkToken = () => {
+        const token = localStorage.getItem('accessToken')
+        if(!token) {
+            setAccessToken('');
+        }
     }
 
     const logoutUser = () => {
         //@ts-ignore
         useAppDispatch(removeUser());
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem(locStorageName);
     }
 
     let contextData: ContextData = {
@@ -46,16 +54,25 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
     }
 
     useEffect(() => {
-        if(!accessToken) {
-            logoutUser;
-        } else {
-            loginUser(accessToken);
+        checkToken()
+        const checkUser = async() => {
+            if (accessToken) return loginUser(accessToken);
+
+            const result = await userAPI.checkAuth();
+            if(!result) {
+                logoutUser;
+            } else {
+                setAccessToken(() => (result))
+                loginUser(result)
+            }
         }
+        checkUser();
+        setIsLoading(false)
     }, [])
 
     return(
         <AuthContext.Provider value={contextData}>
-            {children}
+            {isLoading ? <div>Loading...</div> : children}
         </AuthContext.Provider>
     )
 }

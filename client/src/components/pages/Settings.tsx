@@ -1,6 +1,6 @@
 import Flexbox from "../primitives/Flexbox";
 import Text from "../primitives/Text";
-import Form, { FormConfig } from "../primitives/Form";
+import Form, { FormConfig } from "../primitives/Form/Form";
 import Button from "../primitives/Button";
 
 const Settings = () => {
@@ -28,7 +28,7 @@ const Settings = () => {
                 <div className="max-w-72 pl-3">
                     <Form
                         config={config}
-                        formAction={<Button rounded="sm" className="w-40 font-semibold bg-accent text-white hover:bg-orange-600">Save changes</Button>}
+                        formAction={<Button rounded="sm" className="w-40 font-semibold bg-accent-500 text-white hover:bg-orange-600">Save changes</Button>}
                     />
                 </div>
             </Flexbox>

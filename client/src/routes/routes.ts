@@ -1,6 +1,6 @@
 
 const checkString = (string:string) => {
-    return !string || typeof string !== "string" || string.length < 1;
+    return typeof string !== "string" || string.length < 1;
 }
 class Routes {
 

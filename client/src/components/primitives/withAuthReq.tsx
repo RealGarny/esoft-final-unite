@@ -1,22 +1,16 @@
-import routes from "../../routes/routes";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { removeUser } from "../../store/userSlice";
-
-const isUserLogged = () => {
-    return false;
-}
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 
 type props = {
     render: (href:string) => React.ReactElement
 }
 
 const WithAuthReq = (props:props) => {
-    const userLogin = useAppSelector(state => state.user.login);
-    const dispatch = useAppDispatch();
+    const {logoutUser, user} = useContext(AuthContext);
     let path = "";
-    if(!userLogin) {
-        //@ts-ignore
-        dispatch(removeUser())
+    if(!user.login) {
+        logoutUser();
+        path = "/sign-in"
     }
     
 

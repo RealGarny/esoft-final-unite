@@ -1,20 +1,36 @@
 import $host from ".";
+import errorList from "../utils/errorList";
 import jwtDecode from "../utils/jwtDecode";
+import { AxiosError } from "axios";
+
 type UserRegistration = (email:string, displayedName: string, login: string, password:string) => void;
 type UserAuthorization = (login:string, password:number) => {error:string} | any;
 
 class userAPI {
 
+    public static checkAuth = async() => {
+        try {
+            const {data} = await $host.get("/users/checkAuth", {withCredentials: true})
+            return data.accessToken;
+        } catch(e) {
+            if(e instanceof AxiosError) {
+                if(e.response?.status === 401) {
+                    return null;
+                }
+            }
+        }
+        return undefined;
+    }
+
     public static registration:UserRegistration = async (email, displayedName, login, password) => {
         try {
-            const {data} = await $host.post('/users', {email, displayedName, login, password}, {withCredentials: true});
-            return(jwtDecode(data.accessToken));
+            return(await $host.post('/users', {email, displayedName, login, password}, {withCredentials: true}));
         }
         catch(e:any) {
             if(e.response.data.message) {
-                return({error: e.response.data.message})
+                return(this._createError(e.response.data.message))
             } else {
-                return({error: "INTERNAL_ERROR"})
+                return(this._createError("INTERNAL_ERROR"))
             }
         }
     }
@@ -26,11 +42,15 @@ class userAPI {
         } catch(e:any) {
             console.log(e)
             if(e.response.data.message) {
-                return({error: e.response.data.message})
+                return(this._createError(e.response.data.message))
             } else {
-                return({error: "INTERNAL_ERROR"})
+                return(this._createError("INTERNAL_ERROR"))
             }
         }
+    }
+
+    private static _createError = (error:Parameters<typeof errorList>[0]) => {
+        return({error: errorList(error)})
     }
 
     public static deleteUser() {

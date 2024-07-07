@@ -58,6 +58,20 @@ class CommunitiesService {
         this._communitiesData = communitiesData;
     }
 
+    public updateCommunity = (communityChanges:Partial<CreateCommunity>) => {
+        //TODO: UPDATE COMMUNITIES;
+    }
+
+    public getCommunities = async(params:any) => {
+        if(!params) return await this._communitiesData.getCommunities();
+        
+        //TODO: CHECK PARAMS
+        const filteredParams = params
+        const result = await this._communitiesData.getCommunities(filteredParams)
+        if(!result) return {error: "COMMUNITIES_NOT_FOUND"}
+        return result;
+    }
+
     public createCommunity = async(user:any, community:CreateCommunity) => {
         //TODO: TRIM ALL INCOMING STRINGS
         if(

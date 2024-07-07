@@ -1,56 +1,35 @@
-import { useState } from "react"
-import communityAPI from "../../http/communityAPI"
-import routes from "../../routes/routes"
-import { useNavigate } from "../../utils/router"
-import Button from "../primitives/Button"
+import Text from "../primitives/Text";
 import Flexbox from "../primitives/Flexbox"
-import Form, { FormConfig } from "../primitives/Form"
+import CreateCommunity from "../primitives/CreateCommunity";
+import CommunityCard from "../primitives/CommunityCard";
+import { useEffect, useState } from "react";
+import communityAPI from "../../http/communityAPI";
 
 const Communities = () => {
-    const navigate = useNavigate()
-    const [isError, setIsError] = useState(false);
-    const [formMessage, setFormError] = useState("");
 
-    const config:FormConfig = {
-        onSubmit: async(e, {values, errors}) => {
-            e.preventDefault();
-            let result = await communityAPI.createCommunity(values);
-            if (!result?.error) navigate(routes.community(values.name));
-            setFormError(result?.error);
-            setIsError(true)
-            console.log(result)
-        },
-        inputs: [
-            {
-                label: "community name",
-                name: "communityName",
-                isError: (values) => values.communityName >= 3 && values.communityName <= 20,
-                errorMessage: "must be between 3 and 20 characters long"
-            },
-            {
-                label: "description",
-                type: "textarea",
-                name: "description",
-                isError: (values) => values.communityName <= 200,
-                errorMessage: "must be between 3 and 20 characters long"
-            },
-            {
-                label: "follower nickname",
-                name: "followerNickname",
-                isError: (values) => values.communityName >= 3 && values.communityName <= 20,
-                errorMessage: "must be between 3 and 20 characters long"
-            }
-        ]
-    }
+    const [communities, setCommunities] = useState<any[]>([])
+
+    useEffect(()=> {
+        const getCommunities = async() =>{
+            const result = await communityAPI.getCommunities();
+            if(result) {setCommunities(result)}
+        }
+        getCommunities()
+    }, [])
 
     return(
-        <Flexbox>
-            <div>Communities</div>
-            {isError && <p>{formMessage}</p>}
-            <Form
-                config={config}
-                formAction={<Button>create community</Button>}
-            />
+        <Flexbox className="flex-col">
+            <Flexbox className="p-4 flex-col w-full bg-secondary items-center justify-center self-center">
+                <Text className="font-bold text-2xl text-center">Cannot find community you're looking for?</Text>
+                <CreateCommunity/>
+            </Flexbox>
+            <div className="grid grid-cols-3 self-center gap-2 max-w-container mb-4">
+                {communities.map((community) => (
+                    <CommunityCard
+                        {...community}
+                    />
+                ))}
+            </div>
         </Flexbox>
     )
 }
