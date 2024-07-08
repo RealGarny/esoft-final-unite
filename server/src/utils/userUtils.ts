@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import SnowflakeId from "./generateSnowflake";
+import ServiceUtil from "./serviceUtil";
 
 export type usersData = {
     login: string,
@@ -19,40 +20,35 @@ export type fullUsersData = usersData & {
 
 export type tokenPayload = Omit<fullUsersData, "password" | "refreshToken" | "lastSeen">
 
-class userUtils {
+class userUtils extends ServiceUtil {
 
-    private static emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     private static passSaltRounds = 6;
 
     private static _userConfig = {
         nameMinLen: 4,
         nameMaxLen: 25,
-        emailRegex: this.emailRegex,
+        emailRegex: this._emailRegex,
         emailMaxLen: 254,
         passwordMinLen: 8,
         passwordMaxLen: 25
     }
-
-    private static _checkString(string:string) {
-        return !!string && typeof string === "string";
-    }
     
     public static checkName(name:string) {
-        return this._checkString(name) &&
+        return !!this._checkString(name) &&
             name.length >= this._userConfig.nameMinLen &&
             name.length <= this._userConfig.nameMaxLen;
     }
 
     public static checkPassword(password:string) {
-        return this._checkString(password) &&
+        return !!this._checkString(password) &&
             password.length >= this._userConfig.passwordMinLen &&
             password.length <= this._userConfig.passwordMaxLen;
     }
 
     public static checkEmail(email:string):boolean {
-        return this._checkString(email) &&
+        return !!this._checkString(email) &&
             email.length < this._userConfig.emailMaxLen &&
-            this.emailRegex.test(email);
+            this._emailRegex.test(email);
     }
 
     public static checkUser(user:usersData):boolean {

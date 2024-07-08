@@ -20,6 +20,17 @@ class communityAPI {
         }
     }
 
+    public static createPost = async(params:any) => {
+        try {
+            const {data} = await $tokenHost.post('communities/posts', params)
+            return data;
+        } catch(e) {
+            if(e instanceof AxiosError) {
+                return null;
+            }
+        }
+    }
+
     public static updateCommunity = async(communityId:number, updatedParams:object) => {
         //TODO: update logic
     }

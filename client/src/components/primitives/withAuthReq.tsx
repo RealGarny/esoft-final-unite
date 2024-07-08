@@ -15,9 +15,7 @@ const WithAuthReq = (props:props) => {
     
 
     return (
-        <>
-            {props.render(path)}
-        </>
+        props.render(path)
     )
 }
 

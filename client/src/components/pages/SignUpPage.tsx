@@ -84,7 +84,7 @@ const SignUpPage = () => {
                 <p className="font-bold text-2xl pb-4">Create an account</p>
                 <Form
                     config = {config}
-                    formAction = {<Button rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign Up</Button>}
+                    formAction = {(params)=><Button onClick={params.onClick} rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign Up</Button>}
                 />
                 <p className="font-bold">Already have an account? <Hyperlink to={routes.signIn()} className="text-accent-500 hover:underline">Sign In</Hyperlink></p>
             </Card>

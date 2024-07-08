@@ -79,7 +79,7 @@ const CreateCommunity = () => {
                 {isError && <p>{formMessage}</p>}
                 <Form
                     config={config}
-                    formAction={<Button>create community</Button>}
+                    formAction={(params)=><Button onClick={params.onClick}>create community</Button>}
                 />
             </Dialog>
         </>

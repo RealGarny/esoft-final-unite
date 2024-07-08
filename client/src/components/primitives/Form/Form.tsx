@@ -6,7 +6,7 @@ import Textarea from "./Textarea"
 import FormElement from "./FormElement"
 
 export type InputItem = InputHTMLAttributes<HTMLInputElement> & {
-    label: string,
+    label?: string,
     name: string,
     className?: string,
     isError: (values:any) => boolean,
@@ -25,7 +25,7 @@ export interface FormConfig {
 
 export interface FormProps {
     config: FormConfig,
-    formAction: ReactElement;
+    formAction: (...args:any) => ReactElement;
 }
 
 const Form = ({formAction, config}:FormProps) => {
@@ -86,7 +86,7 @@ const Form = ({formAction, config}:FormProps) => {
                     }}
                     />
             )})}
-           { cloneElement(formAction, {onClick: (e:MouseEvent) => {config.onSubmit(e, {values: formState, errors: formErrors})}}) }
+           { formAction({onClick: (e:MouseEvent) => {config.onSubmit(e, {values: formState, errors: formErrors})}}) }
         </form>
     )
 }

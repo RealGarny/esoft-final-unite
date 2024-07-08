@@ -6,7 +6,7 @@ const sortTypes = ["Trending", "Top", "New", "Featured"]
 
 const FeedSort = () => {
     return(
-        <Flexbox padding="none" className="flex-col w-full">
+        <Flexbox padding="none" className="flex-col flex-1 max-w-52">
             {sortTypes.map((type)=>{
                 return(
                     <Button

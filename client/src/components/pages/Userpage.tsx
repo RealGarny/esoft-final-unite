@@ -1,5 +1,5 @@
 import Text from "../primitives/Text";
-import FeedSection from "../primitives/Feed/FeedSection";
+import {Section} from "../primitives/Feed/FeedSection";
 import { useLocation } from "../../utils/router";
 import { useEffect, useState } from "react";
 import NotFound from "./NotFound";
@@ -8,6 +8,7 @@ import FadeContainer from "../primitives/FadeContainer";
 import Flexbox from "../primitives/Flexbox";
 import WithAuthReq from "../primitives/withAuthReq";
 import Button from "../primitives/Button";
+import Feed from "../primitives/Feed/Feed";
 
 const Userpage = () => {
 
@@ -67,7 +68,11 @@ const Userpage = () => {
                     </Flexbox>
                 </Flexbox>
             </FadeContainer>
-            <FeedSection></FeedSection>
+            <Section
+                feed={
+                    <Feed/>
+                }
+            />
         </>
     )
 }

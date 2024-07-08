@@ -1,32 +1,42 @@
 import Flexbox from "../Flexbox"
 import Feed from "./Feed"
-import Navigation from "../Navigation/Navigation"
 import CommunityInfo from "./CommunityInfo"
 import FeedSort from "../Navigation/FeedSort"
+import CreatePostForm from "../Post/CreatePostForm"
 
-const FeedSection = () => {
+type FeedSectionProps = {
+    description:string,
+    posts: React.ComponentProps<typeof Feed>['posts']
+}
+
+const CommunityFeedSection = (props:FeedSectionProps) => {
     return(
         <Section
-            navigation = {
-                <Navigation
-                    sort={<FeedSort/>}
+            navigation = {<FeedSort/>}
+            feed = {
+                <Feed
+                    topComponents={<CreatePostForm
+                        communityId={props.communityId}
+                    />}
+                    posts={props.posts}
                 />
             }
-            feed = {<Feed/>}
-            info = {<CommunityInfo/>}
+            info = {<CommunityInfo
+                description={props.description}
+            />}
         />
     )
 }
 
-type FeedSectionProps = {
+type SectionProps = {
     navigation?: React.ReactNode;
     feed?: React.ReactNode;
     info?: React.ReactNode;
 }
 
-export const Section = (props:FeedSectionProps) => {
+export const Section = (props:SectionProps) => {
     return(
-        <Flexbox padding="md" className="gap-6 max-w-container w-fit mx-auto">
+        <Flexbox padding="md" className="gap-6 mx-auto max-w-container">
                 {props.navigation}
             <div className="w-full max-w-[592px]">
                 {props.feed}
@@ -36,4 +46,4 @@ export const Section = (props:FeedSectionProps) => {
     )
 }
 
-export default FeedSection;
+export default CommunityFeedSection;

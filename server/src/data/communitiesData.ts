@@ -27,6 +27,11 @@ class CommunitiesData {
         return this._db('communities')
         .insert(communityParams)
     }
+
+    public createPost(postParams:any) {
+        return this._db('posts')
+        .insert(postParams)
+    }
 }
 
 export default CommunitiesData;

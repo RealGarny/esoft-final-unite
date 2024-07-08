@@ -12,6 +12,7 @@ import CommunitiesService from "../services/communitiesService";
 import CommunitiesController from "../controllers/communitiesController";
 import communitiesRouter from "./communitiesRouter";
 import tokenService from "../services/tokenService";
+import CommunitiesUtils from "../utils/communitiesUtils";
 
 const router = Router();
 
@@ -20,7 +21,7 @@ const usersService = new UsersService(usersData, userUtils, tokenService);
 const usersController = new UsersController(usersService);
 
 const communitiesData = new CommunitiesData(uniteModel);
-const communitiesService = new CommunitiesService(communitiesData);
+const communitiesService = new CommunitiesService(communitiesData, CommunitiesUtils);
 const communitiesController = new CommunitiesController(communitiesService);
 
 router.use("/users", usersRouter(Router(), usersController))

@@ -36,6 +36,7 @@ export const checkAccessToken = (req:Request, res:Response, next:NextFunction) =
             next();
         }
     } catch(e) {
+        console.log(e)
         res.status(statusCode.unauthorized).json({message: "user is not authorized"})
     }
 }

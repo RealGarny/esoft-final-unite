@@ -7,7 +7,7 @@ const Settings = () => {
 
     const config:FormConfig = {
         onSubmit: (e, {values, errors}) => {
-    
+            e.preventDefault()
         },
         inputs: [
             {
@@ -28,7 +28,7 @@ const Settings = () => {
                 <div className="max-w-72 pl-3">
                     <Form
                         config={config}
-                        formAction={<Button rounded="sm" className="w-40 font-semibold bg-accent-500 text-white hover:bg-orange-600">Save changes</Button>}
+                        formAction={(params)=><Button onClick={params.onClick} rounded="sm" className="w-40 font-semibold bg-accent-500 text-white hover:bg-orange-600">Save changes</Button>}
                     />
                 </div>
             </Flexbox>

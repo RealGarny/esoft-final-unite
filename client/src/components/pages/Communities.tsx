@@ -44,7 +44,6 @@ const MappedCommunities = ({communities}:{communities:any[]}) => {
 
        if(Date.now() - new Date(communities[i].createdAt) < oneDay) {
             tags.push("NEW!")
-            console.log(tags)
        }
         components.push(
             <CommunityCard

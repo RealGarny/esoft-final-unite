@@ -12,9 +12,10 @@ export async function up(knex: Knex): Promise<void> {
             .references('id')
             .inTable('communities')
             .onDelete('CASCADE')
-        table.string('content', 1500)
+        table.string('content', 500)
             .notNullable()
         table.timestamps(true, true, true)
+        table.primary(['id'])
     })
 }
 

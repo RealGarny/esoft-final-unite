@@ -78,7 +78,7 @@ const SignInPage = () => {
                 {isError && <p>login or password is incorrect</p>}
                 <Form
                     config={config}
-                    formAction={<Button rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign In</Button>}
+                    formAction={(params)=><Button onClick={params.onClick} rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign In</Button>}
                 />
                 <Button rounded="sm" variant="text" href={routes.main()} className="w-full font-bold">Back to Main</Button>
                 <p className="font-bold">don't have an account? <Hyperlink to={routes.signUp()} className="text-accent-500 hover:underline">Sign Up!</Hyperlink></p>
