@@ -1,4 +1,4 @@
-import $host from ".";
+import $host, { $tokenHost } from ".";
 import errorList from "../utils/errorList";
 import jwtDecode from "../utils/jwtDecode";
 import { AxiosError } from "axios";
@@ -32,6 +32,15 @@ class userAPI {
             } else {
                 return(this._createError("INTERNAL_ERROR"))
             }
+        }
+    }
+
+    public static getUsers = async(params:any) => {
+        try {
+            const { data } = await $tokenHost.get(`/users`, {params})
+            return data;
+        } catch(e) {
+            return null;
         }
     }
 

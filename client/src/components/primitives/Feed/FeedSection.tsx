@@ -6,15 +6,32 @@ import FeedSort from "../Navigation/FeedSort"
 
 const FeedSection = () => {
     return(
+        <Section
+            navigation = {
+                <Navigation
+                    sort={<FeedSort/>}
+                />
+            }
+            feed = {<Feed/>}
+            info = {<CommunityInfo/>}
+        />
+    )
+}
+
+type FeedSectionProps = {
+    navigation?: React.ReactNode;
+    feed?: React.ReactNode;
+    info?: React.ReactNode;
+}
+
+export const Section = (props:FeedSectionProps) => {
+    return(
         <Flexbox padding="md" className="gap-6 max-w-container w-fit mx-auto">
-            <Navigation
-                sort={<FeedSort/>}
-            />
+                {props.navigation}
             <div className="w-full max-w-[592px]">
-                <Feed/>
+                {props.feed}
             </div>
-            <CommunityInfo
-            />
+                {props.info}
         </Flexbox>
     )
 }

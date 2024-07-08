@@ -18,21 +18,22 @@ class UsersService {
         this._tokenService = tokenService;
     }
 
-    public getUsers() {
-        return(this._usersData.getUsers())
+    public updateUser(userData:any, userChanges:any) {
+        const editedFields = userChanges;
+        const userId = userData.id;
+        return(this._usersData.updateUser(userId, editedFields))
     }
 
-    public async getUser(login:string) {
-        if(!login || typeof login !== "string" || login.length < 1) {
-            return false;
+     public async getUsers(params:any) {
+        if(!params || params.type==="full") {
+            return {error:"PROHIBITED_PARAMS"};
         }
 
-        const fetchedUser = await this._usersData.getUser({login});
-        if(!fetchedUser) {
-            return false;
-        } else {
-            return fetchedUser;
-        }
+        const filteredParams = params
+        const result = await this._usersData.getUsers(filteredParams)
+        if(!result) return {error: "USERS_NOT_FOUND"}
+
+        return result;
     }
 
     public async authUser(user:userAuth) {
@@ -41,12 +42,11 @@ class UsersService {
             !this._userUtils.checkPassword(user.password)
         ) return false;
 
-        let fetchedUser:fullUsersData = await this.getUser(user.login);
-
+        let fetchedUser:fullUsersData = await this._usersData.getUsers({login: user.login, type:"full"});
         if(!fetchedUser || !this._userUtils.comparePassword(user.password, fetchedUser.password)) {
             return false;
         }
-
+        console.log(fetchedUser)
         try {
         const {refreshToken, accessToken} = await this._handleUserTokens(fetchedUser)
         return {refreshToken, accessToken};
@@ -89,7 +89,7 @@ class UsersService {
         }
 
         try{
-            const createdUser = await this._usersData.getUser({login: userSchema.login});
+            const createdUser = await this._usersData.getUsers({login: userSchema.login, type: "full"});
             const accessToken = this._createUserAccess(createdUser);
             return {accessToken, refreshToken}
         } catch(e) {

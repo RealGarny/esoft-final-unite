@@ -11,7 +11,7 @@ export default {
         "secondary": "#2D2C2A",
         "additional": "#262523",
         "background": "#31302E",
-        "accent-500": {
+        "accent": {
           '50': '#fff8ec',
           '100': '#ffefd3',
           '200': '#ffdca5',

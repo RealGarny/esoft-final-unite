@@ -23,7 +23,7 @@ type CommunityCardProps = {
 }
 
 const checkParam = (param:any) => {
-    return param && typeof param === "string";
+    return typeof param === "string";
 }
 
 const CommunityCard:React.FC<CommunityCardProps> = ({
@@ -37,7 +37,6 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
     creator,
     tags
 }) => {
-    
     if(!checkParam(name) || !checkParam(description) || !checkParam(followerNickname)) {
         return <Card className="p-2">Props are invalid</Card>
     }
@@ -81,10 +80,11 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
 
 const CommunityFollowers = (props:any) => {
     if(typeof props.followCount !== "number") return null;
+    
     return(
         <Flexbox padding="none" className="font-bold gap-1 text-sm mt-auto">
             {checkParam(props.followerIcon) && <img className="max-h-6 max-w-6" src={props.followerIcon}></img>}
-            {checkParam(props.followCount) && <span>{props.followCount}</span>}
+            {<span>{props.followCount}</span>}
             <span className="opacity-60">{props.followerNickname}s</span>
         </Flexbox>
     )
@@ -97,7 +97,7 @@ export const CommunityActionBtn = (props:any) => {
         return(
             <Button
                 href={`${routes.community(props.name)}/settings`}
-                className={`text-sm  bg-accent-500 hover:bg-accent-600 text-white font-bold ${props.className}`}
+                className={`text-sm bg-accent-500 hover:bg-accent-600 text-white font-bold ${props.className}`}
             >Edit</Button>
         )
     }
@@ -110,16 +110,15 @@ export const CommunityActionBtn = (props:any) => {
 
 const CommunityTags = (props:any) => {
     if(!props.tags || !Array.isArray(props.tags)) return null
-
     return(
         props.tags?.map(
-            (tag:string)=>{
+            (tag:string)=>(
                 <Card
                     padding="none"
                     rounded="sm"
                     className="px-1 items-center uppercase bg-accent-500 text-sm font-bold min-h-6 w-fit "
                 >{tag}</Card>
-            }
+            )
         )
     )
 }

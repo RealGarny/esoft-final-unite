@@ -13,8 +13,8 @@ class UsersController {
 
 
     public getUsers = async (req:usersRequest, res:usersResponse) => {
-        const users = await this._usersService.getUsers();
-        if(users) {
+        const users = await this._usersService.getUsers(req.query);
+        if(users && !users.error) {
             res.status(statusCode.ok).json(users);
         } else {
             res.status(statusCode.notFound).json({message:"users not found"})
@@ -46,6 +46,10 @@ class UsersController {
         }
     }
 
+    public updateUser = async(req:usersRequest, res:usersResponse) => {
+        const result = await this._usersService.updateUser(req.user, req.body);
+    }
+
     public createUser = async (req:usersRequest, res:usersResponse) => {
         const result = await this._usersService.createUser(req.body);
 
@@ -56,16 +60,6 @@ class UsersController {
             .json({accessToken: result.accessToken});
         } else {
             res.status(statusCode.badRequest).json(result)
-        }
-    }
-
-    public getUser = async(req: usersRequest, res: usersResponse) => {
-        const user = await this._usersService.getUser(req.params.userLogin)
-
-        if(user) {
-            res.status(statusCode.ok).json(user);
-        } else {
-            res.status(statusCode.notFound).json({message: "user was not found."})
         }
     }
 }

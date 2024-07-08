@@ -11,7 +11,7 @@ const Communities = () => {
 
     useEffect(()=> {
         const getCommunities = async() =>{
-            const result = await communityAPI.getCommunities();
+            const result = await communityAPI.getCommunities({});
             if(result) {setCommunities(result)}
         }
         getCommunities()
@@ -24,14 +24,38 @@ const Communities = () => {
                 <CreateCommunity/>
             </Flexbox>
             <div className="grid grid-cols-3 self-center gap-2 max-w-container mb-4">
-                {communities.map((community) => (
-                    <CommunityCard
-                        {...community}
-                    />
-                ))}
+                <MappedCommunities
+                    communities={communities}
+                />
             </div>
         </Flexbox>
     )
+}
+
+const MappedCommunities = ({communities}:{communities:any[]}) => {
+
+    if(!Array.isArray(communities) || communities.length < 1) return null;
+
+    const components = [];
+    const oneDay = new Date().getTime() + (1 * 24 * 60 * 60 * 1000)
+
+    for(let i = 0; i < communities.length; i++) {
+        let tags = communities[i].tags ? communities[i].tags : [];
+
+       if(Date.now() - new Date(communities[i].createdAt) < oneDay) {
+            tags.push("NEW!")
+            console.log(tags)
+       }
+        components.push(
+            <CommunityCard
+                key={communities[i].name? communities[i].name : i}
+                {...communities[i]}
+                tags={tags}
+            />
+        )
+    }
+
+    return components;
 }
 
 export default Communities;

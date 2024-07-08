@@ -56,8 +56,9 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
     useEffect(() => {
         checkToken()
         const checkUser = async() => {
-            if (accessToken) return loginUser(accessToken);
+            if (!accessToken) return;
 
+            loginUser(accessToken)
             const result = await userAPI.checkAuth();
             if(!result) {
                 logoutUser;

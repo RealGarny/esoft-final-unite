@@ -14,12 +14,37 @@ class UsersData {
         this._db = model;
     }
 
-    //get user by his login
-    public getUser(param:object):Promise<usersData[]> {
+    //get users specific params
+    public getUsers(params:any):Promise<usersData[]> | undefined {
 
-        return this._db.from<usersData>('users')
-            .where(param)
-            .first();
+        if(!params || Object.keys(params).length < 1) {
+            return undefined;
+        }
+
+        console.log(params.login)
+
+        let query = this._db('users');
+
+        if(params.type && typeof params.type === "string") {
+            switch(params.type) {
+                case "userpage": 
+                    query.select("displayedName", "login", "createdAt")
+                    break;
+                case "full":
+                    query.select("*")
+                    break;
+                default:
+                    query.select("displayedName", "login", "createdAt")
+            }
+        } else {
+            query.select("displayedName", "login", "createdAt")
+        }
+
+        if(params.login) {
+            query.where('login', params.login)
+            .first()
+        }
+        return query.then((res:any) => res)
     }
 
     public createUser(userData:usersData) {
