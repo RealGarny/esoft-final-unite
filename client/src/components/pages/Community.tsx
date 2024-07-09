@@ -11,6 +11,15 @@ import NotFound from "./NotFound";
 import { CommunityActionBtn } from "../primitives/CommunityCard";
 
 const Community = () => {
+    const fetchedCommunity = {
+        id: 0,
+        name: 'Source',
+        bgUrl: '',
+        iconUrl: '',
+        description: 'a test description',
+        followCount: 123,
+        followerNickname: 'braindeads'
+    }
 
     type CommunityData = {
         name: string,

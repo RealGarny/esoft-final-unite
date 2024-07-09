@@ -23,12 +23,13 @@ export interface FormConfig {
     inputs: InputItem[]
 }
 
-export interface FormProps {
+export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
+    className?: string,
     config: FormConfig,
     formAction: ReactElement;
 }
 
-const Form = ({formAction, config}:FormProps) => {
+const Form = ({formAction, config, className, ...args}:FormProps) => {
     if(!config || !config.inputs) {
         return(<div>config was not provided</div>)
     }
@@ -41,8 +42,15 @@ const Form = ({formAction, config}:FormProps) => {
     const [formState, setFormState] = useState(initialFormState)
     const formErrors:boolean[] = [];
     
-    const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
-        setFormState((prevState) => ({...prevState, [e.target.name]: e.target.value}))
+    const handleChange = (e:ChangeEvent<HTMLInputElement>, inputType:InputItem["type"]) => {
+        switch(inputType) {
+            case "file":
+                setFormState((prevState) => ({...prevState, [e.target.name]: e.target.files && e.target.files[0] ? e.target.files[0] : ''}))
+                break;
+            default:
+                setFormState((prevState) => ({...prevState, [e.target.name]: e.target.value}))
+                break;
+        }
     }
 
     const handleError = (index:number) => {
@@ -53,7 +61,7 @@ const Form = ({formAction, config}:FormProps) => {
     }
 
     return(
-        <form className="flex flex-col w-full gap-4">
+        <form className={`flex flex-col w-full gap-4 ${className}`} {...args}>
             {config.inputs.map((input, index)=> {
                 if(!input.name || typeof input.name !== "string") {return <div>provided input name is icorrect. input id:{index}</div>}
                 return(
@@ -63,25 +71,35 @@ const Form = ({formAction, config}:FormProps) => {
                         key={input.name}
                         errorMessage={input.errorMessage}
                         render={(props) => {
-                            if(props.type !== "textarea") {
-                                return(<Input
+                            switch(props.type) {
+                                case "file":
+                                    return(<Input
                                         {...props}
 
+                                        variant={input.variant ? input.variant : "contained"}
+                                        //@ts-ignore
+                                        className={`${input.className ? input.className : ""}`}
+                                        onChange={(e)=>handleChange(e, input.type)}
+                                    />)
+                                case "textarea":
+                                    return(<Textarea
+                                        {...props}
                                         variant={input.variant ? input.variant : "contained"}
                                         //@ts-ignore
                                         value={formState[input.name]}
                                         className={`${input.className ? input.className : ""}`}
                                         onChange={handleChange}
                                     />)
-                            } else {
-                                return(<Textarea
-                                    {...props}
-                                    variant={input.variant ? input.variant : "contained"}
-                                    //@ts-ignore
-                                    value={formState[input.name]}
-                                    className={`${input.className ? input.className : ""}`}
-                                    onChange={handleChange}
-                                />)
+                                default:
+                                    return(<Input
+                                        {...props}
+
+                                        variant={input.variant ? input.variant : "contained"}
+                                        //@ts-ignore
+                                        value={formState[input.name]}
+                                        className={`${input.className ? input.className : ""}`}
+                                        onChange={(e)=>handleChange(e, input.type)}
+                                    />)
                             }
                     }}
                     />

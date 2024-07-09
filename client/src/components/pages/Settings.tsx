@@ -7,9 +7,18 @@ const Settings = () => {
 
     const config:FormConfig = {
         onSubmit: (e, {values, errors}) => {
-    
+            e.preventDefault()
+            console.log(e.target.files)
         },
         inputs: [
+            {
+                name: 'avatar',
+                label: 'Avatar',
+                type: "file",
+                className: 'border border-primary',
+                isError: (value) => {console.log(value); return false},
+                errorMessage: ""
+            },
             {
                 name: 'displayedName',
                 label: 'Displayed Name',
@@ -27,6 +36,7 @@ const Settings = () => {
                 <div className="h-[1px] w-40 bg-white bg-opacity-60"></div>
                 <div className="max-w-72 pl-3">
                     <Form
+                        encType="multipart/form-data"
                         config={config}
                         formAction={<Button rounded="sm" className="w-40 font-semibold bg-accent-500 text-white hover:bg-orange-600">Save changes</Button>}
                     />

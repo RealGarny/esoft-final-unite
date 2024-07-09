@@ -1,12 +1,10 @@
 import Button from "../primitives/Button";
 import Card from "../primitives/Card";
 import Hyperlink from "../primitives/Hyperlink";
-import routes from "../../routes/routes";
 import Form, { FormConfig } from "../primitives/Form/Form";
 import userAPI from "../../http/userAPI";
 import userUtils from "../../utils/userUtils";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "../../utils/router";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
@@ -14,8 +12,7 @@ import AuthContext from "../../context/AuthContext";
 const SignInPage = () => {
 
     const userConfig = userUtils.getUserReqs();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const {navigate, routes} = useNavigate();
     const {loginUser} = useContext(AuthContext);
 
     const stringLenError = (minLen:number, maxLen:number) => {
