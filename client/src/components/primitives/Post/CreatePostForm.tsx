@@ -16,7 +16,6 @@ const PostFormButton = (props:any) => {
 }
 
 const CreatePostForm = (props) => {
-    console.log(props.communityId)
     const {user} = useContext(AuthContext);
 
     const formConfig:React.ComponentProps<typeof Form>['config'] = {

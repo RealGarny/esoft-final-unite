@@ -41,7 +41,7 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
 
     const logoutUser = () => {
         //@ts-ignore
-        useAppDispatch(removeUser());
+        dispatch(removeUser());
         localStorage.removeItem(locStorageName);
     }
 
@@ -61,7 +61,8 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
             loginUser(accessToken)
             const result = await userAPI.checkAuth();
             if(!result) {
-                logoutUser;
+                console.log("exit")
+                logoutUser();
             } else {
                 setAccessToken(() => (result))
                 loginUser(result)

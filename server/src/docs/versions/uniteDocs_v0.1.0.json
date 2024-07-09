@@ -36,7 +36,7 @@
       "resToken": {
         "type": "object",
         "properties": {
-          "token": {
+          "accessToken": {
             "type": "string",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           }
@@ -50,11 +50,59 @@
             "example": "Some server message"
           }
         }
+      },
+      "resCommunity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Really-Nice-Community"
+          },
+          "description": {
+            "type": "string",
+            "example": "a good community description!"
+          },
+          "creator": {
+            "type": "integer",
+            "example": 1352
+          },
+          "followCount": {
+            "type": "integer",
+            "example": 0
+          },
+          "followerNickname": {
+            "type": "string",
+            "example": "pacifists"
+          },
+          "bgUrl": {
+            "type": "string",
+            "example": "https://www.someurl.com"
+          },
+          "iconUrl": {
+            "type": "string",
+            "example": "https://www.someurl.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2024-07-08T04:39:24.528Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2024-07-08T04:39:24.528Z"
+          }
+        }
       }
     }
   },
   "paths": {
     "/users": {
+      "get": {
+        "tags":["users"]
+      },
       "post": {
         "tags": ["users"],
         "description": "Create a new user",
@@ -75,6 +123,101 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/resToken"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User was not created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/resMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pet/findByTags": {
+      "get": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Finds Pets by tags",
+        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+        "operationId": "findPetsByTags",
+        "parameters": [
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Tags to filter by",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pet"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pet"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid tag value"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    },
+    "/communities": {
+      "get": {
+        "tags":["communities"],
+        "description": "Get communities by provided parameters.",
+        "summary": "Finds Pets by tags",
+        "operationId": "findPetsByTags",
+        "parameters": {
+          "name": "tags"
+        }
+      },
+      "post": {
+        "tags":["communities"],
+        "responses": {
+          "201": {
+            "description": "jwt token of created user",
+            "content": {
+              "array": {
+                "schema": {
+                  "$ref": "#/components/schemas/resCommunity"
                 }
               }
             }
