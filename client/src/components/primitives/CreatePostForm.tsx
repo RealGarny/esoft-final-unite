@@ -1,11 +1,12 @@
-import Flexbox from "../Flexbox"
-import Text from "../Text"
-import Form from "../Form/Form"
-import Button from "../Button"
-import WithAuthReq from "../withAuthReq"
-import communityAPI from "../../../http/communityAPI"
+import Flexbox from "./Flexbox"
+import Text from "./Text"
+import Form from "./Form/Form"
+import Button from "./Button"
+import WithAuthReq from "./withAuthReq"
+import communityAPI from "../../http/communityAPI"
 import { useContext } from "react"
-import AuthContext from "../../../context/AuthContext"
+import AuthContext from "../../context/AuthContext"
+import useCommunity from "../../context/CommunityContext"
 
 const PostFormButton = (props:any) => {
     return(
@@ -17,17 +18,12 @@ const PostFormButton = (props:any) => {
 
 const CreatePostForm = (props) => {
     const {user} = useContext(AuthContext);
+    const {createPost} = useCommunity();
 
     const formConfig:React.ComponentProps<typeof Form>['config'] = {
         onSubmit: async(e, {values, errors}) => {
             e.preventDefault();
-            const createdPost = await communityAPI.createPost({
-                authorId: user.id,
-                communityId: props.communityId,
-                content:values.postText
-            })
-
-            console.log(createdPost)
+            createPost(user.id, values.postText)
         },
         inputs: [
             {

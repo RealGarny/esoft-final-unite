@@ -30,6 +30,17 @@ class CommunitiesController {
         
     }
 
+    public createFollow = async(req:Request, res:Response) => {
+
+        const result = await this._communitiesService.createFollow(req.user, req.body.communityId);
+        if(!result.error) {
+            res.status(statusCode.created).json(result)  
+        } else {
+            res.status(statusCode.internal).json({message: result.error})
+        }
+        
+    }
+
     public createCommunity = async(req:Request, res:Response) => {
         const result = await this._communitiesService.createCommunity(req.user, req.body) //req.user is supposed to be assigned by a middleware
         console.log(result);

@@ -7,7 +7,7 @@ export type CommunityInfo = {
 }
 const CommunityInfo:React.FC<CommunityInfo> = (props) => {
     return(
-        <Flexbox className="flex-col flex-1 hidden lg:block">
+        <Flexbox className="flex-col hidden lg:block">
             {props.description && 
                 <Flexbox className="flex-col gap-2 font-bold">
                     <Text className="opacity-80 text-md">About</Text>

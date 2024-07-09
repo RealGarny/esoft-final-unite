@@ -1,5 +1,5 @@
 import Text from "../primitives/Text";
-import {Section} from "../primitives/Feed/FeedSection";
+import {Section} from "../primitives/Feed/Section";
 import { useLocation } from "../../utils/router";
 import { useEffect, useState } from "react";
 import NotFound from "./NotFound";

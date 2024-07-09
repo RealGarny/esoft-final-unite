@@ -1,17 +1,16 @@
 import Dialog from "./Dialog"
 import Form, {FormConfig} from "./Form/Form";
 import Button from "./Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import communityAPI from "../../http/communityAPI";
 import WithAuthReq from "./withAuthReq";
 import { useNavigate } from "../../utils/router";
-import routes from "../../routes/routes";
 
 const CreateCommunity = () => {
     const [isError, setIsError] = useState(false);
     const [formMessage, setFormMessage] = useState("");
     const [isModal, setIsModal] = useState(false);
-    const navigate = useNavigate();
+    const {navigate, routes} = useNavigate();
 
     const config:FormConfig = {
         onSubmit: async(e, {values, errors}) => {

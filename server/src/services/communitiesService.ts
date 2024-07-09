@@ -63,6 +63,19 @@ class CommunitiesService {
         return result;
     }
 
+    public createFollow = async(user:any, communityId:any) => {
+        if(!user.id || !this._communitiesUtils.checkId(communityId)) return {error:"BAD_REQUEST"}
+
+        try {
+            const res = await this._communitiesData.createFollow(user.id, communityId);
+            console.log(res)
+            return({message:"SUCCESS"})
+        } catch(e) {
+            console.log(e)
+            return {error: "INTERNAL_ERROR"}
+        }
+    }
+
     public createCommunity = async(user:any, community:CreateCommunity) => {
         //TODO: TRIM ALL INCOMING STRINGS
         if(

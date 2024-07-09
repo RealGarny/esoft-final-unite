@@ -14,58 +14,72 @@ declare global {
     }
 }
 
+type Options = {
+    tokenOptional: boolean
+}
+
 export const tokenUniteData = new TokenData(uniteModel);
 const tokenService = new TokenService(tokenUniteData);
 
-export const checkAccessToken = (req:Request, res:Response, next:NextFunction) => {
-    if(req.method === "OPTIONS") {
-        next()
-    }
-    try {
-        const token = req.headers.authorization!.split(' ')[1];
-
-        if(!token) {
-            return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
-        }
-        const decoded = tokenService.verifyAccessToken(token);
-        if(!decoded){
-            console.log("expired access")
-            return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
-        } else {
-            req.user = decoded;
-            next();
-        }
-    } catch(e) {
-        console.log(e)
-        res.status(statusCode.unauthorized).json({message: "user is not authorized"})
-    }
-}
-
-export const checkRefreshToken = async(req:Request, res:Response, next:NextFunction) => {
-    
-    if(req.method === "OPTIONS") {
-        next()
-    }
-    try {
-        const { refreshToken } = req.cookies;
-        console.log(refreshToken);
-        if(!refreshToken) {
-            return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
-        }
-
-        const refreshPayload = await tokenService.verifyRefreshToken(refreshToken)
+export const checkAccessToken = (options:Options={tokenOptional:false}) => {
+    return(
+        (req:Request, res:Response, next:NextFunction) => {
+            if(req.method === "OPTIONS") {
+                next()
+            }
+            try {
+                const token = req.headers.authorization!.split(' ')[1];
         
-        if(!refreshPayload) {
-            console.log("expired refresh")
-            return res.status(statusCode.unauthorized)
-                    .json({message: "user is not authorized"})
+                if(!token) {
+                    if (options.tokenOptional) next();
+                    else return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+                }
+                const decoded = tokenService.verifyAccessToken(token);
+                if(!decoded){
+                    console.log("expired access")
+                    return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+                } else {
+                    req.user = decoded;
+                    next();
+                }
+            } catch(e) {
+                console.log(e)
+                res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+            }
         }
-        req.refreshPayload = refreshPayload;
-        next();
-    } catch(e) {
-        console.log(e)
-        res.status(statusCode.unauthorized).json({message: "user is not authorized"})
-    }
+    )
 }
 
-export const checkAccessAndRefresh = [checkAccessToken, checkRefreshToken]
+export const checkRefreshToken = (options:Options={tokenOptional:false}) => {
+
+    return(async(req:Request, res:Response, next:NextFunction) => {
+        if(req.method === "OPTIONS") {
+            next()
+        }
+        try {
+            const { refreshToken } = req.cookies;
+
+            if(!refreshToken) {
+                if(options.tokenOptional) next();
+                return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+            }
+
+            const refreshPayload = await tokenService.verifyRefreshToken(refreshToken)
+            
+            if(!refreshPayload) {
+                console.log("expired refresh")
+                return res.status(statusCode.unauthorized)
+                        .json({message: "user is not authorized"})
+            }
+            req.refreshPayload = refreshPayload;
+            next();
+        } catch(e) {
+            console.log(e)
+            res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+        }
+    })
+}
+
+export const checkAccessAndRefresh = (options:Options={tokenOptional:false}) => {
+    return [checkAccessToken(options), checkRefreshToken(options)]
+}

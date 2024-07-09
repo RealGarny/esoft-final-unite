@@ -1,6 +1,5 @@
 import Card from "../primitives/Card";
 import Button from "../primitives/Button";
-import routes from "../../routes/routes";
 import Hyperlink from "../primitives/Hyperlink";
 import userAPI from "../../http/userAPI";
 import userUtils from "../../utils/userUtils";
@@ -13,7 +12,7 @@ const SignUpPage = () => {
 
     const userConfig = userUtils.getUserReqs();
     const {loginUser} = useContext(AuthContext);
-    const navigate = useNavigate()
+    const {navigate, routes} = useNavigate()
 
     const stringLenError = (minLen:number, maxLen:number) => {
         return(`Should be at least ${minLen}-${maxLen} characters long`)

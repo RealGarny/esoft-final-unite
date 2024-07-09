@@ -37,16 +37,17 @@ class UsersService {
     }
 
     public async authUser(user:userAuth) {
+        console.log(this._userUtils.checkName(user.login))
+        console.log(user.password)
         if(
             !this._userUtils.checkName(user.login) ||
             !this._userUtils.checkPassword(user.password)
-        ) return false;
+        ) {return false};
 
         let fetchedUser:fullUsersData = await this._usersData.getUsers({login: user.login, type:"full"});
         if(!fetchedUser || !this._userUtils.comparePassword(user.password, fetchedUser.password)) {
             return false;
         }
-        console.log(fetchedUser)
         try {
         const {refreshToken, accessToken} = await this._handleUserTokens(fetchedUser)
         return {refreshToken, accessToken};
@@ -85,6 +86,7 @@ class UsersService {
                 refreshToken 
             });
         }catch(e) {
+            console.log(e)
             return {error: "USER_EXISTS"};
         }
 

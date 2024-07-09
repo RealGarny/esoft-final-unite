@@ -4,7 +4,6 @@ import type { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('community_followers', (table) => {
         table.increments("id")
-            .primary()
         table.integer("userId")
             .references('id')
             .inTable('users')
@@ -13,6 +12,7 @@ export async function up(knex: Knex): Promise<void> {
             .references('id')
             .inTable('communities')
             .onDelete("CASCADE")
+        table.primary(['id', 'userId', 'communityId'])
     })
 }
 

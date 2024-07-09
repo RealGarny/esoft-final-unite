@@ -34,24 +34,24 @@ class userUtils extends ServiceUtil {
     }
     
     public static checkName(name:string) {
-        return !!this._checkString(name) &&
+        return this._checkString(name) &&
             name.length >= this._userConfig.nameMinLen &&
             name.length <= this._userConfig.nameMaxLen;
     }
 
     public static checkPassword(password:string) {
-        return !!this._checkString(password) &&
+        return this._checkString(password) &&
             password.length >= this._userConfig.passwordMinLen &&
             password.length <= this._userConfig.passwordMaxLen;
     }
 
-    public static checkEmail(email:string):boolean {
-        return !!this._checkString(email) &&
+    public static checkEmail(email:string) {
+        return this._checkString(email) &&
             email.length < this._userConfig.emailMaxLen &&
             this._emailRegex.test(email);
     }
 
-    public static checkUser(user:usersData):boolean {
+    public static checkUser(user:usersData) {
         if(
             !this.checkName(user.displayedName) ||
             !this.checkName(user.login) ||

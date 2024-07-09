@@ -20,6 +20,10 @@ class communityAPI {
         }
     }
 
+    public static getPosts = async(params:any) => {
+        
+    }
+
     public static createPost = async(params:any) => {
         try {
             const {data} = await $tokenHost.post('communities/posts', params)

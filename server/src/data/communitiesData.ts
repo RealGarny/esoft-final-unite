@@ -28,6 +28,11 @@ class CommunitiesData {
         .insert(communityParams)
     }
 
+    public createFollow(userId:any, communityId:any) {
+        return this._db('community_followers')
+        .insert({userId, communityId})
+    }
+
     public createPost(postParams:any) {
         return this._db('posts')
         .insert(postParams)

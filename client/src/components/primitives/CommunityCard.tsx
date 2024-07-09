@@ -1,7 +1,6 @@
 import Card from "./Card"
 import FadeContainer from "./FadeContainer"
 import Flexbox from "./Flexbox"
-import routes from "../../routes/routes"
 import Hyperlink from "./Hyperlink"
 import Logo from "./Logo"
 import WithAuthReq from "./withAuthReq"
@@ -9,6 +8,7 @@ import Button from "./Button"
 import Text from "./Text"
 import { useContext } from "react"
 import AuthContext from "../../context/AuthContext"
+import { useNavigate } from "../../utils/router"
 
 type CommunityCardProps = {
     name:string,
@@ -41,8 +41,10 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
         return <Card className="p-2">Props are invalid</Card>
     }
 
+    const {routes} = useNavigate();
+
     return(
-        <Card padding="none" className="relative overflow-hidden flex-col gap-0 flex-grow-0 flex-shrink-0 w-auto w-96">
+        <Card padding="none" className="relative overflow-hidden flex-col gap-0 flex-grow-0 flex-shrink-0 w-96">
             {<FadeContainer fadeColor="from-primary" fadeSize="h-20" className="h-40 w-full">
                 <div className="absolute min-h-full min-w-full bg-cover bg-additional"
                 style={{"backgroundImage":`url(${bgURL})`, "backgroundPosition":"50%"}}
@@ -92,6 +94,7 @@ const CommunityFollowers = (props:any) => {
 
 export const CommunityActionBtn = (props:any) => {
     const {user} = useContext(AuthContext);
+    const {routes} = useNavigate();
 
     if(props.creator === user.id) {
         return(
@@ -101,9 +104,11 @@ export const CommunityActionBtn = (props:any) => {
             >Edit</Button>
         )
     }
+
+    //const [isFollowing, setIsFollowing]
     return(
         <WithAuthReq render={(path) => (
-            <Button href={path} className={`text-sm bg-accent-500 hover:bg-accent-600 text-white font-bold ${props.className}`}>Join</Button>
+            <Button href={path} className={`text-sm bg-accent-500 hover:bg-accent-600 text-white font-bold ${props.className}`}>Follow</Button>
         )}/>
     )
 }

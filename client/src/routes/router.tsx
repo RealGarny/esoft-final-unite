@@ -10,6 +10,7 @@ import Communities from "../components/pages/Communities";
 import { ScrollRestoration } from "../utils/router";
 import Userpage from "../components/pages/Userpage";
 import NotFound from "../components/pages/NotFound";
+import { CommunityProvider } from "../context/CommunityContext";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
         },
         {
           path: routes.rawCommunity(),
-          element: <Community/>
+          element: <CommunityProvider><Community/></CommunityProvider>
         }
       ]
   },

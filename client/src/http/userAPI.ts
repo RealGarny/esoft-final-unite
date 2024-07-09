@@ -24,7 +24,8 @@ class userAPI {
 
     public static registration:UserRegistration = async (email, displayedName, login, password) => {
         try {
-            return(await $host.post('/users', {email, displayedName, login, password}, {withCredentials: true}));
+            const {data} = await $host.post('/users', {email, displayedName, login, password}, {withCredentials: true});
+            return data.accessToken
         }
         catch(e:any) {
             if(e.response.data.message) {

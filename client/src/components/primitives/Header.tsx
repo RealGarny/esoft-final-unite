@@ -5,6 +5,7 @@ import Button from "./Button";
 import routes from "../../routes/routes";
 import { useAppSelector } from "../../store/hooks";
 import Hyperlink from "./Hyperlink";
+import UserMenu from "./UserMenu";
 
 const Header:React.FC = () => {
 
@@ -30,10 +31,7 @@ const Header:React.FC = () => {
             <Searchbar/>
             {
                 user.login !== '' ?
-                <div className="flex gap-2 items-center">
-                    <p>{user.displayedName}</p>
-                    <Button variant={"text"} href={routes.settings()}>Settings</Button>
-                </div>
+                <UserMenu/>
                 : 
                 <div className="flex gap-2 items-center">
                     <Button variant="text" href={routes.signIn()} className="uppercase font-bold opacity-75 text-sm">sign in</Button>
