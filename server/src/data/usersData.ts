@@ -21,8 +21,6 @@ class UsersData {
             return undefined;
         }
 
-        console.log(params.login)
-
         let query = this._db('users');
 
         if(params.type && typeof params.type === "string") {

@@ -1,5 +1,5 @@
 class ServiceUtil {
-    protected static _checkString(string:string) {
+    public static checkString(string:string) {
         const isString = !!string && typeof string === "string";
         return isString ? string.trim() : null;
     }
@@ -8,7 +8,7 @@ class ServiceUtil {
 
     protected static _emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    protected static _checkNumber(number:number) {
+    public static checkNumber(number:number) {
         const isNumber = !!number && typeof number === "number";
         return isNumber ? number : null;
     }

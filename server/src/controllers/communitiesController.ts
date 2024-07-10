@@ -10,7 +10,7 @@ class CommunitiesController {
 
     public getCommunities = async(req:Request, res:Response) => {
 
-        const result = await this._communitiesService.getCommunities(req.query);
+        const result = await this._communitiesService.getCommunities(req.query, req.user);
         if(!result.error) {
             res.status(statusCode.created).json(result)  
         } else {
@@ -32,7 +32,7 @@ class CommunitiesController {
 
     public createFollow = async(req:Request, res:Response) => {
 
-        const result = await this._communitiesService.createFollow(req.user, req.body.communityId);
+        const result = await this._communitiesService.createFollow(req.user, req.body);
         if(!result.error) {
             res.status(statusCode.created).json(result)  
         } else {
@@ -43,7 +43,6 @@ class CommunitiesController {
 
     public createCommunity = async(req:Request, res:Response) => {
         const result = await this._communitiesService.createCommunity(req.user, req.body) //req.user is supposed to be assigned by a middleware
-        console.log(result);
         if(!result.error) {
             res.status(statusCode.created).json({message: "community was created"})  
         } else {

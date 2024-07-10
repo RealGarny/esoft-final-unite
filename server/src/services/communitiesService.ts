@@ -40,10 +40,8 @@ class CommunitiesService {
             return true;
         } catch(e:any) {
             if(e.detail) {
-                console.log(e.detail)
                 return {error: "BAD_POST"}
             } else {
-                console.log(e)
                 return {error: "INTERNAL_ERROR"}
             }
         }
@@ -53,36 +51,81 @@ class CommunitiesService {
         //TODO: UPDATE COMMUNITIES;
     }
 
-    public getCommunities = async(params:any) => {
+    public getCommunities = async(params:any, user:any=null) => {
         if(!params) return await this._communitiesData.getCommunities();
-        
+
         //TODO: CHECK PARAMS
         const filteredParams = params
         const result = await this._communitiesData.getCommunities(filteredParams)
         if(!result) return {error: "COMMUNITIES_NOT_FOUND"}
+
+        if(user) {
+            let followQuery = [];
+            for(let i = 0; i < result.length; i++) {
+                followQuery.push({userId: user.id, communityId:result[i].id})
+            }
+            console.log(followQuery)
+            const follows = await this._getFollowsByArray(followQuery)
+            console.log(follows)
+        }
+
         return result;
     }
 
-    public createFollow = async(user:any, communityId:any) => {
-        if(!user.id || !this._communitiesUtils.checkId(communityId)) return {error:"BAD_REQUEST"}
-
+    public getFollows = async(params:any) => {
+        let finalParams:any = {}
+        if(typeof params !== "object") return {message:"BAD_REQUEST"};
+        
+        if(typeof params === "object") {
+            for(const [key, value] of Object.entries(params)) {
+                switch(typeof value) {
+                    case "string":
+                        if(this._communitiesUtils.checkName(value)) finalParams[key] = value
+                    case "number":
+                        if(this._communitiesUtils.checkId(value)) finalParams[key] = value
+                }
+            }
+        }
+        
         try {
-            const res = await this._communitiesData.createFollow(user.id, communityId);
-            console.log(res)
+            return await this._communitiesData.getFollows(finalParams);
+        } catch(e) {
+            return {message:"NOT_FOUND"}
+        }
+    }
+
+    private _getFollowsByArray = async(array:any) => {
+        try {
+            return await this._communitiesData.getFollows(array);
+        } catch(e) {
+            return {message:"NOT_FOUND"}
+        }
+    }
+
+    public createFollow = async(user:any, params:any) => {
+        const communityId = this._communitiesUtils.checkId(params.communityId);
+        const deleteFollow = params.deleteFollow && typeof params.deleteFollow === "boolean";
+
+        if(!user.id || !communityId) return {error:"BAD_REQUEST"}
+        try {
+            await this._communitiesData.createFollow(user.id, {deleteFollow, communityId});
             return({message:"SUCCESS"})
         } catch(e) {
-            console.log(e)
             return {error: "INTERNAL_ERROR"}
         }
     }
 
     public createCommunity = async(user:any, community:CreateCommunity) => {
-        //TODO: TRIM ALL INCOMING STRINGS
+        const creator = this._communitiesUtils.checkId(user.id);
+        const name = this._communitiesUtils.checkName(community.name);
+        const description = this._communitiesUtils.checkDescription(community.description);
+        const followerNickname = this._communitiesUtils.checkFollowerNickname(community.followerNickname)
+        console.log(creator, name, description, followerNickname);
         if(
-            !this._communitiesUtils.checkId(user.id) || 
-            !this._communitiesUtils.checkName(community.name) || 
-            !this._communitiesUtils.checkDescription(community.description) || 
-            !this._communitiesUtils.checkFollowerNickname(community.followerNickname)
+            !creator || 
+            !name || 
+            !description || 
+            !followerNickname
         ) {
             return {error: "BAD_COMMUNITY"}
         }

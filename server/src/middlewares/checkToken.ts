@@ -27,23 +27,25 @@ export const checkAccessToken = (options:Options={tokenOptional:false}) => {
             if(req.method === "OPTIONS") {
                 next()
             }
-            try {
-                const token = req.headers.authorization!.split(' ')[1];
-        
-                if(!token) {
-                    if (options.tokenOptional) next();
-                    else return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+
+            if(!req.headers.authorization || !req.headers.authorization!.split(' ')[1]) {
+                if (options.tokenOptional) {
+                    return next();
                 }
+                else return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
+            }
+
+            try {
+                let token = req.headers.authorization!.split(' ')[1];
+
                 const decoded = tokenService.verifyAccessToken(token);
                 if(!decoded){
-                    console.log("expired access")
                     return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
                 } else {
                     req.user = decoded;
                     next();
                 }
             } catch(e) {
-                console.log(e)
                 res.status(statusCode.unauthorized).json({message: "user is not authorized"})
             }
         }
@@ -58,7 +60,7 @@ export const checkRefreshToken = (options:Options={tokenOptional:false}) => {
         }
         try {
             const { refreshToken } = req.cookies;
-
+            console.log(refreshToken)
             if(!refreshToken) {
                 if(options.tokenOptional) next();
                 return res.status(statusCode.unauthorized).json({message: "user is not authorized"})
@@ -67,14 +69,13 @@ export const checkRefreshToken = (options:Options={tokenOptional:false}) => {
             const refreshPayload = await tokenService.verifyRefreshToken(refreshToken)
             
             if(!refreshPayload) {
-                console.log("expired refresh")
+                console.log(refreshPayload)
                 return res.status(statusCode.unauthorized)
                         .json({message: "user is not authorized"})
             }
             req.refreshPayload = refreshPayload;
             next();
         } catch(e) {
-            console.log(e)
             res.status(statusCode.unauthorized).json({message: "user is not authorized"})
         }
     })

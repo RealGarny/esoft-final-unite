@@ -24,7 +24,7 @@ class CommunitiesUtils extends ServiceUtil {
     }
 
     public static checkName(name:string) {
-        const str = this._checkString(name)
+        const str = this.checkString(name)
         if(str &&
             str.length >= this._communityConfig.nameMinLen &&
             str.length <= this._communityConfig.nameMaxLen
@@ -35,25 +35,25 @@ class CommunitiesUtils extends ServiceUtil {
     }
 
     public static checkDescription(description:string) {
-        const str = this._checkString(description)
-        if(str && str.length >= this._communityConfig.descriptionMaxLen) {
+        const str = this.checkString(description)
+        if(str && str.length <= this._communityConfig.descriptionMaxLen) {
             return str;
         }
         return null;
     }
 
     public static checkUrl(url:string) {
-        return this._checkString(url) && this._urlRegex.test(url)
+        return this.checkString(url) && this._urlRegex.test(url)
     }
 
     public static checkId(creatorId:number) {
-        return this._checkNumber(creatorId);
+        return this.checkNumber(creatorId);
     }
 
     public static checkFollowerNickname(nickname:string) {
-        const str = this._checkString(nickname)
+        const str = this.checkString(nickname)
         if((str
-            && str.length >= this._communityConfig.followerNicknameMaxLen
+            && str.length >= this._communityConfig.followerNicknameMinLen
             && str.length <= this._communityConfig.followerNicknameMaxLen) || nickname === ""
         ) {
             return str;
@@ -62,7 +62,7 @@ class CommunitiesUtils extends ServiceUtil {
     }
 
     public static checkPostContent(content:string) {
-        const str = this._checkString(content);
+        const str = this.checkString(content);
         if((str
             && str !== ""
             && str.length <= this._communityConfig.followerNicknameMaxLen)

@@ -37,8 +37,6 @@ class UsersService {
     }
 
     public async authUser(user:userAuth) {
-        console.log(this._userUtils.checkName(user.login))
-        console.log(user.password)
         if(
             !this._userUtils.checkName(user.login) ||
             !this._userUtils.checkPassword(user.password)
@@ -52,14 +50,12 @@ class UsersService {
         const {refreshToken, accessToken} = await this._handleUserTokens(fetchedUser)
         return {refreshToken, accessToken};
         } catch(e) {
-            console.log(e);
             return false;
         }
     }
 
     public async checkAuth(refreshPayload:fullUsersData) {
         try {
-            console.log(refreshPayload)
             return this._handleUserTokens(refreshPayload);
         } catch(e) {
             return {error: "TOKENGEN_FAILURE"}
@@ -86,7 +82,6 @@ class UsersService {
                 refreshToken 
             });
         }catch(e) {
-            console.log(e)
             return {error: "USER_EXISTS"};
         }
 
