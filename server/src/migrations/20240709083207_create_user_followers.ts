@@ -13,7 +13,7 @@ export async function up(knex: Knex): Promise<void> {
             .references('id')
             .inTable('users')
             .onDelete("CASCADE")
-            table.primary(['userId', 'followerId'])
+        table.primary(['userId', 'followerId'])
     })
 }
 

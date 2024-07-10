@@ -11,7 +11,7 @@ class communityAPI {
 
     public static getCommunities = async(params:GetCommunities) => {
         try {
-            const {data} = await $host.get('communities', {params})
+            const {data} = await $tokenHost.get('communities', {params})
             return data;
         } catch(e) {
             if(e instanceof AxiosError) {

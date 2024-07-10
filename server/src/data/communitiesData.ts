@@ -6,21 +6,37 @@ class CommunitiesData {
         this._db = model;
     }
 
-    public getCommunities(params:any = {}) {
-        if(!params || Object.keys(params).length < 1) {
-            return this._db('communities')
-            .select("*")
-            .limit(5)
-        }
+    public getCommunities(params:any={}, user:any=null) {
+        if(params && typeof params !== 'object') throw new Error('Provided parameters are invalid');
 
         const query = this._db('communities')
             .select("*")
-
+        //TODO: FIX DIS PIECE OF CRAP
+        if(user && typeof user === "object") {
+            query.select(
+                'communities.*',
+                this._db.raw('CASE WHEN community_followers."userId" IS NOT NULL THEN TRUE ELSE FALSE END as "isFollowed"')
+            )
+            query.leftJoin('community_followers', function() {
+                //@ts-ignore
+                this.on('community_followers.communityId', '=', 'communities.id').andOn('community_followers.userId', '=', user.id);
+            })
+        }
         if(params.name) {
             query.where('name', params.name)
             .first()
         }
-        return query.then((res:any) => res)
+        return query.then((res:any) => {
+
+            if(Array.isArray(res)) {
+                for(let i = 0; i < res.length; i++) {
+                    delete res[i].userId;
+                    delete res[i].communityId;
+                }
+            }
+            
+            return res;
+        })
     }
 
     public createCommunity(communityParams:any) {
@@ -41,9 +57,27 @@ class CommunitiesData {
                 {userId,
                 communityId: params.communityId
             })
+
+            this._db('communities')
+            .where('id', params.communityId)
+            .increment('followCount', 1)
         }
 
-        return query.then((res:any) => res);
+        return query.then((res:any) => {
+            console.log(res)
+            if(params.deleteFollow && res > 0) {
+                this._db('communities')
+                .where('id', params.communityId)
+                .decrement('followCount', 1)
+                .catch((e:any)=>console.log(e))
+            } else {
+                this._db('communities')
+                .where('id', params.communityId)
+                .increment('followCount', 1)
+                .catch((e:any)=>console.log(e))
+            }
+            return res
+        });
     }
 
     public getFollows(params:any) {
