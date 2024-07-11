@@ -1,14 +1,17 @@
 import Text from "../primitives/Text";
 import {Section} from "../primitives/Feed/Section";
-import { useLocation } from "../../utils/router";
+import { NavLink, useLocation, useNavigate } from "../../utils/router";
 import { useEffect, useState } from "react";
 import NotFound from "./NotFound";
 import userAPI from "../../http/userAPI";
 import FadeContainer from "../primitives/FadeContainer";
 import Flexbox from "../primitives/Flexbox";
 import WithAuthReq from "../primitives/withAuthReq";
-import Button from "../primitives/Button";
 import Feed from "../primitives/Feed/Feed";
+import CommunityActionBtn from "../primitives/Buttons/CommunityActionBtn";
+import Button from "../primitives/Button";
+import { GitGraph, MessageCircleHeart } from "lucide-react";
+import { Outlet } from "react-router-dom";
 
 const Userpage = () => {
 
@@ -21,12 +24,21 @@ const Userpage = () => {
     const location = useLocation();
     const [user, setUser] = useState<CommunityData>();
     const [isFound, setIsFound] = useState(false);
+    const {routes} = useNavigate();
 
     useEffect(()=> {
         const pathArr:string[] = location.pathname.split("/");
 
         const getCommunities = async() =>{
-            const result = await userAPI.getUsers({login:pathArr[pathArr.length-1]});
+            let index = 0;
+            for(let i = 0; i < pathArr.length; i++) {
+                if(pathArr[i] === "user") {
+                    index = i+1;
+                }
+            }
+            index = index ? index : location.pathname.split("/").length - 1
+
+            const result = await userAPI.getUsers({login:pathArr[index]});
             if(!result) {
                 return;
             }
@@ -55,11 +67,6 @@ const Userpage = () => {
                         <Text className="font-bold text-4xl">
                             {user.displayedName}
                         </Text>
-                        <WithAuthReq
-                            render={(path) => (
-                                <Button href={path} className="absolute right-2 text-sm bg-accent-500 hover:bg-accent-600 text-white font-bold">Follow</Button>
-                            )}
-                        />
                     </Flexbox>
                     <Flexbox className="flex-col font-bold opacity-80">
                         <Text>@{user.login}</Text>
@@ -68,8 +75,27 @@ const Userpage = () => {
                 </Flexbox>
             </FadeContainer>
             <Section
+                navigation={
+                    <Flexbox className="flex-col">
+                        <NavLink
+                            to={routes.user(user.login)}
+                            end
+                        >
+                            {({ isActive, isPending, isTransitioning }) => {console.log(isActive);return(
+                                <Button variant={isActive ? "contained" : "outlined"} className="gap-0 w-full text-lg font-bold justify-start" rounded={"sm"}><MessageCircleHeart className="h-5"/>Posts</Button>
+                            )}}
+                        </NavLink>
+                        <NavLink
+                            to={routes.userCommunities(user.login)}
+                        >
+                            {({ isActive, isPending, isTransitioning }) => (
+                                <Button variant={isActive ? "contained" : "outlined"} className={`gap-0 w-full text-lg font-bold justify-start`} rounded={"sm"}><GitGraph className="h-4"/>Communities</Button>
+                            )}
+                        </NavLink>
+                    </Flexbox>
+                }
                 feed={
-                    <Feed/>
+                    <Outlet/>
                 }
             />
         </>

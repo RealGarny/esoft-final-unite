@@ -44,19 +44,25 @@ const userSlice = createSlice({
             state.updatedAt = action.payload.updatedAt;
         },
         removeUser(state) {
-            state.id = 0;
-            state.login = '';
-            state.displayedName = '';
-            state.email = '';
-            state.globalRole = 0;
-            state.createdAt = '';
-            state.updatedAt = '';
+            state.id = null
+            state.login = ''
+            state.displayedName = ''
+            state.email = ''
+            state.globalRole = null
+            state.createdAt = ''
+            state.updatedAt = ''
+        },
+        updateUser(state, action:PayloadAction<UserState>) {
+            for(let[key,value] of Object.entries(action.payload)) {
+                state[key] = value;
+            }
         }
     }
 })
 
 export const {
     assignUser,
-    removeUser
+    removeUser,
+    updateUser
 } = userSlice.actions;
 export default userSlice.reducer;

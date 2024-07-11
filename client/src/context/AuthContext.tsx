@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { assignUser, removeUser } from "../store/userSlice";
+import { assignUser, removeUser, updateUser as patchUser } from "../store/userSlice";
 import jwtDecode from "../utils/jwtDecode";
 import userAPI from "../http/userAPI";
 
@@ -9,7 +9,8 @@ type ContextData = {
     accessToken:string  | null,
     setAccessToken: any,
     loginUser: (token:string) => void,
-    logoutUser: () => void 
+    logoutUser: () => void,
+    updateUser: (params:any) => void,
 }
 const AuthContext = createContext<ContextData | null>(null);
 
@@ -46,22 +47,30 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
         localStorage.removeItem(locStorageName);
     }
 
+    const updateUser = async(params:any) => {
+        const result = await userAPI.updateUser({...params, id:user.id});
+        if(result) {dispatch(patchUser(params))}
+    }
+
     let contextData: ContextData = {
         user,
         accessToken,
         setAccessToken,
         loginUser,
-        logoutUser
+        logoutUser,
+        updateUser
     }
 
     useEffect(() => {
         checkToken()
         const checkUser = async() => {
             if (!accessToken) return;
-
+            console.log("here")
             const result = await userAPI.checkAuth();
             if(result) {
                 loginUser(result)
+            } else {
+                logoutUser()
             }
         }
         checkUser();

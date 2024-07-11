@@ -28,7 +28,7 @@ const Header:React.FC = () => {
                 <img src={unite_logo}></img>
                 </Hyperlink>
             </div>
-            <Searchbar/>
+            {/*<Searchbar/>*/}
             {
                 user.login !== '' ?
                 <UserMenu/>

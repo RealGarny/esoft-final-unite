@@ -32,7 +32,7 @@ const Feed = ({topComponents, params}:FeedProps) => {
                         PostContent={<PostContent
                             text={post.content}
                         />}
-                        PostActions={<PostActions/>}
+                        //PostActions={<PostActions/>}
                     />
                 )}
             />

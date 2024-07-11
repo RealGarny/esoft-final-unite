@@ -49,7 +49,6 @@ class TokenService {
         try {
             <UserPayload>jwt.verify(token, _refreshTokenSecret!)
             let result = await this._tokenData.getRefreshToken(token)
-            
             if(result) {
                 return result;
             }

@@ -91,7 +91,7 @@ const CommunityFollowers = (props:any) => {
         <Flexbox padding="none" className="font-bold gap-1 text-sm mt-auto">
             {checkParam(props.followerIcon) && <img className="max-h-6 max-w-6" src={props.followerIcon}></img>}
             {<span>{props.followCount}</span>}
-            <span className="opacity-60">{props.followerNickname}s</span>
+            <span className="opacity-60">{props.followerNickname}</span>
         </Flexbox>
     )
 }

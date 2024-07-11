@@ -30,7 +30,7 @@ const Community = () => {
                 className="bg-additional h-72 mt-[-64px] flex justify-center items-end"
                 fadeSize="h-20"
             >
-                <Flexbox className="p-8 w-full h-fit max-w-[1212px] z-10 flex-col">
+                <Flexbox className="p-8 w-full h-fit max-w-[1212px] z-10 flex-col gap-3">
                     <Flexbox className="items-end">
                         <Text className="font-bold text-5xl">
                             {community.name}

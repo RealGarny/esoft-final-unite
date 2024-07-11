@@ -22,7 +22,6 @@ const PostsList:React.FC<PostListProps> = ({params=defaultFeedParameters, render
     const dispatch = useAppDispatch();
     const {routes} = useNavigate();
     const location = useLocation();
-    console.log(posts)
 
     useEffect(()=> {
         const getPosts = async() =>{

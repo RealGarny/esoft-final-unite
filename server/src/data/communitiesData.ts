@@ -34,9 +34,13 @@ class CommunitiesData {
                 this.on('community_followers.communityId', '=', 'communities.id').andOn('community_followers.userId', '=', user.id);
             })
         }
-        if(params.name) {
-            query.where('name', params.name)
-            .first()
+        if(params.name || params.id) {
+            if(params.id) {
+                query.where('id', params.id)
+            } else {
+                query.where('name', params.name)
+            }
+            query.first()
         }
         return query.then((res:any) => {
 

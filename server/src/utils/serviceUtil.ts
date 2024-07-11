@@ -28,6 +28,18 @@ class ServiceUtil {
             default: return null;
         }
     }
+
+    public static paramChecker(checks:any, params:any) {
+        let filteredParams:any = {}
+
+        for(let [key, value] of Object.entries(params)) {
+            //checks if such key exists in the checks object and passes its conditions
+            if(key in checks && checks[key as  keyof typeof checks](value)) {
+                filteredParams[key] = checks[key as  keyof typeof checks](value);
+            }
+        }
+        return filteredParams;
+    }
 }
 
 export default ServiceUtil;

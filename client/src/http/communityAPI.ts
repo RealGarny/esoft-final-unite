@@ -48,8 +48,14 @@ class communityAPI {
         }
     }
 
-    public static updateCommunity = async(communityId:number, updatedParams:object) => {
-        //TODO: update logic
+    public static updateCommunity = async(params:any) => {
+        if(typeof params !== 'object') throw new Error('params of invalid type');
+        try{
+            $tokenHost.patch('/communities', params);
+            return true;
+        }catch(e) {
+            return false;
+        }
     }
 
     public static deleteCommunity = async(communityId:number) => {

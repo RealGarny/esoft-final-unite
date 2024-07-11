@@ -3,10 +3,10 @@ import { checkAccessAndRefresh, checkRefreshToken } from "../middlewares/checkTo
 const usersRouter = (router:any, usersController:any) => {
 
     router.post("/", usersController.createUser)
+    router.patch("/", checkAccessAndRefresh(), usersController.updateUser)
     router.post("/auth", usersController.authUser)
     router.get("/checkAuth", checkRefreshToken(), usersController.checkAuth)
     router.get("/", usersController.getUsers)
-    router.post("update", checkAccessAndRefresh(), usersController.updateUser)
 
     return router;
 }

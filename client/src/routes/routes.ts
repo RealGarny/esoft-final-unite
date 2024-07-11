@@ -7,14 +7,15 @@ class Routes {
     private _routes = {
         main: "/",
         user: "/user/:userId",
+        userCommunities: "/user/:userId/communities",
+
         communities: "/communities",
+        community: "/communities/:communityId",
+        communitySettings: `/communities/:communityId/settings`,
         
         signUp: "/sign-up",
         signIn: "/sign-in",
         settings: "/settings"
-    }
-    private _rawRoutes = {
-        community: "/communities/:communityId",
     }
 
     public main() {
@@ -25,12 +26,24 @@ class Routes {
         return this._routes.user;
     }
 
-    public user(userTag:string) {
-        if(checkString(userTag)) {
-            throw Error("userTag is invalid.")
+    public rawUserCommunities() {
+        return this._routes.userCommunities;
+    }
+
+    public userCommunities(userLogin:string) {
+        if(checkString(userLogin)) {
+            throw Error("userLogin is invalid.")
         }
 
-        return this._routes.user.replace(":userId", userTag)
+        return this._routes.userCommunities.replace(":userId", userLogin)
+    }
+
+    public user(userLogin:string) {
+        if(checkString(userLogin)) {
+            throw Error("userLogin is invalid.")
+        }
+
+        return this._routes.user.replace(":userId", userLogin)
     }
 
     public communities() {
@@ -38,7 +51,19 @@ class Routes {
     }
 
     public rawCommunity() {
-        return this._rawRoutes.community;
+        return this._routes.community;
+    }
+
+    public rawCommunitySettings() {
+        return this._routes.communitySettings;
+    }
+
+    public communitySettings(communityName:string) {
+        if(checkString(communityName)) {
+            throw Error("community name is invalid.")
+        }
+
+        return this._routes.community.replace(":communityId", communityName)
     }
 
     public community(communityName:string) {
@@ -46,7 +71,7 @@ class Routes {
             throw Error("community name is invalid.")
         }
 
-        return this._rawRoutes.community.replace(":communityId", communityName)
+        return this._routes.community.replace(":communityId", communityName)
     }
 
     public signIn() {

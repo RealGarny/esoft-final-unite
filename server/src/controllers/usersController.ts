@@ -47,7 +47,12 @@ class UsersController {
     }
 
     public updateUser = async(req:usersRequest, res:usersResponse) => {
-        const result = await this._usersService.updateUser(req.user, req.body);
+        const result = await this._usersService.updateUser(req.body, req.user);
+        if(!result.error) {
+            res.json(result);
+        } else {
+            res.status(statusCode.badRequest).json(result)
+        }
     }
 
     public createUser = async (req:usersRequest, res:usersResponse) => {

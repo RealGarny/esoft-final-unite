@@ -69,7 +69,6 @@ export const checkRefreshToken = (options:Options={tokenOptional:false}) => {
             const refreshPayload = await tokenService.verifyRefreshToken(refreshToken)
             
             if(!refreshPayload) {
-                console.log(refreshPayload)
                 return res.status(statusCode.unauthorized)
                         .json({message: "user is not authorized"})
             }

@@ -2,15 +2,20 @@ import Flexbox from "../primitives/Flexbox";
 import Text from "../primitives/Text";
 import Form, { FormConfig } from "../primitives/Form/Form";
 import Button from "../primitives/Button";
-import { useContext } from "react";
-import AuthContext from "../../context/AuthContext";
 import NotFound from "./NotFound";
+import useCommunity from "../../context/CommunityContext";
+import { useLocation } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import AuthContext from "../../context/AuthContext";
 
-const Settings = () => {
+const CommunitySettings = () => {
 
-    const {updateUser,user} = useContext(AuthContext);
+    const location = useLocation();
+    const {community, updateCommunity} = useCommunity();
+    const {user} = useContext(AuthContext);
 
-    if(!user.id) {
+    console.log(community)
+    if(!community.id || community.creator !==user.id) {
         return(
             <NotFound
                 pageUrl={location.pathname}
@@ -30,16 +35,16 @@ const Settings = () => {
                 }
             }
             if(!formErrors) {
-                updateUser(values)
+                updateCommunity(values)
             }
         },
         inputs: [
             {
-                name: 'displayedName',
-                label: 'Displayed Name',
+                name: 'followerNickname',
+                label: 'Follower Nickname',
                 className: 'border border-primary',
-                isError: (value) => (value< 3 || value > 15),
-                errorMessage: ""
+                isError: (values) => (values.followerNickname.length < 3 || values.followerNickname.length > 20) && values.followerNickname !== "",
+                errorMessage: "must be between 3 and 20 characters long"
             }
         ]
     }
@@ -47,7 +52,7 @@ const Settings = () => {
     return(
         <Flexbox className="m-auto max-w-container justify-center p-4">
             <Flexbox className="flex-col w-full">
-                <Text className="text-4xl">User Settings</Text>
+                <Text className="text-4xl">Community settings</Text>
                 <div className="h-[1px] w-40 bg-white bg-opacity-60"></div>
                 <div className="max-w-72 pl-3">
                     <Form
@@ -61,4 +66,4 @@ const Settings = () => {
     )
 }
 
-export default Settings;
+export default CommunitySettings;

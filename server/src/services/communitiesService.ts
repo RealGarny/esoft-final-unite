@@ -87,15 +87,22 @@ class CommunitiesService {
         }
     }
 
-    public updateCommunity = async(communityChanges:any) => {
-        if(typeof communityChanges !== "object") return {error: "BAD_REQUEST"}
+    public updateCommunity = async(communityParams:any, user:any) => {
+        if(typeof communityParams !== "object") return {error: "BAD_REQUEST"}
+        console.log(user)
         const checks = {
             followerNickname: (param:any) => this._communitiesUtils.checkFollowerNickname(param),
+        }
+        try {
+            const fetchedCommunity = await this.getCommunities({id:communityParams.communityId})
+            if(fetchedCommunity.creator !== user.id) return {error:"NOT_PERMITTED"}
+        } catch(e) {
+            return {error: "COMMUNITY_NOT_EXIST"}
         }
 
         let filteredParams:any = {}
 
-        for(let [key, value] of Object.entries(communityChanges)) {
+        for(let [key, value] of Object.entries(communityParams)) {
             //checks if such key exists in the checks object and passes its conditions
             if(key in checks && checks[key as  keyof typeof checks](value)) {
                 filteredParams[key] = checks[key as  keyof typeof checks](value);
@@ -103,7 +110,7 @@ class CommunitiesService {
         }
 
         try {
-            const res = await this._communitiesData.updateCommunity({...filteredParams}, communityChanges.communityId);
+            const res = await this._communitiesData.updateCommunity({...filteredParams}, communityParams.communityId);
             console.log(res)
             return res
         } catch(e) {
@@ -142,14 +149,6 @@ class CommunitiesService {
         
         try {
             return await this._communitiesData.getFollows(finalParams);
-        } catch(e) {
-            return {message:"NOT_FOUND"}
-        }
-    }
-
-    private _getFollowsByArray = async(array:any) => {
-        try {
-            return await this._communitiesData.getFollows(array);
         } catch(e) {
             return {message:"NOT_FOUND"}
         }

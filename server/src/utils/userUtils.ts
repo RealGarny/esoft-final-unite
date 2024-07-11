@@ -34,9 +34,13 @@ class userUtils extends ServiceUtil {
     }
     
     public static checkName(name:string) {
-        return this.checkString(name) &&
+        const string = this.checkString(name)
+        if(string &&
             name.length >= this._userConfig.nameMinLen &&
-            name.length <= this._userConfig.nameMaxLen;
+            name.length <= this._userConfig.nameMaxLen){
+            return string;
+        };
+        return null;
     }
 
     public static checkPassword(password:string) {

@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
     assignCommunity,
     CommunityState,
-    removeCommunity as remCommunity
+    removeCommunity as remCommunity,
+    updateCommunity as patchCommunity
 } from "../store/communitySlice";
-import { assignPosts, addPost } from "../store/postsSlice";
 import communityAPI from "../http/communityAPI";
 
 type CommunityContextType = {
@@ -33,6 +33,11 @@ export const CommunityProvider = (props:any) => {
         if(result) {dispatch(assignCommunity(result))}
     }
 
+    const updateCommunity = async(params:any) => {
+        const result = await communityAPI.updateCommunity({...params, id:community.id});
+        if(result) {dispatch(patchCommunity(params))}
+    }
+
     /*
     const getPosts = async(params:any) =>{
         const result = await communityAPI.getPosts(params ? params : {});
@@ -55,6 +60,7 @@ export const CommunityProvider = (props:any) => {
         removeCommunity,
         getCommunity,
         createPost,
+        updateCommunity,
         //getPosts,
         community,
         posts,
@@ -62,7 +68,13 @@ export const CommunityProvider = (props:any) => {
 
     useEffect(()=> {
         const pathArr:string[] = location.pathname.split("/");
-        getCommunity({name:pathArr[pathArr.length-1]});
+        let index;
+        for(let i = 0; i < pathArr.length; i++) {
+            if(pathArr[i] === "communities") {
+                index = i+1;
+            }
+        }
+        getCommunity({name:pathArr[index]});
     }, [])
 
     return(

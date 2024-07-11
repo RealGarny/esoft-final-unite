@@ -18,12 +18,6 @@ class UsersService {
         this._tokenService = tokenService;
     }
 
-    public updateUser(userData:any, userChanges:any) {
-        const editedFields = userChanges;
-        const userId = userData.id;
-        return(this._usersData.updateUser(userId, editedFields))
-    }
-
      public async getUsers(params:any) {
         if(!params || params.type==="full") {
             return {error:"PROHIBITED_PARAMS"};
@@ -60,6 +54,25 @@ class UsersService {
         } catch(e) {
             return {error: "TOKENGEN_FAILURE"}
         }
+    }
+
+    public async updateUser(params:any, user:any) {
+        if(!params || typeof params !== "object" || !user) return {error:"BAD_REQUEST"}
+
+        const checks = {
+            displayedName: (param:any) => this._userUtils.checkName(param),
+        }
+
+        const fields = this._userUtils.paramChecker(checks, params);
+        try {
+            return await this._usersData.updateUser(fields, user.id)
+        } catch(e) {
+            return {error: "ERROR_INTERNAL"}
+        }
+    }
+
+    private _updateUserRefresh = (refreshToken:string, userId:any) => {
+        return this._usersData.updateUser({refreshToken}, userId)
     }
 
     public async createUser(user:usersData) {
@@ -114,7 +127,7 @@ class UsersService {
     private async _handleUserTokens(user:fullUsersData) {
         try {
             const { accessToken, refreshToken } = this._createUserTokens(user);
-            await this._usersData.updateUser(user.id, {refreshToken})
+            await this._updateUserRefresh(refreshToken, user.id)
 
             return {accessToken, refreshToken}
         } catch(e) {

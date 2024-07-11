@@ -36,18 +36,32 @@ const communitySlice = createSlice({
             state.description = action.payload.description;
             state.followerNickname = action.payload.followerNickname;
             state.createdAt = action.payload.createdAt;
-            state.createdAt = action.payload.createdAt;
             state.updatedAt = action.payload.updatedAt;
             state.isFollowed= action.payload.isFollowed;
         },
         removeCommunity(state) {
-            state.community = initialState;
+            state.id = null;
+            state.name = '';
+            state.creator = null;
+            state.followCount = '';
+            state.description = '';
+            state.followerNickname = '';
+            state.createdAt = '';
+            state.createdAt = '';
+            state.updatedAt = '';
+            state.isFollowed= undefined;
+        },
+        updateCommunity(state, action:PayloadAction<CommunityState>) {
+            for(let[key,value] of Object.entries(action.payload)) {
+                state[key] = value;
+            }
         },
     }
 })
 
 export const {
     assignCommunity,
-    removeCommunity
+    removeCommunity,
+    updateCommunity
 } = communitySlice.actions;
 export default communitySlice.reducer;

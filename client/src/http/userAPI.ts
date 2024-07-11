@@ -65,8 +65,13 @@ class userAPI {
         //TODO: delete logic
     }
 
-    public static updateUser() {
-        //TODO: update logic
+    public static updateUser = async(params:any) => {
+        try {
+            await $tokenHost.patch(`/users`, params)
+            return true;
+        } catch(e) {
+            return false;
+        }
     }
 }
 
