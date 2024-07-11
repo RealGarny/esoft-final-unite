@@ -7,7 +7,7 @@ import communityAPI from "../../../http/communityAPI";
 const FollowButton = ({params, className}:any) => {
 
     const {user} = useContext(AuthContext);
-    const [isFollow, setIsFollow] = useState(params.followed ? params.followed : false);
+    const [isFollow, setIsFollow] = useState(params.isFollowed ? params.isFollowed : false);
     const [isClicked, setIsClicked] = useState(false);
 
     const handleClick = () => {
@@ -15,6 +15,7 @@ const FollowButton = ({params, className}:any) => {
         setIsClicked(true);
         setIsFollow(!isFollow);
     }
+    console.log(isFollow)
 
     const handleFollow = async() => {
         await communityAPI.setFollow({communityId:params.communityId, deleteFollow:!isFollow})

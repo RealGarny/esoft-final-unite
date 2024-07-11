@@ -1,5 +1,4 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
-import { useNavigate } from "../utils/router";
 import userAPI from "./userAPI";
 
 const $host = axios.create({
@@ -26,10 +25,15 @@ const tokenResponseInterceptor = (response:AxiosResponse) => {
     return response;
 };
 const tokenResponseInterceptorError = async(error:AxiosError) => {
+
     switch(error.response?.status) {
         case 401:   
             const response = await userAPI.checkAuth();
-            localStorage.setItem('accessToken', response ? response : '') 
+            if(response) {
+                localStorage.setItem('accessToken', response) 
+            } else {
+                localStorage.removeItem('accessToken')
+            }
     }
 }
 

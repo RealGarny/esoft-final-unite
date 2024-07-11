@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
-    addPost,
     assignCommunity,
-    assignPosts,
     CommunityState,
     removeCommunity as remCommunity
 } from "../store/communitySlice";
+import { assignPosts, addPost } from "../store/postsSlice";
 import communityAPI from "../http/communityAPI";
 
 type CommunityContextType = {
@@ -22,7 +21,9 @@ const CommunityContext = createContext({});
 
 export const CommunityProvider = (props:any) => {
     const dispatch = useAppDispatch();
-    const {community, posts} = useAppSelector(state => state.community)
+    const community = useAppSelector(state => state.community)
+    const posts = useAppSelector(state => state.posts)
+
     const removeCommunity = () => {
         dispatch(remCommunity());
     }
@@ -32,10 +33,11 @@ export const CommunityProvider = (props:any) => {
         if(result) {dispatch(assignCommunity(result))}
     }
 
+    /*
     const getPosts = async(params:any) =>{
         const result = await communityAPI.getPosts(params ? params : {});
         if(result) {dispatch(assignPosts(result))}
-    }
+    }*/ 
 
     const createPost:CommunityContextType["createPost"] = async(authorId, content) => {
         if(!authorId || !content) return;
@@ -45,7 +47,7 @@ export const CommunityProvider = (props:any) => {
             content:content
         })
         if(createdPost) {
-            dispatch(addPost(createdPost));
+            console.log(createdPost)
         }
     }
 
@@ -53,7 +55,7 @@ export const CommunityProvider = (props:any) => {
         removeCommunity,
         getCommunity,
         createPost,
-        getPosts,
+        //getPosts,
         community,
         posts,
     }

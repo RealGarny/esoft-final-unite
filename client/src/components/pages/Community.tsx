@@ -43,7 +43,8 @@ const Community = () => {
                             params = {{
                                 name: community.name,
                                 creator: community.creator,
-                                communityId: community.id
+                                communityId: community.id,
+                                isFollowed: community.isFollowed
                             }}
                         />
                     </Flexbox>

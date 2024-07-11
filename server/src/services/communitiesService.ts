@@ -23,23 +23,24 @@ class CommunitiesService {
 
     public getPosts = async(params:any={}, user:any=null) => {
         if(typeof params !== "object") return {message:"BAD_REQUEST"}
-        /*{
-            foreignPage:true,
-            limit: 5,
-            type: short,
-            community: Yupiie
-        }
-        */
+        if(Object.keys(params).length > 20) return {message:"TOO_MANY_PARAMETERS"} //pass to a middleware
 
         const filteredParams:any = {}
 
+        //accepted params
         const checks = {
             foreignPage: (param:any) => {
                 if(typeof param === 'string') {
                     return this._communitiesUtils.parseBoolean(param);
                 }
             },
-            limit: (param:any) => this._communitiesUtils.checkNumber(params.limit)
+            limit: (param:any) => this._communitiesUtils.checkNumber(param),
+            id: (param:any) => this._communitiesUtils.checkNumber(param),
+            authorId: (param:any) => this._communitiesUtils.checkNumber(param),
+            authorLogin: (param:any) => this._communitiesUtils.checkString(param),
+            type: (param:any) => this._communitiesUtils.checkString(param),
+            communityName: (param:any) => this._communitiesUtils.checkString(param),
+            communityId: (param:any) => this._communitiesUtils.checkNumber(param)
         }
 
         for(let [key, value] of Object.entries(params)) {
@@ -73,8 +74,10 @@ class CommunitiesService {
 
         
         try{
-            await this._communitiesData.createPost({authorId, content, communityId})
-            return true;
+            const postId = await this._communitiesData.createPost({authorId, content, communityId})
+            if(typeof postId[0].id !== 'number') return "INTERNAL ERROR";
+
+            return await this.getPosts({id:postId[0].id});
         } catch(e:any) {
             if(e.detail) {
                 return {error: "BAD_POST"}
@@ -84,8 +87,29 @@ class CommunitiesService {
         }
     }
 
-    public updateCommunity = (communityChanges:Partial<CreateCommunity>) => {
-        //TODO: UPDATE COMMUNITIES;
+    public updateCommunity = async(communityChanges:any) => {
+        if(typeof communityChanges !== "object") return {error: "BAD_REQUEST"}
+        const checks = {
+            followerNickname: (param:any) => this._communitiesUtils.checkFollowerNickname(param),
+        }
+
+        let filteredParams:any = {}
+
+        for(let [key, value] of Object.entries(communityChanges)) {
+            //checks if such key exists in the checks object and passes its conditions
+            if(key in checks && checks[key as  keyof typeof checks](value)) {
+                filteredParams[key] = checks[key as  keyof typeof checks](value);
+            }
+        }
+
+        try {
+            const res = await this._communitiesData.updateCommunity({...filteredParams}, communityChanges.communityId);
+            console.log(res)
+            return res
+        } catch(e) {
+            console.log(e)
+            return {error: "INTERNAL_ERROR"}
+        }
     }
 
     public getCommunities = async(params:any, user:any=null) => {

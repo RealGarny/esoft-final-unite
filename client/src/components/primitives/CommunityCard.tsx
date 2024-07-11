@@ -17,7 +17,7 @@ type CommunityCardProps = {
     followerIcon?:string,
     bgURL?:string,
     creator?: number,
-    followed?:boolean,
+    isFollowed?:boolean,
     tags?: string[]
 }
 
@@ -35,7 +35,7 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
     followerIcon,
     bgURL,
     creator,
-    followed,
+    isFollowed,
     tags
 }) => {
     if(!checkParam(name) || !checkParam(description) || !checkParam(followerNickname)) {
@@ -61,7 +61,7 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
                         params = {{
                             creator,
                             name,
-                            followed,
+                            isFollowed,
                             communityId: id
                         }}
                         className="absolute z-[1] right-5 m-auto"

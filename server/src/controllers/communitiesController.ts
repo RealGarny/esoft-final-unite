@@ -19,6 +19,17 @@ class CommunitiesController {
         
     }
 
+    public updateCommunity = async(req:Request, res:Response) => {
+
+        const result = await this._communitiesService.updateCommunity(req.body, req.user);
+        if(!result.error) {
+            res.status(statusCode.created).json(result)  
+        } else {
+            res.status(statusCode.badRequest).json(result)
+        }
+        
+    }
+
     public createPost = async(req:Request, res:Response) => {
 
         const result = await this._communitiesService.createPost(req.user, req.body);

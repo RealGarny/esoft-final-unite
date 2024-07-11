@@ -8,8 +8,13 @@ class ServiceUtil {
 
     protected static _emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    public static checkNumber(number:number) {
-        const isNumber = !!number && typeof number === "number";
+    public static checkNumber(number:number|string) {
+        let isNumber = !!number && typeof number === "number";
+        if(!isNumber && typeof parseInt(number as string) === 'number') {
+            number = parseInt(number as string);
+            isNumber = true;
+        }
+
         return isNumber ? number : null;
     }
 

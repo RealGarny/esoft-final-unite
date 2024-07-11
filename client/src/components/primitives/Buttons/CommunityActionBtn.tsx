@@ -8,7 +8,6 @@ import AuthContext from "../../../context/AuthContext";
 export const CommunityActionBtn = ({params, className}:any) => {
     const {user} = useContext(AuthContext);
     const {routes} = useNavigate();
-    console.log(params, user.id)
     if(!params) {return<div>invalid params</div>}
     return(
         <WithAuthReq
@@ -20,7 +19,7 @@ export const CommunityActionBtn = ({params, className}:any) => {
                 >Edit</Button>
                 :
                 <FollowButton
-                    params = {{followed:params.followed, communityId:params.communityId}}
+                    params = {{isFollowed:params.isFollowed, communityId:params.communityId}}
                     className={className}
                 />
             )}

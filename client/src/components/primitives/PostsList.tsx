@@ -1,8 +1,9 @@
 import { useEffect } from "react"
 import communityAPI from "../../http/communityAPI"
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { assignPosts } from "../../store/communitySlice"
 import Text from "./Text"
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { assignPosts } from "../../store/postsSlice"
+import { useLocation, useNavigate } from "../../utils/router"
 
 type PostListProps = {
     params: {
@@ -11,15 +12,30 @@ type PostListProps = {
     render: (args:any) => React.ReactElement
 }
 
-const PostsList:React.FC<PostListProps> = ({params, render}) => {
-    
+const defaultFeedParameters = {
+    limit:15,
+}
+
+const PostsList:React.FC<PostListProps> = ({params=defaultFeedParameters, render}) => {
+
+    const {posts} = useAppSelector(state => state.posts)
     const dispatch = useAppDispatch();
-    const posts = useAppSelector(state => state.community.posts)
+    const {routes} = useNavigate();
+    const location = useLocation();
+    console.log(posts)
 
     useEffect(()=> {
         const getPosts = async() =>{
-            const result = await communityAPI.getPosts(params ? params : {});
-            if(result) {dispatch(assignPosts(result))}
+            let result;
+            const communityName = location.pathname.split('/')[location.pathname.split('/').length-1];
+            if(communityName && location.pathname === routes.community(communityName)) {
+                result = await communityAPI.getPosts({...params, communityName});
+            } else {
+                result = await communityAPI.getPosts({...params, type:"full"});
+            }
+            if(result) {
+                dispatch(assignPosts(result))
+            }
         }
         getPosts()
     }, [])

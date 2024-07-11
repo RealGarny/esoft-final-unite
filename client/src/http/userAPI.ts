@@ -1,6 +1,5 @@
 import $host, { $tokenHost } from ".";
 import errorList from "../utils/errorList";
-import jwtDecode from "../utils/jwtDecode";
 import { AxiosError } from "axios";
 
 type UserRegistration = (email:string, displayedName: string, login: string, password:string) => void;

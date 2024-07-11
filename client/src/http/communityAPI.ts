@@ -27,7 +27,14 @@ class communityAPI {
     }
 
     public static getPosts = async(params:any) => {
-        
+        try {
+            const {data} = await $tokenHost.get('communities/posts', {params})
+            return data;
+        } catch(e) {
+            if(e instanceof AxiosError) {
+                return null;
+            }
+        }
     }
 
     public static createPost = async(params:any) => {

@@ -11,7 +11,6 @@ type FeedProps = {
 }
 
 const Feed = ({topComponents, params}:FeedProps) => {
-    if(!params) params = {limit:15}
     return(
         <Flexbox className="flex-col">
             {topComponents && topComponents}
@@ -20,15 +19,16 @@ const Feed = ({topComponents, params}:FeedProps) => {
                 render={(post) => (
                     <Post
                         key={post.author}
-                        PostHeader={<PostHeader
-                            authorLogo={post.authorLogo}
-                            author={post.author}
-                            authorId={post.authorId}
-                            createdAt={post.createdAt}
-                            communityLogo={post.communityLogo}
-                            communityId = {post.communityId}
-                            communityName={post.communityName}
-                        />}
+                        PostHeader={
+                            <PostHeader
+                                authorLogo={post.userIcon}
+                                author={post.displayedName}
+                                authorLogin={post.login}
+                                createdAt={post.createdAt}
+                                communityLogo={post.communityLogo}
+                                communityName={post.communityName}
+                            />
+                        }
                         PostContent={<PostContent
                             text={post.content}
                         />}
