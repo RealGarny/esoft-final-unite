@@ -11,14 +11,6 @@ const Settings = () => {
         },
         inputs: [
             {
-                name: 'avatar',
-                label: 'Avatar',
-                type: "file",
-                className: 'border border-primary',
-                isError: (value) => {console.log(value); return false},
-                errorMessage: ""
-            },
-            {
                 name: 'displayedName',
                 label: 'Displayed Name',
                 className: 'border border-primary',

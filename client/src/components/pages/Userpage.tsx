@@ -35,7 +35,6 @@ const Userpage = () => {
         }
         getCommunities()
     }, [])
-    console.log(isFound)
     if(!isFound || !user) {
         return(
             <NotFound

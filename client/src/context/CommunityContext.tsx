@@ -23,7 +23,6 @@ const CommunityContext = createContext({});
 export const CommunityProvider = (props:any) => {
     const dispatch = useAppDispatch();
     const {community, posts} = useAppSelector(state => state.community)
-    console.log(community)
     const removeCommunity = () => {
         dispatch(remCommunity());
     }
@@ -40,13 +39,11 @@ export const CommunityProvider = (props:any) => {
 
     const createPost:CommunityContextType["createPost"] = async(authorId, content) => {
         if(!authorId || !content) return;
-        console.log(authorId, community.id, content)
         const createdPost = await communityAPI.createPost({
             authorId: authorId,
             communityId: community.id,
             content:content
         })
-        console.log(createdPost)
         if(createdPost) {
             dispatch(addPost(createdPost));
         }
@@ -64,7 +61,7 @@ export const CommunityProvider = (props:any) => {
     useEffect(()=> {
         const pathArr:string[] = location.pathname.split("/");
         getCommunity({name:pathArr[pathArr.length-1]});
-    })
+    }, [])
 
     return(
         <CommunityContext.Provider value={data}>

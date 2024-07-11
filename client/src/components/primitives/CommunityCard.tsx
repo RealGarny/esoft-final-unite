@@ -3,14 +3,12 @@ import FadeContainer from "./FadeContainer"
 import Flexbox from "./Flexbox"
 import Hyperlink from "./Hyperlink"
 import Logo from "./Logo"
-import WithAuthReq from "./withAuthReq"
-import Button from "./Button"
 import Text from "./Text"
-import { useContext } from "react"
-import AuthContext from "../../context/AuthContext"
 import { useNavigate } from "../../utils/router"
+import CommunityActionBtn from "./Buttons/CommunityActionBtn"
 
 type CommunityCardProps = {
+    id:number,
     name:string,
     description:string,
     icon?:string,
@@ -18,7 +16,8 @@ type CommunityCardProps = {
     followerNickname:string,
     followerIcon?:string,
     bgURL?:string,
-    creator?: number
+    creator?: number,
+    followed?:boolean,
     tags?: string[]
 }
 
@@ -27,6 +26,7 @@ const checkParam = (param:any) => {
 }
 
 const CommunityCard:React.FC<CommunityCardProps> = ({
+    id,
     name,
     description,
     icon,
@@ -35,12 +35,12 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
     followerIcon,
     bgURL,
     creator,
+    followed,
     tags
 }) => {
     if(!checkParam(name) || !checkParam(description) || !checkParam(followerNickname)) {
         return <Card className="p-2">Props are invalid</Card>
     }
-
     const {routes} = useNavigate();
 
     return(
@@ -57,9 +57,13 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
                     <Text className="font-bold text-3xl">
                         {name}
                     </Text>
-                    <CommunityActionBtn
-                        creator = {creator}
-                        name = {name}
+                   <CommunityActionBtn
+                        params = {{
+                            creator,
+                            name,
+                            followed,
+                            communityId: id
+                        }}
                         className="absolute z-[1] right-5 m-auto"
                     />
                 </Flexbox>
@@ -89,27 +93,6 @@ const CommunityFollowers = (props:any) => {
             {<span>{props.followCount}</span>}
             <span className="opacity-60">{props.followerNickname}s</span>
         </Flexbox>
-    )
-}
-
-export const CommunityActionBtn = (props:any) => {
-    const {user} = useContext(AuthContext);
-    const {routes} = useNavigate();
-
-    if(props.creator === user.id) {
-        return(
-            <Button
-                href={`${routes.community(props.name)}/settings`}
-                className={`text-sm bg-accent-500 hover:bg-accent-600 text-white font-bold ${props.className}`}
-            >Edit</Button>
-        )
-    }
-
-    //const [isFollowing, setIsFollowing]
-    return(
-        <WithAuthReq render={(path) => (
-            <Button href={path} className={`text-sm bg-accent-500 hover:bg-accent-600 text-white font-bold ${props.className}`}>Follow</Button>
-        )}/>
     )
 }
 

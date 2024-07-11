@@ -50,7 +50,6 @@ class userAPI {
             const {data} = await $host.post('/users/auth', {login, password}, {withCredentials: true});
             return(data.accessToken);
         } catch(e:any) {
-            console.log(e)
             if(e.response.data.message) {
                 return(this._createError(e.response.data.message))
             } else {

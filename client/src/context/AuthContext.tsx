@@ -30,6 +30,7 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
         localStorage.setItem(locStorageName, token)
         const tokenData = jwtDecode(token)
         dispatch(assignUser(tokenData))
+        setAccessToken(token)
     }
 
     const checkToken = () => {
@@ -58,13 +59,8 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
         const checkUser = async() => {
             if (!accessToken) return;
 
-            loginUser(accessToken)
             const result = await userAPI.checkAuth();
-            if(!result) {
-                console.log("exit")
-                logoutUser();
-            } else {
-                setAccessToken(() => (result))
+            if(result) {
                 loginUser(result)
             }
         }

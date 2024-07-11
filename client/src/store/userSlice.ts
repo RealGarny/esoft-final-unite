@@ -10,17 +10,6 @@ export interface UserState {
     updatedAt: string
 }
 
-export const GetCommunityColors = createAsyncThunk(
-    'style/GetCommunityColors',
-    async function() {
-        //В будующем можно реализовать через API запрос
-        // const response = await fetch(api_url);
-        // const data = await response.json();
-        // return data;
-        console.log(window.location.href)
-    }
-)
-
 const initialState:UserState = {
     id: 0,
     login: '',

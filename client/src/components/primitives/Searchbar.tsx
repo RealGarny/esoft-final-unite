@@ -13,10 +13,11 @@ const Searchbar = () => {
     return(
         <div className="basis-[400px]">
             <form className="relative flex rounded-md bg-black bg-opacity-20">
+                {/*
                 <SearchIcon
                     className="absolute top-3 left-3 w-4 h-4 stroke-white opacity-50 cursor-pointer"
-                    onClick={()=>{console.log("hello")}}
-                />
+                    onClick={()=>{}}
+                />*/}
                 <input
                     type="text"
                     className="h-10 px-10 w-full font-bold text-white"

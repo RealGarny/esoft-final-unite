@@ -12,6 +12,7 @@ type PostListProps = {
 }
 
 const PostsList:React.FC<PostListProps> = ({params, render}) => {
+    
     const dispatch = useAppDispatch();
     const posts = useAppSelector(state => state.community.posts)
 

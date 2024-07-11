@@ -27,7 +27,6 @@ const CommunitiesList:React.FC<CommunitiesList> = (props) => {
 
        if(Date.now() - new Date(communities[i].createdAt) < oneDay) {
             tags.push("NEW!")
-            console.log(tags)
        }
         components.push(
             <CommunityCard

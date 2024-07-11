@@ -1,5 +1,7 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "../../utils/router";
+import { useState } from "react";
 
 type props = {
     render: (href:string) => React.ReactElement
@@ -7,12 +9,17 @@ type props = {
 
 const WithAuthReq = (props:props) => {
     const {logoutUser, user} = useContext(AuthContext);
-    let path = "";
-    if(!user.login) {
-        logoutUser();
-        path = "/sign-in"
-    }
+    const {routes} = useNavigate()
+    const [path, setPath] = useState('')
     
+    useEffect(()=> {
+        if(!user.login) {
+            logoutUser();
+            setPath(routes.signIn());
+        } else {
+            setPath('')
+        }
+    },[])
 
     return (
         props.render(path)

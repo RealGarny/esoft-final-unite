@@ -7,11 +7,17 @@ type GetCommunities = {
 
 }
 
+type FollowData = {
+    followType: boolean,
+    userId: number,
+    communityId: number
+}
+
 class communityAPI {
 
     public static getCommunities = async(params:GetCommunities) => {
         try {
-            const {data} = await $host.get('communities', {params})
+            const {data} = await $tokenHost.get('communities', {params})
             return data;
         } catch(e) {
             if(e instanceof AxiosError) {
@@ -41,6 +47,15 @@ class communityAPI {
 
     public static deleteCommunity = async(communityId:number) => {
         //TODO: delete logic
+    }
+
+    public static setFollow = async(followData:FollowData) => {
+        try {
+            $tokenHost.post('communities/follow', followData)
+            return true;
+        } catch(e) {
+            return e;
+        }
     }
 
     public static createCommunity = async (communityData:any) => {

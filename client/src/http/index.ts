@@ -23,7 +23,6 @@ $tokenHost.interceptors.request.use((config:any) => {
 
 //response interceptors
 const tokenResponseInterceptor = (response:AxiosResponse) => {
-    console.log("good response")
     return response;
 };
 const tokenResponseInterceptorError = async(error:AxiosError) => {

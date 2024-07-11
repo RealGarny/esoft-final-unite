@@ -4,13 +4,14 @@ import Flexbox from "../primitives/Flexbox";
 import Text from "../primitives/Text";
 import { useLocation } from "../../utils/router";
 import NotFound from "./NotFound";
-import { CommunityActionBtn } from "../primitives/CommunityCard";
 import CrossIcon from "../icons/CrossIcon";
 import useCommunity from "../../context/CommunityContext";
 import Section from "../primitives/Feed/Section";
 import Feed from "../primitives/Feed/Feed";
 import CreatePostForm from "../primitives/CreatePostForm";
 import CommunityInfo from "../primitives/Feed/CommunityInfo";
+import CommunityActionBtn from "../primitives/Buttons/CommunityActionBtn";
+
 const Community = () => {
 
     const location = useLocation();
@@ -39,14 +40,20 @@ const Community = () => {
                         <Text>{community.followCount}</Text>
                         <Text className=" opacity-80">{community.followerNickname}</Text>
                         <CommunityActionBtn
-                            name={community.name}
-                            creator={community.creator}
+                            params = {{
+                                name: community.name,
+                                creator: community.creator,
+                                communityId: community.id
+                            }}
                         />
                     </Flexbox>
                 </Flexbox>
             </FadeContainer>
             <Section
-                feed={<Feed params={{limit:15}} topComponents={<CreatePostForm/>}/>}
+                feed={<Feed 
+                    params={{limit:15}}
+                    topComponents={<CreatePostForm/>}/>
+                }
                 info={<CommunityInfo description={community.description}/>}
             />
             <Button className="fixed right-6 bottom-7 p-7 bg-accent-500 hover:bg-accent-500 shadow-md">
