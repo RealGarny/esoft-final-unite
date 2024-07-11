@@ -30,6 +30,15 @@ class CommunitiesController {
         
     }
 
+    public getPosts = async(req:Request, res:Response) => {
+        const result = await this._communitiesService.getPosts(req.query, req.user);
+        if(!result.error) {
+            res.status(statusCode.created).json(result)
+        } else {
+            res.status(statusCode.badRequest).json(result)
+        }
+    }
+
     public createFollow = async(req:Request, res:Response) => {
 
         const result = await this._communitiesService.createFollow(req.user, req.body);

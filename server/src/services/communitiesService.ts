@@ -21,6 +21,43 @@ class CommunitiesService {
         this._communitiesUtils = communitiesUtils;
     }
 
+    public getPosts = async(params:any={}, user:any=null) => {
+        if(typeof params !== "object") return {message:"BAD_REQUEST"}
+        /*{
+            foreignPage:true,
+            limit: 5,
+            type: short,
+            community: Yupiie
+        }
+        */
+
+        const filteredParams:any = {}
+
+        const checks = {
+            foreignPage: (param:any) => {
+                if(typeof param === 'string') {
+                    return this._communitiesUtils.parseBoolean(param);
+                }
+            },
+            limit: (param:any) => this._communitiesUtils.checkNumber(params.limit)
+        }
+
+        for(let [key, value] of Object.entries(params)) {
+            //checks if such key exists in the checks object and passes its conditions
+            if(key in checks && checks[key as  keyof typeof checks](value)) {
+                filteredParams[key] = checks[key as  keyof typeof checks](value);
+            }
+        }
+        try {
+            const result = await this._communitiesData.getPosts(filteredParams, user)
+            if(!result) return {error: "POSTS_NOT_FOUND"}
+            return result;
+        } catch(e) {
+            console.log(e);
+            return {error: "BAD_REQUEST"}
+        }
+    }
+
     public createPost = async(user:any, post:CreatePost) => {
 
         if(!user || !post.content || !post.communityId) return null;
@@ -52,24 +89,16 @@ class CommunitiesService {
     }
 
     public getCommunities = async(params:any, user:any=null) => {
-        if(!params) return await this._communitiesData.getCommunities();
-
         //TODO: CHECK PARAMS
         const filteredParams = params
-        const result = await this._communitiesData.getCommunities(filteredParams)
-        if(!result) return {error: "COMMUNITIES_NOT_FOUND"}
-
-        if(user) {
-            let followQuery = [];
-            for(let i = 0; i < result.length; i++) {
-                followQuery.push({userId: user.id, communityId:result[i].id})
-            }
-            console.log(followQuery)
-            const follows = await this._getFollowsByArray(followQuery)
-            console.log(follows)
+        try {
+            const result = await this._communitiesData.getCommunities(filteredParams, user)
+            if(!result) return {error: "COMMUNITIES_NOT_FOUND"}
+            return result;
+        } catch(e) {
+            console.log(e);
+            return {error: "BAD_REQUEST"}
         }
-
-        return result;
     }
 
     public getFollows = async(params:any) => {

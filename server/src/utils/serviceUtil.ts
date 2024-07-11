@@ -12,6 +12,17 @@ class ServiceUtil {
         const isNumber = !!number && typeof number === "number";
         return isNumber ? number : null;
     }
+
+    public static parseBoolean(string:string) {
+        if(typeof string !== 'string') return null;
+
+        switch(string.toLowerCase()) {
+            case "true": return true;
+            case "false": return false;
+            case "": return true;
+            default: return null;
+        }
+    }
 }
 
 export default ServiceUtil;
