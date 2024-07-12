@@ -17,6 +17,7 @@ type CommunityCardProps = {
     followerIcon?:string,
     bgURL?:string,
     creator?: number,
+    type?:string,
     isFollowed?:boolean,
     tags?: string[]
 }
@@ -36,6 +37,7 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
     bgURL,
     creator,
     isFollowed,
+    type,
     tags
 }) => {
     if(!checkParam(name) || !checkParam(description) || !checkParam(followerNickname)) {
@@ -44,14 +46,14 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
     const {routes} = useNavigate();
 
     return(
-        <Card padding="none" className="relative overflow-hidden flex-col gap-0 flex-grow-0 flex-shrink-0 w-96">
-            {<FadeContainer fadeColor="from-primary" fadeSize="h-20" className="h-40 w-full">
+        <Card padding="none" className={`relative overflow-hidden flex-col gap-0 flex-grow-0 flex-shrink-0 w-96  ${type === "horizontal" && "flex-row w-auto"}`}>
+            {type !== "horizontal" && <FadeContainer fadeColor="from-primary" fadeSize="h-20" className="h-40 w-full">
                 <div className="absolute min-h-full min-w-full bg-cover bg-additional"
                 style={{"backgroundImage":`url(${bgURL})`, "backgroundPosition":"50%"}}
                 >
                 </div>
             </FadeContainer>}
-            <Flexbox className="flex-col relative px-5 py-5 gap-4 h-full">
+            <Flexbox className="flex-col relative px-5 py-5 gap-4 h-full w-full">
                     {icon && <Logo size="lg" alt="communityLogo" rounded="xl" src={icon ? icon : ""} className="border-black border-4 border-opacity-10 mt-[-70px]"/>}
                 <Flexbox className="w-2/3 break-words">
                     <Text className="font-bold text-3xl">

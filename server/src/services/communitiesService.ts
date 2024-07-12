@@ -89,15 +89,22 @@ class CommunitiesService {
 
     public updateCommunity = async(communityParams:any, user:any) => {
         if(typeof communityParams !== "object") return {error: "BAD_REQUEST"}
-        console.log(user)
+
         const checks = {
             followerNickname: (param:any) => this._communitiesUtils.checkFollowerNickname(param),
         }
         try {
             const fetchedCommunity = await this.getCommunities({id:communityParams.communityId})
+            console.log({params:communityParams, fetched:fetchedCommunity})
             if(fetchedCommunity.creator !== user.id) return {error:"NOT_PERMITTED"}
         } catch(e) {
             return {error: "COMMUNITY_NOT_EXIST"}
+        }
+
+        if(communityParams.files) {
+            for(let [key,value] of Object.entries(communityParams.files)) {
+                console.log(key, value)
+            }
         }
 
         let filteredParams:any = {}

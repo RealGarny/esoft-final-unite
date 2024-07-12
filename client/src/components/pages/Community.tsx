@@ -7,10 +7,10 @@ import NotFound from "./NotFound";
 import CrossIcon from "../icons/CrossIcon";
 import useCommunity from "../../context/CommunityContext";
 import Section from "../primitives/Feed/Section";
-import Feed from "../primitives/Feed/Feed";
 import CreatePostForm from "../primitives/CreatePostForm";
 import CommunityInfo from "../primitives/Feed/CommunityInfo";
 import CommunityActionBtn from "../primitives/Buttons/CommunityActionBtn";
+import PostsFeed from "../primitives/Feed/PostsFeed";
 
 const Community = () => {
 
@@ -51,9 +51,11 @@ const Community = () => {
                 </Flexbox>
             </FadeContainer>
             <Section
-                feed={<Feed 
-                    params={{limit:15}}
-                    topComponents={<CreatePostForm/>}/>
+                feed={
+                    <PostsFeed
+                        params={{limit:15}}
+                        topComponents={<CreatePostForm/>}
+                    />
                 }
                 info={<CommunityInfo description={community.description}/>}
             />

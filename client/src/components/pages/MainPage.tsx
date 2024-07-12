@@ -2,7 +2,7 @@ import Card from "../primitives/Card";
 import { Section } from "../primitives/Feed/Section";
 import Splash from "../primitives/Splash";
 import Text from "../primitives/Text";
-import Feed from "../primitives/Feed/Feed";
+import PostsFeed from "../primitives/Feed/PostsFeed";
 
 const MainPage:React.FC = () => {
     return(
@@ -22,7 +22,7 @@ const MainPage:React.FC = () => {
 
 const MainPageFeed:React.FC = () => {
     return(
-        <Feed
+        <PostsFeed
             topComponents={<Text className="font-bold text-2xl">Recent Posts</Text>}
             params={{limit:15}}
         />

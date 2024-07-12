@@ -3,15 +3,21 @@ import { useState, useEffect } from "react"
 import communityAPI from "../../http/communityAPI"
 
 type CommunitiesList = {
-    limit?:number
+    params: any,
+    limit?:number,
+    render?:(props:any) => React.ReactElement
 }
 
-const CommunitiesList:React.FC<CommunitiesList> = (props) => {
+const defaultParams = {
+    limit: 100,
+}
+
+const CommunitiesList:React.FC<CommunitiesList> = ({params=defaultParams, render, ...args}) => {
     const [communities, setCommunities] = useState<any[]>([])
 
     useEffect(()=> {
         const getCommunities = async() =>{
-            const result = await communityAPI.getCommunities(props.limit ? {limit:props.limit} : {});
+            const result = await communityAPI.getCommunities(params);
             if(result) {setCommunities(result)}
         }
         getCommunities()
@@ -28,13 +34,18 @@ const CommunitiesList:React.FC<CommunitiesList> = (props) => {
        if(Date.now() - new Date(communities[i].createdAt) < oneDay) {
             tags.push("NEW!")
        }
-        components.push(
-            <CommunityCard
-                key={communities[i].name? communities[i].name : i}
-                {...communities[i]}
-                tags={tags}
-            />
-        )
+       if(!render) {
+            components.push(
+                <CommunityCard
+                    {...args}
+                    key={communities[i].name? communities[i].name : i}
+                    {...communities[i]}
+                    tags={tags}
+                />
+            )
+        } else {
+            components.push(render({...communities[i], ...args, tags, }))
+        }
     }
 
     return components;

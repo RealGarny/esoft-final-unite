@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import AuthContext from "../../../context/AuthContext";
-import Feed from "./Feed";
+import PostsFeed from "./PostsFeed";
 
 const UserPostsFeed = () => {
     const {user} = useContext(AuthContext);
     return(
-        <Feed
+        <PostsFeed
             params={{authorId:user.id}}
         />
     )

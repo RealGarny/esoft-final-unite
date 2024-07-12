@@ -10,7 +10,7 @@ type FeedProps = {
     params: any
 }
 
-const Feed = ({topComponents, params}:FeedProps) => {
+const PostsFeed = ({topComponents, params}:FeedProps) => {
     return(
         <Flexbox className="flex-col">
             {topComponents && topComponents}
@@ -40,4 +40,4 @@ const Feed = ({topComponents, params}:FeedProps) => {
     )
 }
 
-export default Feed;
+export default PostsFeed;

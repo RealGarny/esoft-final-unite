@@ -1,4 +1,5 @@
 import routes from "../../routes/routes"
+import Flexbox from "../primitives/Flexbox"
 import Hyperlink from "../primitives/Hyperlink"
 import Text from "../primitives/Text"
 type NotFoundProps = {
@@ -6,8 +7,8 @@ type NotFoundProps = {
 }
 const NotFound:React.FC<NotFoundProps> = (props) => {
     return(
-        <div className="w-screen h-screen">
-            <Text>
+        <Flexbox className="flex-col w-full h-full items-center">
+            <Text className="font-bold text-xl">
                 404. not found
             </Text>
             {props.pageUrl &&
@@ -15,8 +16,8 @@ const NotFound:React.FC<NotFoundProps> = (props) => {
                     Requested page {props.pageUrl.toString()} was not found.
                 </Text>
             }
-            <Hyperlink to={routes.main()}>go to main</Hyperlink>
-        </div>
+            <Hyperlink to={routes.main()} className="text-accent-500 underline">go to main</Hyperlink>
+        </Flexbox>
     )
 }
 
