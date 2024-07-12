@@ -11,8 +11,8 @@ class CommunitiesData {
             `${userTag}.login`,
             `${userTag}.displayedName`,
             `${userTag}.globalRole`,
-            //`${userTag}.bgUrl`,
-            //`${userTag}.iconUrl`,
+            `${userTag}.bgUrl`,
+            `${userTag}.iconUrl`,
             `${userTag}.createdAt as userCreatedAt`,
             `${userTag}.updatedAt as userUpdatedAt`,
         )
@@ -23,7 +23,6 @@ class CommunitiesData {
 
         const query = this._db('communities')
             .select("*")
-        //TODO: FIX DIS PIECE OF CRAP
         if(user && typeof user === "object") {
             query.select(
                 'communities.*',
@@ -41,6 +40,9 @@ class CommunitiesData {
                 query.where('name', params.name)
             }
             query.first()
+        }
+        if(params.creator) {
+            query.where('creator', params.creator)
         }
         return query.then((res:any) => {
 
@@ -61,6 +63,8 @@ class CommunitiesData {
     }
 
     public updateCommunity(postParams:any, communityId:number) {
+        if(!postParams || typeof postParams !== "object" || Object.keys(postParams).length < 1) return null;
+        console.log(postParams)
         return this._db('communities').where({id:communityId}).update(postParams)
     }
 
@@ -134,7 +138,6 @@ class CommunitiesData {
             communityId: 1
         }
         */
-       console.log(postParams.id)
         
         if(postParams.limit) {
             query.limit(postParams.limit)
@@ -162,7 +165,7 @@ class CommunitiesData {
         switch(postParams.type) {
             case "full":
                 query.select(
-                    "c.name as communityName", "c.bgUrl as communityBackground", "c.iconUrl as communityUrl",
+                    "c.name as communityName", "c.bgUrl as communityBackground", "c.iconUrl as communityIconUrl",
                 )
                 query.join("communities as c", 'posts.communityId', 'c.id')
             case "short":

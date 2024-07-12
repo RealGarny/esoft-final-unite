@@ -15,7 +15,6 @@ const FollowButton = ({params, className}:any) => {
         setIsClicked(true);
         setIsFollow(!isFollow);
     }
-    console.log(isFollow)
 
     const handleFollow = async() => {
         await communityAPI.setFollow({communityId:params.communityId, deleteFollow:!isFollow})

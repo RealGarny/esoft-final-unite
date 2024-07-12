@@ -47,7 +47,7 @@ class UsersController {
     }
 
     public updateUser = async(req:usersRequest, res:usersResponse) => {
-        const result = await this._usersService.updateUser(req.body, req.user);
+        const result = await this._usersService.updateUser({params: req.body, files:req.files}, req.user);
         if(!result.error) {
             res.json(result);
         } else {

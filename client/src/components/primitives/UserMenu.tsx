@@ -11,9 +11,11 @@ import {
 import { LogOut, Settings, User } from "lucide-react";
 import Text from "./Text";
 import { useNavigate } from "../../utils/router";
+import { useLocation } from "react-router-dom";
 
 const UserMenu:React.FC = () => {
     const {navigate, routes} = useNavigate();
+    const location = useLocation();
     const {user, logoutUser} = useContext(AuthContext);
 
     return(

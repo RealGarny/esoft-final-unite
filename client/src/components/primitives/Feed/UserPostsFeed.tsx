@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import AuthContext from "../../../context/AuthContext";
 import PostsFeed from "./PostsFeed";
+import { useOutletContext } from "react-router-dom";
 
 const UserPostsFeed = () => {
-    const {user} = useContext(AuthContext);
+    const {user} = useOutletContext()
     return(
         <PostsFeed
             params={{authorId:user.id}}

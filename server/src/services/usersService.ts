@@ -1,11 +1,11 @@
 import { fullUsersData, usersData } from "../utils/userUtils";
+import fs from 'fs'
+import path = require("path");
 
 type userAuth = {
     login: usersData['login'],
     password: usersData['password']
 }
-
-type registerUser = Omit<usersData, "password">
 
 class UsersService {
     private _usersData;
@@ -19,11 +19,13 @@ class UsersService {
     }
 
      public async getUsers(params:any) {
-        if(!params || params.type==="full") {
-            return {error:"PROHIBITED_PARAMS"};
+        const checks = {
+            id: (param:any) => this._userUtils.checkNumber(param),
+            displayedName: (param:any) => this._userUtils.checkName(param),
+            login: (param:any) => this._userUtils.checkName(param),
+            limit: (param:any) => this._userUtils.checkNumber(param),
         }
-
-        const filteredParams = params
+        const filteredParams = this._userUtils.paramChecker(checks, params);
         const result = await this._usersData.getUsers(filteredParams)
         if(!result) return {error: "USERS_NOT_FOUND"}
 
@@ -36,7 +38,9 @@ class UsersService {
             !this._userUtils.checkPassword(user.password)
         ) {return false};
 
-        let fetchedUser:fullUsersData = await this._usersData.getUsers({login: user.login, type:"full"});
+        let fetchedUser:fullUsersData = await this._usersData.getUsers({login:user.login, type:"full"});
+        console.log(fetchedUser)
+
         if(!fetchedUser || !this._userUtils.comparePassword(user.password, fetchedUser.password)) {
             return false;
         }
@@ -56,17 +60,44 @@ class UsersService {
         }
     }
 
-    public async updateUser(params:any, user:any) {
-        if(!params || typeof params !== "object" || !user) return {error:"BAD_REQUEST"}
+    public async updateUser(data:any, user:any) {
+        if(!data || typeof data !== "object" || !user) return {error:"BAD_REQUEST"}
+        const files = data.files;
+        const params = data.params;
 
         const checks = {
-            displayedName: (param:any) => this._userUtils.checkName(param),
+            displayedName: (param:any) => this._userUtils.checkName(param)
         }
 
-        const fields = this._userUtils.paramChecker(checks, params);
+        let filteredParams = this._userUtils.paramChecker(checks, params);
+
+        if(files) {
+            const fetchedUser = await this.getUsers({id:user.id})
+            if(!fetchedUser) return {message:"USER_NOT_FOUND"}
+
+            if(files.background) {
+                if(fetchedUser.bgUrl && fetchedUser.bgUrl.length > 0) {
+                    fs.unlink(
+                        path.join(__dirname,`../uploads${fetchedUser.bgUrl.split('cdn')[1]}`),
+                        (err)=>{console.log(err)}
+                    )
+                }
+                filteredParams['bgUrl'] = `${process.env.SERVER_URL}/cdn/backgrounds/${files.background[0].filename}`
+            }
+            if(files.icon) {
+                if(fetchedUser.iconUrl && fetchedUser.iconUrl.length > 0) {
+                    fs.unlink(
+                        path.join(__dirname,`../uploads${fetchedUser.iconUrl.split('cdn')[1]}`),
+                        (err)=>{console.log(err)}
+                    )
+                }
+                filteredParams['iconUrl'] = `${process.env.SERVER_URL}/cdn/avatars/${files.icon[0].filename}`
+            }
+        }
         try {
-            return await this._usersData.updateUser(fields, user.id)
+            return await this._usersData.updateUser(filteredParams, user.id)
         } catch(e) {
+            console.log(e)
             return {error: "ERROR_INTERNAL"}
         }
     }

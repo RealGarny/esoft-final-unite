@@ -5,7 +5,7 @@ import Button from "../primitives/Button";
 import NotFound from "./NotFound";
 import useCommunity from "../../context/CommunityContext";
 import { useLocation } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 
 const CommunitySettings = () => {
@@ -34,18 +34,39 @@ const CommunitySettings = () => {
                     break;
                 }
             }
+            console.log(values)
             if(!formErrors) {
-                updateCommunity(values)
+                const form = new FormData();
+                for(let [key,value] of Object.entries(values)) {
+                    form.append(key, value as any);
+                }
+                updateCommunity(form)
             }
         },
         inputs: [
+            {
+                name: 'icon',
+                type: 'file',
+                label: 'Community Avatar',
+                className: 'border border-primary',
+                isError: (values) => values.icon.size > 4000000,
+                errorMessage: "cannot be more, than 150KB"
+            },
+            {
+                name: 'background',
+                type: 'file',
+                label: 'Community Background',
+                className: 'border border-primary',
+                isError: (values) => values.background.size > 4000000,
+                errorMessage: "cannot be more, than 400KB"
+            },
             {
                 name: 'followerNickname',
                 label: 'Follower Nickname',
                 className: 'border border-primary',
                 isError: (values) => (values.followerNickname.length < 3 || values.followerNickname.length > 20) && values.followerNickname !== "",
                 errorMessage: "must be between 3 and 20 characters long"
-            }
+            },
         ]
     }
 

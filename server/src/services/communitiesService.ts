@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 type CreateCommunity = {
     name: string,
     description: string,
@@ -49,6 +52,7 @@ class CommunitiesService {
                 filteredParams[key] = checks[key as  keyof typeof checks](value);
             }
         }
+        console.log(filteredParams)
         try {
             const result = await this._communitiesData.getPosts(filteredParams, user)
             if(!result) return {error: "POSTS_NOT_FOUND"}
@@ -89,36 +93,43 @@ class CommunitiesService {
 
     public updateCommunity = async(communityParams:any, user:any) => {
         if(typeof communityParams !== "object") return {error: "BAD_REQUEST"}
+        const files = communityParams.files;
+        const params = communityParams.params;
 
         const checks = {
             followerNickname: (param:any) => this._communitiesUtils.checkFollowerNickname(param),
         }
+        let fetchedCommunity;
         try {
-            const fetchedCommunity = await this.getCommunities({id:communityParams.communityId})
-            console.log({params:communityParams, fetched:fetchedCommunity})
+            fetchedCommunity = await this.getCommunities({id:params.id})
             if(fetchedCommunity.creator !== user.id) return {error:"NOT_PERMITTED"}
         } catch(e) {
             return {error: "COMMUNITY_NOT_EXIST"}
         }
 
-        if(communityParams.files) {
-            for(let [key,value] of Object.entries(communityParams.files)) {
-                console.log(key, value)
+        let filteredParams:any = this._communitiesUtils.paramChecker(checks, params)
+
+        if(files.background) {
+            if(fetchedCommunity.bgUrl && fetchedCommunity.bgUrl.length > 0) {
+                fs.unlink(
+                    path.join(__dirname,`../uploads${fetchedCommunity.bgUrl.split('cdn')[1]}`),
+                    (err)=>{console.log(err)}
+                )
             }
+            filteredParams['bgUrl'] = `${process.env.SERVER_URL}/cdn/backgrounds/${files.background[0].filename}`
         }
-
-        let filteredParams:any = {}
-
-        for(let [key, value] of Object.entries(communityParams)) {
-            //checks if such key exists in the checks object and passes its conditions
-            if(key in checks && checks[key as  keyof typeof checks](value)) {
-                filteredParams[key] = checks[key as  keyof typeof checks](value);
+        if(files.icon) {
+            if(fetchedCommunity.bgUrl && fetchedCommunity.iconUrl.length > 0) {
+                fs.unlink(
+                    path.join(__dirname,`../uploads${fetchedCommunity.iconUrl.split('cdn')[1]}`),
+                    (err)=>{console.log(err)}
+                )
             }
+            filteredParams['iconUrl'] = `${process.env.SERVER_URL}/cdn/avatars/${files.icon[0].filename}`
         }
 
         try {
-            const res = await this._communitiesData.updateCommunity({...filteredParams}, communityParams.communityId);
-            console.log(res)
+            const res = await this._communitiesData.updateCommunity(filteredParams, params.id);
             return res
         } catch(e) {
             console.log(e)

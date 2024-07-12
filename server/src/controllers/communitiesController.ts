@@ -21,7 +21,7 @@ class CommunitiesController {
 
     public updateCommunity = async(req:Request, res:Response) => {
 
-        const result = await this._communitiesService.updateCommunity({...req.body, files:req.files}, req.user);
+        const result = await this._communitiesService.updateCommunity({params: req.body, files:req.files}, req.user);
         if(!result.error) {
             res.status(statusCode.created).json(result)  
         } else {

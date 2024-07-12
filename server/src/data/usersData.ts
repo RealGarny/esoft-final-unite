@@ -14,6 +14,19 @@ class UsersData {
         this._db = model;
     }
 
+    private getUserSecured(query:any, userTag:string) {
+        return query.select(
+            `${userTag}.id`,
+            `${userTag}.login`,
+            `${userTag}.displayedName`,
+            `${userTag}.globalRole`,
+            `${userTag}.bgUrl`,
+            `${userTag}.iconUrl`,
+            `${userTag}.createdAt as userCreatedAt`,
+            `${userTag}.updatedAt as userUpdatedAt`,
+        )
+    }
+
     //get users specific params
     public getUsers(params:any):Promise<usersData[]> | undefined {
 
@@ -22,25 +35,24 @@ class UsersData {
         }
 
         let query = this._db('users');
-
-        if(params.type && typeof params.type === "string") {
-            switch(params.type) {
-                case "userpage": 
-                    query.select("displayedName", "login", "createdAt")
-                    break;
-                case "full":
-                    query.select("*")
-                    break;
-                default:
-                    query.select("displayedName", "login", "createdAt")
-            }
+        if(params.type !== "full"){
+            this.getUserSecured(query, 'users');
         } else {
-            query.select("displayedName", "login", "createdAt")
+            query.select("*")
         }
 
-        if(params.login) {
-            query.where('login', params.login)
-            .first()
+        if(params.limit) {
+            query.limit(params.limit)
+        }
+        if(params.id || params.login || params.displayedName) {
+            if(params.id) {
+                query.where({'users.id': params.id})
+            }else if(params.login) {
+                query.where({login:params.login})
+            } else {
+                query.where({displayedName:params.displayedName})
+            }
+            query.first()
         }
         return query.then((res:any) => res)
     }
@@ -50,11 +62,9 @@ class UsersData {
     }
 
     public updateUser(data:any, userId:number) {
-        if(typeof data !=='object') return null;
-
-        return this._db('users')
-        .where('id', userId)
-        .update(data)
+        if(!data || typeof data !== "object" || Object.keys(data).length < 1) return null;
+        console.log(typeof data.iconUrl);
+        return this._db('users').where({id:userId}).update(data)
     }
 
     public getRolePermissions(userRole:number|number[]) {

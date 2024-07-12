@@ -14,6 +14,7 @@ const defaultParams = {
 
 const CommunitiesList:React.FC<CommunitiesList> = ({params=defaultParams, render, ...args}) => {
     const [communities, setCommunities] = useState<any[]>([])
+    console.log(communities)
 
     useEffect(()=> {
         const getCommunities = async() =>{

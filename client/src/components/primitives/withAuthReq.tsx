@@ -14,7 +14,6 @@ const WithAuthReq = (props:props) => {
     
     useEffect(()=> {
         if(!user.login) {
-            logoutUser();
             setPath(routes.signIn());
         } else {
             setPath('')

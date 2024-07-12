@@ -4,6 +4,8 @@ export interface CommunityState {
     id: number | null,
     name: string,
     creator: number | null,
+    icon: string,
+    background:string
     description: string
     followCount: number,
     followerNickname: string,
@@ -17,6 +19,8 @@ const initialState:CommunityState = {
     creator: null,
     name: '',
     description: '',
+    icon: '',
+    background: '',
     followCount: 0,
     followerNickname: '',
     createdAt: '',
@@ -31,6 +35,8 @@ const communitySlice = createSlice({
         assignCommunity(state, action:PayloadAction<CommunityState>) {
             state.id = action.payload.id;
             state.name = action.payload.name;
+            state.icon = action.payload.iconUrl;
+            state.background = action.payload.bgUrl;
             state.creator = action.payload.creator;
             state.followCount = action.payload.followCount;
             state.description = action.payload.description;

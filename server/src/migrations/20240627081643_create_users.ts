@@ -19,6 +19,8 @@ export async function up(knex: Knex): Promise<void> {
         table.timestamps(true, true, true)
         table.timestamp('lastSeen')
             .defaultTo(knex.fn.now())
+        table.string('bgUrl')
+        table.string('iconUrl')
         table.string("refreshToken", 1000)
             
     })

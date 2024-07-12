@@ -1,6 +1,5 @@
 import Flexbox from "../Flexbox";
 import Post from "../Post/Post";
-import PostActions from "../Post/PostActions";
 import PostContent, {PostContentProps} from "../Post/PostContent";
 import PostHeader, {PostHeaderProps} from "../Post/PostHeader";
 import PostsList from "../PostsList";
@@ -18,15 +17,15 @@ const PostsFeed = ({topComponents, params}:FeedProps) => {
                 params={params}
                 render={(post) => (
                     <Post
-                        key={post.author}
+                        key={`${post.author}${post.id}`}
                         PostHeader={
                             <PostHeader
-                                authorLogo={post.userIcon}
+                                authorLogo={post.iconUrl}
                                 author={post.displayedName}
                                 authorLogin={post.login}
                                 createdAt={post.createdAt}
-                                communityLogo={post.communityLogo}
-                                communityName={post.communityName}
+                                communityLogo={post.communityIconUrl}
+                                communityName={post.communityName || post.name}
                             />
                         }
                         PostContent={<PostContent

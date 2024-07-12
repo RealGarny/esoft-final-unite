@@ -30,10 +30,30 @@ const Settings = () => {
                 }
             }
             if(!formErrors) {
-                updateUser(values)
+                const form = new FormData();
+                for(let [key,value] of Object.entries(values)) {
+                    form.append(key, value as any);
+                }
+                updateUser(form)
             }
         },
         inputs: [
+            {
+                name: 'icon',
+                type: 'file',
+                label: 'Profile Avatar',
+                className: 'border border-primary',
+                isError: (values) => values.icon.size > 4000000,
+                errorMessage: "cannot be more, than 150KB"
+            },
+            {
+                name: 'background',
+                type: 'file',
+                label: 'Profile Background',
+                className: 'border border-primary',
+                isError: (values) => values.background.size > 4000000,
+                errorMessage: "cannot be more, than 400KB"
+            },
             {
                 name: 'displayedName',
                 label: 'Displayed Name',

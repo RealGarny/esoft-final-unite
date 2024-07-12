@@ -7,6 +7,7 @@ import {
     updateCommunity as patchCommunity
 } from "../store/communitySlice";
 import communityAPI from "../http/communityAPI";
+import { addPost } from "../store/postsSlice";
 
 type CommunityContextType = {
     removeCommunity: () => void,
@@ -34,7 +35,8 @@ export const CommunityProvider = (props:any) => {
     }
 
     const updateCommunity = async(params:any) => {
-        const result = await communityAPI.updateCommunity({...params, id:community.id});
+        params.append('id', community.id)
+        const result = await communityAPI.updateCommunity(params);
         if(result) {dispatch(patchCommunity(params))}
     }
 
@@ -52,7 +54,7 @@ export const CommunityProvider = (props:any) => {
             content:content
         })
         if(createdPost) {
-            console.log(createdPost)
+            dispatch(addPost(createdPost))
         }
     }
 

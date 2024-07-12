@@ -12,6 +12,7 @@ import CommunityActionBtn from "../primitives/Buttons/CommunityActionBtn";
 import Button from "../primitives/Button";
 import { GitGraph, MessageCircleHeart } from "lucide-react";
 import { Outlet } from "react-router-dom";
+import Logo from "../primitives/Logo";
 
 const Userpage = () => {
 
@@ -19,6 +20,7 @@ const Userpage = () => {
         login: string,
         displayedName: string,
         createdAt: string,
+        background:string
     }
 
     const location = useLocation();
@@ -46,7 +48,8 @@ const Userpage = () => {
             setIsFound(true);
         }
         getCommunities()
-    }, [])
+    }, [setIsFound])
+    
     if(!isFound || !user) {
         return(
             <NotFound
@@ -60,20 +63,25 @@ const Userpage = () => {
             <FadeContainer
                 fadeColor="from-secondary"
                 className="bg-additional h-72 mt-[-64px] flex justify-center items-end" //TODO: figure out how to save myself from addign mt manually for every header
-                fadeSize="h-20"
+                fadeSize="h-3"
             >
-                <Flexbox className="p-8 w-full h-fit max-w-[832px] z-10 flex-col">
-                    <Flexbox className="relative items-center">
-                        <Text className="font-bold text-4xl">
-                            {user.displayedName}
-                        </Text>
-                    </Flexbox>
-                    <Flexbox className="flex-col font-bold opacity-80">
-                        <Text>@{user.login}</Text>
-                        <Text className="">A member since {new Date(user.createdAt).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric' })}</Text>
-                    </Flexbox>
-                </Flexbox>
+                <div className={`min-h-full min-w-full absolute-centered`} style={{backgroundImage:`url(${user.bgUrl})`}}></div>
             </FadeContainer>
+            <Flexbox className="p-8 w-full h-fit max-w-[832px] z-10 flex-col mx-auto mt-[-90px]">
+                <Logo
+                    src={user.iconUrl}
+                    className="size-40 border-4 border-primary"
+                />
+                <Flexbox className="relative items-center">
+                    <Text className="font-bold text-4xl">
+                        {user.displayedName}
+                    </Text>
+                </Flexbox>
+                <Flexbox className="flex-col font-bold opacity-80">
+                    <Text>@{user.login}</Text>
+                    <Text className="">A member since {new Date(user.userCreatedAt).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric' })}</Text>
+                </Flexbox>
+            </Flexbox>
             <Section
                 navigation={
                     <Flexbox className="flex-col">
@@ -95,7 +103,7 @@ const Userpage = () => {
                     </Flexbox>
                 }
                 feed={
-                    <Outlet/>
+                    <Outlet context={{user:user}}/>
                 }
             />
         </>

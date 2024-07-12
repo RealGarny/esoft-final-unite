@@ -30,11 +30,11 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
     id,
     name,
     description,
-    icon,
+    iconUrl,
     followCount,
     followerNickname,
     followerIcon,
-    bgURL,
+    bgUrl,
     creator,
     isFollowed,
     type,
@@ -44,17 +44,16 @@ const CommunityCard:React.FC<CommunityCardProps> = ({
         return <Card className="p-2">Props are invalid</Card>
     }
     const {routes} = useNavigate();
-
     return(
-        <Card padding="none" className={`relative overflow-hidden flex-col gap-0 flex-grow-0 flex-shrink-0 w-96  ${type === "horizontal" && "flex-row w-auto"}`}>
-            {type !== "horizontal" && <FadeContainer fadeColor="from-primary" fadeSize="h-20" className="h-40 w-full">
+        <Card padding="none" className={`relative overflow-hidden flex-col gap-0 flex-grow-0 flex-shrink-0 w-96`}>
+            <FadeContainer fadeColor="from-primary" fadeSize="h-20" className="h-40 w-full">
                 <div className="absolute min-h-full min-w-full bg-cover bg-additional"
-                style={{"backgroundImage":`url(${bgURL})`, "backgroundPosition":"50%"}}
+                style={{"backgroundImage":`url(${bgUrl})`, "backgroundPosition":"50%"}}
                 >
                 </div>
-            </FadeContainer>}
-            <Flexbox className="flex-col relative px-5 py-5 gap-4 h-full w-full">
-                    {icon && <Logo size="lg" alt="communityLogo" rounded="xl" src={icon ? icon : ""} className="border-black border-4 border-opacity-10 mt-[-70px]"/>}
+            </FadeContainer>
+            <Flexbox className="flex-col  relative px-5 py-5 gap-4 h-full w-full">
+                {iconUrl && <Logo size="lg" alt="communityLogo" rounded="xl" src={iconUrl ? iconUrl : ""} className={`border-black border-4 border-opacity-10 ${type !== "horizontal" && "mt-[-70px]"}`}/>}
                 <Flexbox className="w-2/3 break-words">
                     <Text className="font-bold text-3xl">
                         {name}
@@ -102,8 +101,9 @@ const CommunityTags = (props:any) => {
     if(!props.tags || !Array.isArray(props.tags)) return null
     return(
         props.tags?.map(
-            (tag:string)=>(
+            (tag:string,index:number)=>(
                 <Card
+                    key={`${tag}${index}`}
                     padding="none"
                     rounded="sm"
                     className="px-1 items-center uppercase bg-accent-500 text-sm font-bold min-h-6 w-fit "

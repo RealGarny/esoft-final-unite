@@ -44,11 +44,13 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
     const logoutUser = () => {
         //@ts-ignore
         dispatch(removeUser());
+        console.log("logged out")
         localStorage.removeItem(locStorageName);
     }
 
     const updateUser = async(params:any) => {
-        const result = await userAPI.updateUser({...params, id:user.id});
+        params.append('id', user.id)
+        const result = await userAPI.updateUser(params);
         if(result) {dispatch(patchUser(params))}
     }
 
@@ -65,7 +67,6 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
         checkToken()
         const checkUser = async() => {
             if (!accessToken) return;
-            console.log("here")
             const result = await userAPI.checkAuth();
             if(result) {
                 loginUser(result)

@@ -2,11 +2,11 @@ import axios, {AxiosError, AxiosResponse} from "axios";
 import userAPI from "./userAPI";
 
 const $host = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: `${import.meta.env.VITE_API_URL}/api`,
 })
 export default $host;
 export const $tokenHost = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: `${import.meta.env.VITE_API_URL}/api`,
     withCredentials: true
 });
 
@@ -32,6 +32,7 @@ const tokenResponseInterceptorError = async(error:AxiosError) => {
             if(response) {
                 localStorage.setItem('accessToken', response) 
             } else {
+                console.log(response)
                 localStorage.removeItem('accessToken')
             }
     }

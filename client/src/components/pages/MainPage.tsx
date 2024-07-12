@@ -1,4 +1,3 @@
-import Card from "../primitives/Card";
 import { Section } from "../primitives/Feed/Section";
 import Splash from "../primitives/Splash";
 import Text from "../primitives/Text";
@@ -10,11 +9,6 @@ const MainPage:React.FC = () => {
             <Splash/>
             <Section
                 feed={<MainPageFeed/>}
-                info={
-                    <Card>
-                        <Text>Welcome to Unite!</Text>
-                    </Card>
-                }
             />
         </>
     )

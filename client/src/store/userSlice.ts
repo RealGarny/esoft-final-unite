@@ -7,7 +7,11 @@ export interface UserState {
     email: string,
     globalRole: number,
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
+    bgUrl?:string,
+    iconUrl?:string,
+    icon:string,
+    background:string
 }
 
 const initialState:UserState = {
@@ -18,6 +22,8 @@ const initialState:UserState = {
     globalRole: 0,
     createdAt: '',
     updatedAt: '',
+    icon: '',
+    background: ''
 }
 
 const userSlice = createSlice({
@@ -42,6 +48,8 @@ const userSlice = createSlice({
             state.globalRole = action.payload.globalRole;
             state.createdAt = action.payload.createdAt;
             state.updatedAt = action.payload.updatedAt;
+            state.icon = action.payload.iconUrl;
+            state.background = action.payload.bgUrl;
         },
         removeUser(state) {
             state.id = null

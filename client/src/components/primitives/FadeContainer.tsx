@@ -13,7 +13,7 @@ const FadeContainer:React.FC<FadeContainerProps> = ({children, fadePos, fadeSize
     return(
         <div className={twMerge("relative w-full overflow-hidden", `${className}`)}>
             {children}
-            {blackOverlay && <div className="absolute size-full bg-black bg-opacity-20"></div>}
+            {blackOverlay && <div className="absolute size-full bg-black bg-opacity-30"></div>}
             <div className={cn(fadeVariants({fadePos}), `${fadeColor} ${fadeSize}`)}/>
         </div>
     )

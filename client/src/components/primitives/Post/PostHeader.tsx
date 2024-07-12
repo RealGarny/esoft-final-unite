@@ -27,7 +27,6 @@ const PostHeader:React.FC<PostHeaderProps> = (props) => {
         const Hour = Math.floor(Min / 60);
         const Day = Math.floor(Hour / 24);
 
-        console.log(timeDif)
         if(Min < 60000) {
             postTime = `now`;
         }
@@ -43,7 +42,6 @@ const PostHeader:React.FC<PostHeaderProps> = (props) => {
         else {
             postTime = new Date(props.createdAt).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric' });
         }
-        console.log(postTime)
     }
 
     return(
@@ -55,6 +53,7 @@ const PostHeader:React.FC<PostHeaderProps> = (props) => {
                         src={props.authorLogo!}
                         href={routes.user(props.authorLogin)}
                     />
+                    {props.communityLogo &&
                     <Logo
                         alt="communityLogo"
                         rounded="sm"
@@ -63,6 +62,7 @@ const PostHeader:React.FC<PostHeaderProps> = (props) => {
                         className="absolute -bottom-2 border-2 border-secondary -right-3"
                         href={routes.community(props.communityName)}
                     />
+                    }
                 </div>
             }
             <div>
