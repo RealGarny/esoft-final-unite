@@ -1,25 +1,22 @@
-interface routes {
-    main: string,
-    user: string,
-    communities: string,
-    community: string,
-    signIn: string,
-    signUp: string
-}
 
 const checkString = (string:string) => {
-    return !string || typeof string !== "string" || string.length < 1;
+    return typeof string !== "string" || string.length < 1;
 }
 class Routes {
 
-    private _routes:routes = {
+    private _routes = {
         main: "/",
         user: "/user/:userId",
+        userCommunities: "/user/:userId/communities",
+
         communities: "/communities",
         community: "/communities/:communityId",
+        communitySettings: `/communities/:communityId/settings`,
+        
         signUp: "/sign-up",
-        signIn: "/sign-in"
-    }    
+        signIn: "/sign-in",
+        settings: "/settings"
+    }
 
     public main() {
         return this._routes.main;
@@ -29,12 +26,24 @@ class Routes {
         return this._routes.user;
     }
 
-    public user(userTag:string) {
-        if(checkString(userTag)) {
-            throw Error("userTag is invalid.")
+    public rawUserCommunities() {
+        return this._routes.userCommunities;
+    }
+
+    public userCommunities(userLogin:string) {
+        if(checkString(userLogin)) {
+            throw Error("userLogin is invalid.")
         }
 
-        return this._routes.user.replace(":userId", userTag)
+        return this._routes.userCommunities.replace(":userId", userLogin)
+    }
+
+    public user(userLogin:string) {
+        if(checkString(userLogin)) {
+            throw Error("userLogin is invalid.")
+        }
+
+        return this._routes.user.replace(":userId", userLogin)
     }
 
     public communities() {
@@ -45,20 +54,35 @@ class Routes {
         return this._routes.community;
     }
 
-    public community(communityTag:string) {
-        if(checkString(communityTag)) {
-            throw Error("communityTag is invalid.")
+    public rawCommunitySettings() {
+        return this._routes.communitySettings;
+    }
+
+    public communitySettings(communityName:string) {
+        if(checkString(communityName)) {
+            throw Error("community name is invalid.")
         }
 
-        return this._routes.community.replace(":communityId", communityTag)
+        return this._routes.community.replace(":communityId", communityName)
+    }
+
+    public community(communityName:string) {
+        if(checkString(communityName)) {
+            throw Error("community name is invalid.")
+        }
+
+        return this._routes.community.replace(":communityId", communityName)
     }
 
     public signIn() {
-        return this._routes.signIn
+        return this._routes.signIn;
     }
 
     public signUp() {
-        return this._routes.signUp
+        return this._routes.signUp;
+    }
+    public settings() {
+        return this._routes.settings;
     }
 }
 

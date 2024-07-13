@@ -1,6 +1,6 @@
 import { VariantProps, cva } from "class-variance-authority";
 import Card from "./Card"
-import cn from "../../util/cn";
+import cn from "../../utils/cn";
 import { CardProps } from "./Card";
 import Hyperlink from "./Hyperlink";
 

@@ -1,7 +1,7 @@
 import { ContainerProps } from "../../interfaces";
 import Flexbox, { FlexboxProps } from "./Flexbox"
 import { cva, VariantProps } from "class-variance-authority";
-import cn from "../../util/cn";
+import cn from "../../utils/cn";
 
 export interface CardProps extends ContainerProps, VariantProps<typeof CardVariants> {
     bg?:string,

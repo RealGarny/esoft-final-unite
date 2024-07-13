@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
-import cn from "../../util/cn";
+import cn from "../../utils/cn";
 import Hyperlink from "./Hyperlink";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof ButtonVariants> {
@@ -36,8 +36,8 @@ const Button:React.FC<ButtonProps> = ({
         variants: {
             variant: {
                 text: "text-text hover:bg-text hover:bg-opacity-15",
-                contained: "bg-white text-accent hover:bg-accent-light",
-                outlined: "border border-accent border-opacity-30 hover:bg-accent hover:bg-opacity-10 text-accent hover:border-opacity-60"
+                contained: "bg-white text-accent-500 hover:bg-accent-500-light",
+                outlined: "border border-accent-500 border-opacity-30 hover:bg-accent-500 hover:bg-opacity-10 text-accent-500 hover:border-opacity-60"
             },
             padding: {
                 none: "",

@@ -4,42 +4,73 @@ import MainPage from "../components/pages/MainPage";
 import MainLayout from "../components/layouts/MainLayout";
 import SignInPage from "../components/pages/SignInPage";
 import SignUpPage from "../components/pages/SignUpPage";
+import Community from "../components/pages/Community";
+import Settings from "../components/pages/Settings";
+import Communities from "../components/pages/Communities";
+import { ScrollRestoration } from "../utils/router";
+import Userpage from "../components/pages/Userpage";
+import NotFound from "../components/pages/NotFound";
+import { CommunityProvider } from "../context/CommunityContext";
+import CommunitySettings from "../components/pages/CommunitySettings";
+import UserCommunityFeed from "../components/primitives/Feed/UserCommunityFeed";
+import UserPostsFeed from "../components/primitives/Feed/UserPostsFeed";
 
 const router = createBrowserRouter([
-    {
-        path:routes.main(),
-        element: <MainLayout/>,
-        children: [
-            {
-              path: routes.main(),
-              element: <MainPage/>
-            },
+  {
+    path:routes.main(),
+    element: <>
+    <MainLayout/>
+    <ScrollRestoration/>
+    </>,
+    children: [
+        {
+          path: routes.main(),
+          element: <MainPage/>
+        },
+        {
+          path: routes.settings(),
+          element: <Settings/>
+        },
+        {
+          path: routes.rawUser(),
+          element: <Userpage/>,
+          children: [
             {
               path: routes.rawUser(),
-              element: <h1>user</h1>,
+              element: <UserPostsFeed/>
             },
             {
-                path: routes.communities(),
-                element: <h1>communities</h1>
-            },
-            {
-              path: routes.rawCommunity(),
-              element: <h1>specific community</h1>
+              path: routes.rawUserCommunities(),
+              element: <UserCommunityFeed/>
             }
           ]
-    },
-    {
-      path: routes.signIn(),
-      element: <SignInPage/>
-    },
-    {
-      path: routes.signUp(),
-      element: <SignUpPage/>
-    },
-    {
-        path:"*",
-        element: <h1>404</h1>
-    }
+        },
+        {
+            path: routes.communities(),
+            element: <Communities/>
+        },
+        {
+          path: routes.rawCommunity(),
+          element: <CommunityProvider><Community/></CommunityProvider>,
+        },
+        {
+          path: routes.rawCommunitySettings(),
+          element: <CommunityProvider><CommunitySettings/></CommunityProvider>
+        }
+      ]
+  },
+  {
+    path: routes.signIn(),
+    element: <SignInPage/>
+  },
+  {
+    path: routes.signUp(),
+    element: <SignUpPage/>
+  },
+  {
+      path:"*",
+      element: <NotFound pageUrl="test"/>
+  }
 ])
 
 export default router;

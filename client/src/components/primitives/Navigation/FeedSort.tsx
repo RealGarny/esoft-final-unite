@@ -6,12 +6,12 @@ const sortTypes = ["Trending", "Top", "New", "Featured"]
 
 const FeedSort = () => {
     return(
-        <Flexbox padding="none" className="flex-col w-full">
+        <Flexbox padding="none" className="flex-col flex-1 max-w-52">
             {sortTypes.map((type)=>{
                 return(
                     <Button
                         key={type}
-                        startIcon={<TrendingIcon className="fill-accent h-5 w-5"/>}
+                        startIcon={<TrendingIcon className="fill-accent-500 h-5 w-5"/>}
                         rounded="sm"
                         className="text-sm justify-start pl-1 font-bold w-full bg-white text-white bg-opacity-10 hover:bg-primary"
                     >{type}</Button>

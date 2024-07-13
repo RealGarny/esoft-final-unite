@@ -1,6 +1,6 @@
 import { ContainerProps } from "../../interfaces";
 import { VariantProps, cva } from "class-variance-authority";
-import cn from "../../util/cn";
+import cn from "../../utils/cn";
 import { twMerge } from "tailwind-merge";
 
 interface FadeContainerProps extends ContainerProps, VariantProps<typeof fadeVariants>{
@@ -13,7 +13,7 @@ const FadeContainer:React.FC<FadeContainerProps> = ({children, fadePos, fadeSize
     return(
         <div className={twMerge("relative w-full overflow-hidden", `${className}`)}>
             {children}
-            {blackOverlay && <div className="absolute size-full bg-black bg-opacity-20"></div>}
+            {blackOverlay && <div className="absolute size-full bg-black bg-opacity-30"></div>}
             <div className={cn(fadeVariants({fadePos}), `${fadeColor} ${fadeSize}`)}/>
         </div>
     )

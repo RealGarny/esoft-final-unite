@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:latest
+    ports: 
+      - "5432:5432"
+    networks:
+      - unite
+    environment:
+      - POSTGRES_DB=Unite
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=passw0rd
+    container_name: unite-db
+    
+
+  frontend:
+    image: unite-frontend:latest
+    env_file:
+      - client/.env
+    build:
+      context: "./client"
+    ports:
+      - "5173:5173"
+    networks:
+      - unite
+    command: bash -c "
+        npm i
+        && npm run start:dev"
+    container_name: unite-frontend
+    volumes:
+      - ./client/src:/opt/node/src
+  
+  backend:
+    image: unite-backend:latest
+    build:
+      context: ./server
+    ports:
+      - "4000:4000"
+    networks:
+      - unite
+    env_file:
+      - server/.env
+    command: bash -c "
+        npm i
+        && npx knex migrate:latest --knexfile ./src/knexfile.ts
+        && npm run start:dev"
+    container_name: unite-backend
+    volumes:
+      - ./server/src:/opt/node/src
+
+networks:
+  unite:

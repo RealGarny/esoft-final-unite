@@ -1,100 +1,91 @@
 import Card from "../primitives/Card";
 import Button from "../primitives/Button";
-import { ChangeEvent, FormEvent, InputHTMLAttributes, useState } from "react";
-import routes from "../../routes/routes";
 import Hyperlink from "../primitives/Hyperlink";
-import Input from "../primitives/Input";
-
-interface FormInputs extends InputHTMLAttributes<HTMLInputElement> {
-    key:number,
-    label:string,
-    errorMessage?:string,
-    isError?: boolean,
-}
+import userAPI from "../../http/userAPI";
+import userUtils from "../../utils/userUtils";
+import Form, { FormConfig } from "../primitives/Form/Form";
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "../../utils/router";
 
 const SignUpPage = () => {
 
-    const [values, setValues] = useState({
-        email: '',
-        password: '',
-        confirmPassword: '',
-        username: '',
-        displayName: ''
-    });
+    const userConfig = userUtils.getUserReqs();
+    const {loginUser} = useContext(AuthContext);
+    const {navigate, routes} = useNavigate()
 
-    const inputs:FormInputs[] = [
-        {
-            key: 0,
-            name: "email",
-            type:"email",
-            label: "Email",
-            value: values.email,
-            errorMessage: "Email is incorrect!",
-            pattern:"test",
-            isError: !/^\S+@\S+\.\S+$/.test(values.email)
-        },
-        {
-            key: 1,
-            name: "password",
-            type:"password",
-            label: "Password",
-            value: values.password,
-            errorMessage: "Should be at least 8-15 characters long",
-            isError: values.password.length < 8 || values.password.length > 15
-        },
-        {
-            key: 2,
-            name: "confirmPassword",
-            type:"password",
-            value:values.confirmPassword,
-            label: "Confirm Password",
-            errorMessage: "Passwords don't match!",
-            isError: values.password !== values.confirmPassword
-        },
-        {
-            key: 3,
-            name: "username",
-            type: "string",
-            value: values.username,
-            label: "Username",
-            isError: values.username.length > 15 || values.username.length < 4,
-            errorMessage: "Should be at least 4-15 characters long",
-        },
-        {
-            key: 4,
-            name: "displayName",
-            label: "Display name",
-            value: values.displayName,
-            isError: values.displayName.length > 15 || values.displayName.length < 4,
-            errorMessage: "Should be at least 4-15 characters long"
-        },
-    ]
-
-    const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
-        setValues((prevState) => ({...prevState, [e.target.name]: e.target.value}))
+    const stringLenError = (minLen:number, maxLen:number) => {
+        return(`Should be at least ${minLen}-${maxLen} characters long`)
     }
 
-    const handleSubmit = (e:FormEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    const config:FormConfig = {
+        onSubmit: async(e, {values, errors}) => {
+            e.preventDefault()
+            
+            let formErrors = false;
+            for(let key in errors) {
+                if(errors[key]) {
+                    formErrors = true;
+                    break;
+                }
+            }
+
+            if(!formErrors) {
+                const user = await userAPI.registration(values.email, values.displayName, values.login, values.password);
+                if(!user.error) {
+                    loginUser(user);
+                    navigate(routes.main())
+                }
+            }
+        },
+        inputs: [
+            {
+                name: "email",
+                className: "bg-secondary",
+                type:"email",
+                label: "Email",
+                errorMessage: "Email is incorrect!",
+                isError: (values) => !userUtils.checkEmail(values.email)
+            },
+            {
+                name: "password",
+                type:"password",
+                label: "Password",
+                errorMessage: stringLenError(userConfig.passwordMinLen, userConfig.passwordMaxLen),
+                isError: (values) => !userUtils.checkPassword(values.password)
+            },
+            {
+                name: "confirmPassword",
+                type:"password",
+                label: "Confirm Password",
+                errorMessage: "Passwords don't match!",
+                isError: (values) => values.password !== values.confirmPassword
+            },
+            {
+                name: "login",
+                type: "string",
+                label: "Username",
+                isError: (values) => !userUtils.checkName(values.login),
+                errorMessage: stringLenError(userConfig.nameMinLen, userConfig.nameMaxLen),
+            },
+            {
+                name: "displayName",
+                label: "Display name",
+                isError: (values) => !userUtils.checkName(values.displayName),
+                errorMessage: stringLenError(userConfig.nameMinLen, userConfig.nameMaxLen)
+            },
+        ]
     }
 
     return(
         <div className="sm:items-center box-border flex justify-center min-h-screen p-0 sm:p-16">
             <Card padding="lg" bg="bg-primary" className="flex-col justify-center sm:justify-normal items-center w-full sm:w-96 sm:min-h-full">
                 <p className="font-bold text-2xl pb-4">Create an account</p>
-                <form className="flex flex-col w-full gap-4">
-                    {inputs.map((input)=> (
-                        <Input
-                            {...input}
-                            key={input.key}
-                            errorMessage={input.errorMessage}
-                            className="bg-additional"
-                            onChange={handleChange}
-                        />
-                    ))}
-                    <Button onSubmit={handleSubmit} rounded="sm" className="w-full font-bold bg-accent text-white hover:bg-orange-600">Sign Up</Button>
-                </form>
-                <p className="font-bold">Already have an account? <Hyperlink to={routes.signIn()} className="text-accent hover:underline">Sign In</Hyperlink></p>
+                <Form
+                    config = {config}
+                    formAction = {(params)=><Button onClick={params.onClick} rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign Up</Button>}
+                />
+                <p className="font-bold">Already have an account? <Hyperlink to={routes.signIn()} className="text-accent-500 hover:underline">Sign In</Hyperlink></p>
             </Card>
             <Button variant="text" href={routes.main()} className="font-bold absolute top-4 left-4 bg-black bg-opacity-30 text-sm">To Main</Button>
         </div>
