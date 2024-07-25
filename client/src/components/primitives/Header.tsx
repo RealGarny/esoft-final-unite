@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Searchbar from "./Searchbar";
 import unite_logo from "/unite_logo.svg" 
 import Button from "./Button";
 import routes from "../../routes/routes";
 import { useAppSelector } from "../../store/hooks";
 import Hyperlink from "./Hyperlink";
 import UserMenu from "./UserMenu";
+import Searchbar from "./Searchbar";
 
 const Header:React.FC = () => {
 
@@ -28,7 +28,7 @@ const Header:React.FC = () => {
                 <img src={unite_logo}></img>
                 </Hyperlink>
             </div>
-            {/*<Searchbar/>*/}
+            <Searchbar/>
             {
                 user.login !== '' ?
                 <UserMenu/>

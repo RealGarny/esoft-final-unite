@@ -40,6 +40,12 @@ class ServiceUtil {
         }
         return filteredParams;
     }
+
+    public static createResponse(result:any) {
+        if(!result) return {error: "NOT_FOUND"}
+
+        return result;
+    }
 }
 
 export default ServiceUtil;

@@ -1,5 +1,6 @@
 import Flexbox from "../Flexbox";
 import Post from "../Post/Post";
+import PostActions from "../Post/PostActions";
 import PostContent, {PostContentProps} from "../Post/PostContent";
 import PostHeader, {PostHeaderProps} from "../Post/PostHeader";
 import PostsList from "../PostsList";
@@ -31,7 +32,7 @@ const PostsFeed = ({topComponents, params}:FeedProps) => {
                         PostContent={<PostContent
                             text={post.content}
                         />}
-                        //PostActions={<PostActions/>}
+                        PostActions={<PostActions/>}
                     />
                 )}
             />

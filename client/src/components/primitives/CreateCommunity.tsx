@@ -1,4 +1,4 @@
-import Dialog from "./Dialog"
+import Dialog from "./Dialog/Dialog"
 import Form, {FormConfig} from "./Form/Form";
 import Button from "./Button";
 import { useState } from "react";
@@ -74,7 +74,6 @@ const CreateCommunity = () => {
                 isOpen={isModal}
                 onClose={()=>setIsModal(false)}
             >
-                {<Button onClick={()=>setIsModal(false)}>close</Button>}
                 {isError && <p>{formMessage}</p>}
                 <Form
                     config={config}

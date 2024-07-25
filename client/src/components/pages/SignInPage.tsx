@@ -69,17 +69,18 @@ const SignInPage = () => {
     }
 
     return(
-        <div className="items-center box-border flex justify-center min-h-screen p-0 sm:p-24">
+        <div className="sm:items-center box-border flex justify-center min-h-screen p-0 sm:p-16">
             <Card padding="lg" bg="bg-primary" className="flex-col justify-center sm:justify-normal items-center w-full sm:w-96 sm:min-h-full">
                 <p className="font-bold text-2xl pb-4">Welcome back!</p>
                 {isError && <p>login or password is incorrect</p>}
                 <Form
+                    className="max-w-80"
                     config={config}
-                    formAction={(params)=><Button onClick={params.onClick} rounded="sm" className="w-full font-bold bg-accent-500 text-white hover:bg-orange-600">Sign In</Button>}
+                    formAction={(params)=><Button onClick={params.onClick} rounded="sm" className="w-full mx-auto font-bold bg-accent-500 text-white hover:bg-orange-600">Sign In</Button>}
                 />
-                <Button rounded="sm" variant="text" href={routes.main()} className="w-full font-bold">Back to Main</Button>
                 <p className="font-bold">don't have an account? <Hyperlink to={routes.signUp()} className="text-accent-500 hover:underline">Sign Up!</Hyperlink></p>
             </Card>
+            <Button variant="text" href={routes.main()} className="font-bold absolute top-4 left-4 bg-black bg-opacity-30 text-sm">To Main</Button>
         </div>
     )
 }

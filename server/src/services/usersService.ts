@@ -25,28 +25,24 @@ class UsersService {
             login: (param:any) => this._userUtils.checkName(param),
             limit: (param:any) => this._userUtils.checkNumber(param),
         }
+
         const filteredParams = this._userUtils.paramChecker(checks, params);
         const result = await this._usersData.getUsers(filteredParams)
-        if(!result) return {error: "USERS_NOT_FOUND"}
-
-        return result;
+        
+        return this._userUtils.createResponse(result);
     }
 
     public async authUser(user:userAuth) {
-        if(
-            !this._userUtils.checkName(user.login) ||
-            !this._userUtils.checkPassword(user.password)
-        ) {return false};
+        if(!this._userUtils.checkAuthUser(user)) return false;
 
         let fetchedUser:fullUsersData = await this._usersData.getUsers({login:user.login, type:"full"});
-        console.log(fetchedUser)
 
         if(!fetchedUser || !this._userUtils.comparePassword(user.password, fetchedUser.password)) {
             return false;
         }
+
         try {
-        const {refreshToken, accessToken} = await this._handleUserTokens(fetchedUser)
-        return {refreshToken, accessToken};
+            return await this._handleUserTokens(fetchedUser)
         } catch(e) {
             return false;
         }
@@ -62,6 +58,7 @@ class UsersService {
 
     public async updateUser(data:any, user:any) {
         if(!data || typeof data !== "object" || !user) return {error:"BAD_REQUEST"}
+
         const files = data.files;
         const params = data.params;
 
@@ -76,12 +73,7 @@ class UsersService {
             if(!fetchedUser) return {message:"USER_NOT_FOUND"}
 
             if(files.background) {
-                if(fetchedUser.bgUrl && fetchedUser.bgUrl.length > 0) {
-                    fs.unlink(
-                        path.join(__dirname,`../uploads${fetchedUser.bgUrl.split('cdn')[1]}`),
-                        (err)=>{console.log(err)}
-                    )
-                }
+                this._detatchFile(fetchedUser.bgUrl);
                 filteredParams['bgUrl'] = `${process.env.SERVER_URL}/cdn/backgrounds/${files.background[0].filename}`
             }
             if(files.icon) {
@@ -102,13 +94,25 @@ class UsersService {
         }
     }
 
+    private _detatchFile = (fileUrl:string) => {
+        let result:boolean = true;
+
+        if(fileUrl && fileUrl.length > 0) {
+            fs.unlink(
+                path.join(__dirname,`../uploads${fileUrl.split('cdn')[1]}`),
+                (err)=>{console.log(err); result=false}
+            )
+        }
+        return result;
+    }
+
     private _updateUserRefresh = (refreshToken:string, userId:any) => {
         return this._usersData.updateUser({refreshToken}, userId)
     }
 
     public async createUser(user:usersData) {
 
-        if(!this._userUtils.checkUser(user)) return {error: "USER_INVALID"};
+        if(!this._userUtils.checkUser(user)) return {error:"BAD_REQUEST"};
 
         const userSchema = {
             login: user.login,
@@ -122,11 +126,10 @@ class UsersService {
             await this._usersData.createUser({
                 ...userSchema,
                 password: await this._userUtils.hashPassword(user.password),
-                globalRole: 1, //supposed to be user
                 refreshToken 
             });
         }catch(e) {
-            return {error: "USER_EXISTS"};
+            return {error: "ALREADY_EXISTS"};
         }
 
         try{

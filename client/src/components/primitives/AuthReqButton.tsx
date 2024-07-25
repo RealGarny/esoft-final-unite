@@ -1,22 +1,17 @@
-import routes from "../../routes/routes";
 import Button from "./Button"
 import { ButtonProps } from "./Button";
-
-const isUserLogged = () => {
-    return false;
-}
+import WithAuthReq from "./withAuthReq";
 
 const AuthReqButton:React.FC<ButtonProps> = ({children, onClick, ...args}) => {
 
     return(
-            isUserLogged() ? 
-            <Button {...args} onClick={onClick}>
-                {children}
-            </Button>
-            :
-            <Button {...args} href={routes.signIn()}>
-                {children}
-            </Button>
+            <WithAuthReq 
+                render={(path) => (
+                    <Button {...args} href={path ? path : args.href} onClick={onClick}>
+                        {children}
+                    </Button>
+                )}
+            />
         )
 }
 

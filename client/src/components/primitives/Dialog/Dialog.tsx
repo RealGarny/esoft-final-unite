@@ -1,10 +1,10 @@
 import { createPortal } from "react-dom";
-import Card from "./Card";
+import Card from "../Card";
 
 type DialogProps = {
     isOpen: boolean,
     children: React.ReactNode,
-    onClose: () => void
+    onClose?: () => void
 }
 
 const Dialog:React.FC<DialogProps> = ({isOpen, children, onClose}) => {

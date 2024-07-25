@@ -29,6 +29,8 @@ const CommunitiesList:React.FC<CommunitiesList> = ({params=defaultParams, render
     const components = [];
     const oneDay = new Date().getTime() + (1 * 24 * 60 * 60 * 1000)
 
+    if(!Array.isArray(communities) || communities.length < 1) components.push(<Text className="text-center font-bold text-2xl">No posts availible</Text>);
+
     for(let i = 0; i < communities.length; i++) {
         let tags = communities[i].tags ? communities[i].tags : [];
 

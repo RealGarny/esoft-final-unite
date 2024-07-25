@@ -41,7 +41,6 @@ const SignUpPage = () => {
         inputs: [
             {
                 name: "email",
-                className: "bg-secondary",
                 type:"email",
                 label: "Email",
                 errorMessage: "Email is incorrect!",

@@ -14,11 +14,9 @@ import PostsFeed from "../primitives/Feed/PostsFeed";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import WithAuthReq from "../primitives/withAuthReq";
-import Dialog from "../primitives/Dialog";
+import Dialog from "../primitives/Dialog/Dialog";
 import { FormConfig } from "../primitives/Form/Form";
-import { useNavigate } from "../../utils/router";
 import Form from "../primitives/Form/Form";
-import { Cross, Plus } from "lucide-react";
 
 const Community = () => {
 

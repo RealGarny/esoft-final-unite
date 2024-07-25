@@ -55,14 +55,16 @@ class userUtils extends ServiceUtil {
             this._emailRegex.test(email);
     }
 
+    public static checkAuthUser(user:any) {
+        return(this.checkName(user.login) && this.checkPassword(user.password))
+    }
+
     public static checkUser(user:usersData) {
-        if(
-            !this.checkName(user.displayedName) ||
-            !this.checkName(user.login) ||
-            !this.checkEmail(user.email) || 
-            !this.checkPassword(user.password!)
-        ) return false;
-        else return true;
+        return (this.checkName(user.displayedName) &&
+            this.checkName(user.login) &&
+            this.checkEmail(user.email) && 
+            this.checkPassword(user.password!)
+        )
     }
 
     public static getUserTokenSchema(user:fullUsersData):tokenPayload {

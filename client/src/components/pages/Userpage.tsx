@@ -6,13 +6,11 @@ import NotFound from "./NotFound";
 import userAPI from "../../http/userAPI";
 import FadeContainer from "../primitives/FadeContainer";
 import Flexbox from "../primitives/Flexbox";
-import WithAuthReq from "../primitives/withAuthReq";
-import Feed from "../primitives/Feed/PostsFeed";
-import CommunityActionBtn from "../primitives/Buttons/CommunityActionBtn";
 import Button from "../primitives/Button";
-import { GitGraph, MessageCircleHeart } from "lucide-react";
 import { Outlet } from "react-router-dom";
 import Logo from "../primitives/Logo";
+import CommunityIcon from "../icons/CommunityIcon";
+import MessageHeart from "../icons/MessageHeart";
 
 const Userpage = () => {
 
@@ -89,15 +87,19 @@ const Userpage = () => {
                             to={routes.user(user.login)}
                             end
                         >
-                            {({ isActive }) => {console.log(isActive);return(
-                                <Button variant={isActive ? "contained" : "outlined"} className="gap-0 w-full text-lg font-bold justify-start" rounded={"sm"}><MessageCircleHeart className="h-5"/>Posts</Button>
+                            {({ isActive }) => {return(
+                                <Button variant={isActive ? "contained" : "outlined"} className="gap-0 w-full text-lg font-bold justify-start" rounded={"sm"}>
+                                    <MessageHeart className="h-5"/>Posts
+                                </Button>
                             )}}
                         </NavLink>
                         <NavLink
                             to={routes.userCommunities(user.login)}
                         >
                             {({ isActive }) => (
-                                <Button variant={isActive ? "contained" : "outlined"} className={`gap-0 w-full text-lg font-bold justify-start`} rounded={"sm"}><GitGraph className="h-4"/>Communities</Button>
+                                <Button variant={isActive ? "contained" : "outlined"} className={`gap-0 w-full text-lg font-bold justify-start`} rounded={"sm"}>
+                                    <CommunityIcon className="h-4"/>Communities
+                                </Button>
                             )}
                         </NavLink>
                     </Flexbox>

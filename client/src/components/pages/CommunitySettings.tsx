@@ -14,7 +14,6 @@ const CommunitySettings = () => {
     const {community, updateCommunity} = useCommunity();
     const {user} = useContext(AuthContext);
 
-    console.log(community)
     if(!community.id || community.creator !==user.id) {
         return(
             <NotFound
@@ -34,7 +33,6 @@ const CommunitySettings = () => {
                     break;
                 }
             }
-            console.log(values)
             if(!formErrors) {
                 const form = new FormData();
                 for(let [key,value] of Object.entries(values)) {
