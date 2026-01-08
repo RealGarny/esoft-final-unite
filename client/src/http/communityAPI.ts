@@ -1,4 +1,4 @@
-import $host,{ $tokenHost } from ".";
+import { $tokenHost } from ".";
 import errorList from "../utils/errorList";
 import { AxiosError } from "axios";
 

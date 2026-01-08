@@ -12,11 +12,10 @@ const whitelist = ['http://localhost:5173', 'http://frontend:5173']
 
 var corsOptions:CorsOptions = {
   origin: function (origin, callback) {
-    if (whitelist.indexOf(origin!) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    if (!origin ||whitelist.includes(origin)) {
+      return callback(null, true)
     }
+    return callback(new Error('CORS: Not allowed by CORS'))
   },
   credentials: true
 }
