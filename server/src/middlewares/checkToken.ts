@@ -60,7 +60,6 @@ export const checkRefreshToken = (options:Options={tokenOptional:false}) => {
         }
         try {
             const { refreshToken } = req.cookies;
-            
             if(!refreshToken) {
                 if(options.tokenOptional) next();
                 return res.status(statusCode.unauthorized).json({message: "user is not authorized"})

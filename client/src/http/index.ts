@@ -17,7 +17,7 @@ $tokenHost.interceptors.request.use((config:any) => {
     } else {
         config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : ''}`
         return config
-    };
+    }
 })
 
 //response interceptors
